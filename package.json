@@ -1,0 +1,48 @@
+{
+  "name": "sa.book",
+  "private": true,
+  "version": "1.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 4100",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.18.1",
+    "@tanstack/react-query-devtools": "^5.18.1",
+    "axios": "^1.6.7",
+    "js-cookie": "^3.0.8",
+    "lucide-react": "^0.546.0",
+    "moment-jalaali": "^0.10.4",
+    "motion": "^12.23.24",
+    "mui-one-time-password-input": "^2.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.50.1",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.4.0",
+    "react-router": "^6.22.0",
+    "react-router-dom": "^6.22.0",
+    "react-toastify": "^10.0.4",
+    "swiper": "^11.1.1",
+    "tailwind-merge": "^2.3.0",
+    "vaul": "^1.1.2",
+    "zustand": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.19",
+    "daisyui": "^4.12.23",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.1.0"
+  }
+}

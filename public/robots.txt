@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /profile
+Disallow: /profile/*
+Disallow: /cart
+Disallow: /cart/*
+Disallow: /orders
+Disallow: /orders/*
+Disallow: /login
+Disallow: /login/*
+Disallow: /invite
+Disallow: /referral
+
+Sitemap: https://lopon.ir/sitemap.xml

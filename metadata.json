@@ -1,0 +1,8 @@
+{
+  "name": "لوپُن | Lopon Beauty & Deals",
+  "description": "سامانه تخفیف و رزرو آنلاین خدمات زیبایی، سالن‌های آرایشی و کلینیک‌های پوست در کرمان و ایران",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "kal-1";
+    font-style: normal;
+    font-display: swap;
+    src: url('./assets/fonts/dana/woff2/DanaFaNum-Medium.woff2') format('woff2'),
+      url('./assets/fonts/dana/woff/DanaFaNum-Medium.woff') format('woff');
+  }
+  @font-face {
+    font-family: "kal-2";
+    font-style: normal;
+    font-display: swap;
+    src: url('./assets/fonts/dana/woff2/DanaFaNum-Medium.woff2') format('woff2'),
+      url('./assets/fonts/dana/woff/DanaFaNum-Medium.woff') format('woff');
+  }
+  @font-face {
+    font-family: "kal-3";
+    font-style: normal;
+    font-display: swap;
+    src: url('./assets/fonts/dana/woff2/DanaFaNum-DemiBold.woff2') format('woff2'),
+      url('./assets/fonts/dana/woff/DanaFaNum-DemiBold.woff') format('woff');
+  }
+  @font-face {
+    font-family: "kal-4";
+    font-style: normal;
+    font-display: swap;
+    src: url('./assets/fonts/dana/woff2/DanaFaNum-Black.woff2') format('woff2'),
+      url('./assets/fonts/dana/woff/DanaFaNum-Black.woff') format('woff');
+  }
+
+  @font-face {
+    font-family: "ir-sand";
+    font-style: normal;
+    font-display: swap;
+    src: url("./assets/fonts/IRANSans.ttf");
+  }
+}
+@theme {
+  --color-primary: #F47A20;
+  --color-primary-dark: #d66311;
+  --color-primary-light: #fde8d8;
+}
+
+:root {
+  --color-primary: #F47A20;
+  --color-primary-dark: #d66311;
+  --color-primary-light: #fde8d8;
+}
+
+* { 
+  @apply  select-none;
+}
+body {
+  @apply bg-white font-kal-2;
+}
+
+.OtpFont * {
+  @apply font-kal-2 !important;
+}
+.OtpFont fieldset , .OtpFont input , .OtpFont *{
+  @apply focus-visible:border-firoze hover:border-firoze !important;
+}
+/* swiper  */
+.swiper-pagination-bullet-active {
+  @apply w-[13px] h-[8px] rounded-lg bg-firoze;
+}
+@layer components {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .white-otp * {
+    @apply text-gray-100 border-gray-200 hover:border-gray-200;
+  }
+  .active-nav{
+    @apply border-b-2 border-firoze text-firoze font-kal-3 transition-all;
+  }
+  .not-active-nav{
+    @apply text-gray-600 transition-all;
+  }
+  .bookSearch figure{
+    @apply h-28 rounded-lg w-20 p-1 !important;
+  }
+  .bookSearch .priceStage{
+    @apply absolute bottom-2  left-0;
+  }
+
+
+   
+}
+/* // add the code bellow */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+  }
+  .scrollbar::-webkit-scrollbar *{
+ display: none; /* یا حذف این قانون */
+}
+.scrollbar *{
+ -ms-overflow-style: none; 
+    scrollbar-width: none; 
+}
+
+  .wh-full{
+    @apply w-full h-full;
+  }
+  .hidden-parent .priceStage {
+    display: none;
+}
+ 
+}
+
+
+
+.shadow-soft {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+@keyframes fillProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.animate-fill-progress {
+  animation: fillProgress 5s linear forwards;
+}
+
