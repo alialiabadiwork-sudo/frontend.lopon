@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پیش‌نمایش پنل وندور لوپُن</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @font-face {
+      font-family: 'Vazirmatn';
+      src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-Medium.woff2') format('woff2');
+    }
+    body {
+      font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col antialiased select-none">
+
+  <!-- ================= TOP RESPONSIVE HEADER ================= -->
+  <header class="bg-white border-b border-slate-200 h-16 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-40 shadow-xs">
+    <div class="flex items-center gap-3">
+      <!-- Mobile menu trigger -->
+      <button onclick="toggleMobileSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-700 hover:text-[#F47A20]">
+        <i class="fa-solid fa-bars text-base"></i>
+      </button>
+
+      <!-- Brand -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#F47A20] to-[#ff8e38] flex items-center justify-center text-white shadow-md shadow-orange-500/20 font-black text-xl">
+          ل
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-extrabold text-slate-900 text-base">لوپُـن</span>
+            <span class="text-[10px] bg-orange-100 text-[#F47A20] px-1.5 py-0.5 rounded font-bold">پنل وندور</span>
+          </div>
+          <p class="text-[11px] text-slate-400">سالن زیبایی نازنین (کرمان)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2.5">
+      <!-- Quick coupon redemption button -->
+      <button onclick="openRedeemModal()" class="h-10 px-3.5 bg-orange-50 hover:bg-orange-100 text-[#F47A20] border border-orange-200 rounded-xl font-bold text-xs flex items-center gap-2 transition-all cursor-pointer shadow-xs">
+        <i class="fa-solid fa-qrcode text-sm"></i>
+        <span class="hidden sm:inline">ثبت سریع کوپن</span>
+      </button>
+
+      <!-- Reception switch -->
+      <div id="receptionStatusBadge" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="font-bold">پذیرش فعال است</span>
+      </div>
+
+      <!-- Device View Toggle (Desktop vs Mobile Preview) -->
+      <div class="bg-slate-100 p-1 rounded-xl flex items-center text-xs">
+        <button onclick="setViewport('desktop')" id="btnDesk" class="px-2.5 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs">
+          دسکتاپ
+        </button>
+        <button onclick="setViewport('mobile')" id="btnMob" class="px-2.5 py-1 rounded-lg text-slate-500 hover:text-slate-800">
+          موبایل
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= APP CONTAINER ================= -->
+  <div id="mainContainer" class="flex-1 flex overflow-hidden w-full transition-all duration-300">
+
+    <!-- ================= SIDEBAR (DESKTOP) ================= -->
+    <aside id="desktopSidebar" class="w-68 bg-white border-l border-slate-200 flex flex-col shrink-0 z-30 shadow-[4px_0_20px_rgba(0,0,0,0.02)]">
+      <!-- Salon status toggle card -->
+      <div class="p-4 border-b border-slate-100">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span id="sidebarStatusDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <span id="sidebarStatusText" class="text-xs font-bold text-slate-700">سالن باز است</span>
+          </div>
+          <button onclick="toggleSalonStatus()" class="text-[10px] font-bold px-2 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 transition-colors">
+            تغییر
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="flex-1 p-3 space-y-1 overflow-y-auto custom-scrollbar">
+        <button onclick="switchTab('dashboard')" class="nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold transition-all text-right cursor-pointer bg-[#F47A20] text-white shadow-md shadow-orange-500/20" data-tab="dashboard">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span>۱. داشبورد کلی</span>
+          </div>
+        </button>
+
+        <button onclick="switchTab('orders')" class="nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs transition-all text-right cursor-pointer text-slate-600 hover:bg-slate-100" data-tab="orders">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-ticket text-sm text-slate-400"></i>
+            <span>۲. سفارشات و کوپن‌ها</span>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-orange-100 text-[#F47A20] font-bold">۲ جدید</span>
+        </button>
+
+        <button onclick="switchTab('profile')" class="nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs transition-all text-right cursor-pointer text-slate-600 hover:bg-slate-100" data-tab="profile">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-store text-sm text-slate-400"></i>
+            <span>۳. مجموعه من (پروفایل)</span>
+          </div>
+        </button>
+
+        <button onclick="switchTab('services')" class="nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs transition-all text-right cursor-pointer text-slate-600 hover:bg-slate-100" data-tab="services">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-scissors text-sm text-slate-400"></i>
+            <span>۴. خدمات مجموعه</span>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">۵ فعال</span>
+        </button>
+
+        <button onclick="switchTab('catalog')" class="nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs transition-all text-right cursor-pointer text-slate-600 hover:bg-slate-100" data-tab="catalog">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-layer-group text-sm text-slate-400"></i>
+            <span>۵. کاتالوگ خدمات مرجع</span>
+          </div>
+        </button>
+
+        <button onclick="switchTab('crm')" class="nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs transition-all text-right cursor-pointer text-slate-600 hover:bg-slate-100" data-tab="crm">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-users text-sm text-slate-400"></i>
+            <span>۶. باشگاه مشتریان (CRM)</span>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">۶ پرونده</span>
+        </button>
+
+        <button onclick="switchTab('bookings')" class="nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs transition-all text-right cursor-pointer text-slate-600 hover:bg-slate-100" data-tab="bookings">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-calendar-check text-sm text-slate-400"></i>
+            <span>۷. نوبت‌های آفلاین و صندوق</span>
+          </div>
+          <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-bold">۴ نوبت</span>
+        </button>
+      </nav>
+
+      <!-- Bottom Salon Card -->
+      <div class="p-3 border-t border-slate-100 bg-slate-50/70">
+        <div class="flex items-center gap-3 p-2 bg-white rounded-xl border border-slate-200">
+          <div class="w-10 h-10 rounded-lg bg-orange-100 text-[#F47A20] flex items-center justify-center font-bold">
+            <i class="fa-solid fa-gem text-lg"></i>
+          </div>
+          <div class="min-w-0 flex-1">
+            <h4 class="font-bold text-xs text-slate-900 truncate">سالن زیبایی نازنین</h4>
+            <p class="text-[10px] text-slate-400">کرمان، خیابان بهمنیار</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT VIEWPORT ================= -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
+      <div class="max-w-6xl mx-auto space-y-6">
+
+        <!-- TAB 1: DASHBOARD -->
+        <div id="tab-dashboard" class="tab-pane space-y-6">
+          <!-- Welcome & Free Quota Banner -->
+          <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+              <div class="lg:col-span-7 space-y-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-orange-300 text-xs font-bold">
+                  <i class="fa-solid fa-sparkles text-[10px]"></i>
+                  پنل مدیریت یکپارچه سالن زیبایی لوپُن
+                </span>
+                <h2 class="text-xl sm:text-2xl font-black">سلام، مدیریت محترم سالن نازنین</h2>
+                <p class="text-xs text-slate-300 leading-relaxed max-w-lg">
+                  گزارش آنلاین فروش کوپن‌ها، نوبت‌های حضوری و تلفنی امروز، باشگاه مشتریان و وضعیت پذیرش سالن شما در یک محیط واحد.
+                </p>
+              </div>
+
+              <!-- Commission Free Quota -->
+              <div class="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/15 space-y-2.5">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-orange-200 flex items-center gap-1.5">
+                    <i class="fa-solid fa-gift text-[#F47A20]"></i>
+                    سهمیه اولیه فروش بدون کارمزد
+                  </span>
+                  <span class="font-black text-white">۳۸ از ۵۰ کوپن</span>
+                </div>
+                <div class="w-full h-2.5 bg-black/40 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-orange-400 to-[#F47A20] rounded-full" style="width: 76%"></div>
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  ۱۲ کوپن بدون کارمزد باقی مانده است (۱۰۰٪ مبلغ فروش به حساب سالن واریز می‌گردد).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Stats Cards (Updated according to user design) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Card 1: فروش در کل امروز (طراحی اختصاصی ارسالی کاربر) -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+              <div class="flex items-center justify-between">
+                <span class="text-xs sm:text-sm font-bold text-slate-700">فروش در کل امروز:</span>
+                <button onclick="switchTab('catalog')" class="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold text-slate-600 transition-colors shadow-2xs cursor-pointer group">
+                  <span class="text-xs text-[#F47A20] font-black">+</span>
+                  <span>افزایش فروش</span>
+                </button>
+              </div>
+
+              <div class="my-3 flex items-baseline gap-1.5">
+                <span class="font-black text-2xl sm:text-[28px] text-slate-900 tracking-tight">۱۵,۸۰۰,۰۰۰</span>
+                <span class="text-xs text-slate-400 font-normal">تومان</span>
+              </div>
+
+              <!-- دو باکس پایین: لوپُن و سالن -->
+              <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <!-- لوپُن (راست) -->
+                <div class="bg-[#F4F5F7] rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100">
+                  <div class="h-5 flex items-center justify-center">
+                    <svg class="h-4.5 w-4.5" viewBox="0 0 40 40" fill="none">
+                      <path d="M12 24C8 20 8 13 14 9C20 5 26 10 26 18C26 26 32 31 36 27C39 24 37 18 31 18C25 18 19 28 14 31C10 33 6 30 6 25" stroke="#F47A20" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="font-bold text-xs sm:text-sm text-slate-800">۵,۰۰۰,۰۰۰</div>
+                </div>
+
+                <!-- سالن (چپ) -->
+                <div class="bg-[#F4F5F7] rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100">
+                  <span class="text-xs font-bold text-slate-600 h-5 flex items-center justify-center">سالن</span>
+                  <div class="font-bold text-xs sm:text-sm text-slate-800">۱۰,۸۰۰,۰۰۰</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: رزروهای روز -->
+            <div onclick="switchTab('bookings')" class="bg-white hover:bg-slate-50/60 rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between transition-all cursor-pointer group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs sm:text-sm font-bold text-slate-700">رزروهای روز</span>
+                <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <i class="fa-solid fa-calendar-check text-sm"></i>
+                </div>
+              </div>
+
+              <div class="my-3 flex items-baseline gap-1.5">
+                <span class="font-black text-2xl sm:text-[28px] text-slate-900 tracking-tight">۶</span>
+                <span class="text-xs text-slate-400 font-normal">نوبت امروز</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <div class="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-0.5 border border-slate-100">
+                  <span class="text-[11px] text-slate-500">تکمیل شده</span>
+                  <span class="font-bold text-xs sm:text-sm text-emerald-600">۴</span>
+                </div>
+                <div class="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-0.5 border border-slate-100">
+                  <span class="text-[11px] text-slate-500">در انتظار</span>
+                  <span class="font-bold text-xs sm:text-sm text-blue-600">۲</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: تعداد اعضای باشگاه مشتریان -->
+            <div onclick="switchTab('crm')" class="bg-white hover:bg-slate-50/60 rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between transition-all cursor-pointer group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs sm:text-sm font-bold text-slate-700">تعداد اعضای باشگاه مشتریان</span>
+                <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <i class="fa-solid fa-users text-sm"></i>
+                </div>
+              </div>
+
+              <div class="my-3 flex items-baseline gap-1.5">
+                <span class="font-black text-2xl sm:text-[28px] text-slate-900 tracking-tight">۴۸</span>
+                <span class="text-xs text-slate-400 font-normal">عضو فعال</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <div class="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-0.5 border border-slate-100">
+                  <span class="text-[11px] text-slate-500">مشتریان VIP</span>
+                  <span class="font-bold text-xs sm:text-sm text-purple-600">۳ نفر</span>
+                </div>
+                <div class="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-0.5 border border-slate-100">
+                  <span class="text-[11px] text-slate-500">نیازمند بازگشت</span>
+                  <span class="font-bold text-xs sm:text-sm text-amber-600">۲ نفر</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: ساعت فعال امروز -->
+            <div onclick="switchTab('profile')" class="bg-white hover:bg-slate-50/60 rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between transition-all cursor-pointer group">
+              <div class="flex items-center justify-between">
+                <span class="text-xs sm:text-sm font-bold text-slate-700">ساعت فعال امروز</span>
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <i class="fa-solid fa-clock text-sm"></i>
+                </div>
+              </div>
+
+              <div class="my-3 flex items-baseline gap-2">
+                <span class="font-black text-xl sm:text-2xl text-slate-900 tracking-tight">۰۹:۰۰ - ۲۰:۰۰</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5 pt-1">
+                <div class="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-0.5 border border-slate-100">
+                  <span class="text-[11px] text-slate-500">مدت کاری</span>
+                  <span class="font-bold text-xs sm:text-sm text-slate-800">۱۱ ساعت</span>
+                </div>
+                <div class="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-0.5 border border-slate-100">
+                  <span class="text-[11px] text-slate-500">وضعیت</span>
+                  <div class="flex items-center gap-1 font-bold text-xs text-emerald-600">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span>باز و فعال</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick Redemption Box in Dashboard -->
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-qrcode text-[#F47A20]"></i>
+                استعلام و ابطال سریع کوپن در پیشخوان
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">کد ۶ رقمی مشتری (مانند ۵۸۲۹۱۴) را برای تغییر وضعیت به استفاده‌شده وارد کنید:</p>
+            </div>
+            <div class="flex gap-2 w-full md:w-auto">
+              <input type="text" id="dashQuickCode" placeholder="کد ۶ رقمی کوپن..." maxlength="6" class="h-11 px-4 text-center font-bold tracking-widest text-sm bg-slate-50 border border-slate-200 rounded-xl focus:border-[#F47A20] outline-none">
+              <button onclick="handleQuickRedeemInput('dashQuickCode')" class="h-11 px-5 bg-[#F47A20] hover:bg-[#d66311] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer">
+                ثبت پذیرش
+              </button>
+            </div>
+          </div>
+
+          <!-- Today Schedule Preview & Shortcuts -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-8 bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-4">
+              <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-sm text-slate-900 flex items-center gap-2">
+                  <i class="fa-regular fa-clock text-[#F47A20]"></i>
+                  مراجعات و نوبت‌های امروز سالن
+                </h3>
+                <button onclick="switchTab('bookings')" class="text-xs text-[#F47A20] font-bold hover:underline">
+                  مشاهده تقویم کامل
+                </button>
+              </div>
+
+              <div class="space-y-3">
+                <div class="p-3.5 bg-slate-50 rounded-2xl flex items-center justify-between text-xs border border-slate-100">
+                  <div class="flex items-center gap-3">
+                    <span class="w-12 h-12 bg-blue-100 text-blue-700 font-bold rounded-xl flex flex-col items-center justify-center text-xs">
+                      ۱۰:۰۰
+                      <span class="text-[9px] font-normal">۹۰ دقیقه</span>
+                    </span>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <strong class="text-slate-800">زهرا کاظمی</strong>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-bold">نوبت حضوری</span>
+                      </div>
+                      <p class="text-slate-500 mt-0.5">کاشت ناخن با ژل • پرسنل: مهسا مرادی</p>
+                    </div>
+                  </div>
+                  <strong class="text-slate-800">۷۰۰,۰۰۰ تومان (کارتخوان)</strong>
+                </div>
+
+                <div class="p-3.5 bg-orange-50/50 rounded-2xl flex items-center justify-between text-xs border border-orange-100">
+                  <div class="flex items-center gap-3">
+                    <span class="w-12 h-12 bg-orange-100 text-[#F47A20] font-bold rounded-xl flex flex-col items-center justify-center text-xs">
+                      کوپن
+                      <span class="text-[9px] font-normal">لوپُن</span>
+                    </span>
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <strong class="text-slate-800">مبینا کاربخش</strong>
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-orange-100 text-[#F47A20] font-bold">کد: ۵۸۲۹۱۴</span>
+                      </div>
+                      <p class="text-slate-500 mt-0.5">کاشت ناخن ژل • بازه: ۱۵:۰۰ تا ۱۸:۰۰</p>
+                    </div>
+                  </div>
+                  <button onclick="redeemSpecificCode('582914')" class="px-3 py-1.5 bg-[#F47A20] hover:bg-[#d66311] text-white rounded-lg font-bold">
+                    ثبت استفاده
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shortcuts -->
+            <div class="lg:col-span-4 bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-3">
+              <h3 class="font-bold text-xs text-slate-900 pb-2 border-b border-slate-100">دسترسی‌های سریع</h3>
+              <div class="space-y-2 text-xs">
+                <button onclick="switchTab('bookings')" class="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-slate-700 font-bold transition-colors">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-calendar-plus text-blue-500"></i> ثبت نوبت تلفنی یا حضوری</span>
+                  <i class="fa-solid fa-chevron-left text-[10px] text-slate-400"></i>
+                </button>
+                <button onclick="switchTab('catalog')" class="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-slate-700 font-bold transition-colors">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-layer-group text-emerald-500"></i> افزودن خدمت از کاتالوگ</span>
+                  <i class="fa-solid fa-chevron-left text-[10px] text-slate-400"></i>
+                </button>
+                <button onclick="switchTab('crm')" class="w-full p-3 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-slate-700 font-bold transition-colors">
+                  <span class="flex items-center gap-2"><i class="fa-solid fa-users text-purple-500"></i> ارسال پیامک بازگشت مشتریان</span>
+                  <i class="fa-solid fa-chevron-left text-[10px] text-slate-400"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: ORDERS & COUPONS -->
+        <div id="tab-orders" class="tab-pane hidden space-y-6">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+              <div>
+                <h2 class="text-base font-black text-slate-900">سفارشات من و مدیریت کوپن‌ها</h2>
+                <p class="text-xs text-slate-400">پردازش کوپن‌های خریداری‌شده، تغییر وضعیت و خروجی اکسل حسابداری</p>
+              </div>
+              <button onclick="exportSampleExcel()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-2">
+                <i class="fa-solid fa-file-excel text-emerald-600"></i>
+                <span>خروجی اکسل و گزارش مالی (CSV)</span>
+              </button>
+            </div>
+
+            <!-- Tab Filters -->
+            <div class="flex gap-2 overflow-x-auto pb-1">
+              <button onclick="filterCoupons('all', this)" class="coupon-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#F47A20] text-white">همه (۶)</button>
+              <button onclick="filterCoupons('today', this)" class="coupon-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600">نوبت‌های امروز (۲)</button>
+              <button onclick="filterCoupons('pending', this)" class="coupon-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600">در انتظار مراجعه (۲)</button>
+              <button onclick="filterCoupons('used', this)" class="coupon-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600">استفاده شده (۲)</button>
+              <button onclick="filterCoupons('expired', this)" class="coupon-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600">منقضی شده (۱)</button>
+            </div>
+          </div>
+
+          <!-- Coupons List -->
+          <div class="space-y-3" id="couponsContainer">
+            <!-- Item 1 -->
+            <div class="coupon-row bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-status="pending" data-code="582914">
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-black text-sm bg-slate-100 px-2.5 py-1 rounded-lg">کد: ۵۸۲۹۱۴</span>
+                  <span class="badge-status px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-amber-50 text-amber-700 border border-amber-200">در انتظار مراجعه</span>
+                  <span class="text-[11px] text-slate-400">انقضا: ۱۴۰۵/۰۴/۱۴</span>
+                </div>
+                <div class="text-xs text-slate-700 font-bold">
+                  مشتری: مبینا کاربخش (۰۹۱۳۸۸۲۴۵۹۰) • خدمت: کاشت ناخن با ژل و پلی‌ژل
+                </div>
+                <div class="text-[11px] text-slate-400">
+                  تاریخ مراجعه ترجیحی: <strong>۱۴۰۵/۰۳/۱۸</strong> (بازه: ۱۵:۰۰ تا ۱۸:۰۰)
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="text-left text-xs">
+                  <div class="text-slate-400 line-through">۷۰۰,۰۰۰ تومان (۲۰٪ تخفیف)</div>
+                  <strong class="text-emerald-600 text-sm">سهم سالن: ۵۶۰,۰۰۰ تومان</strong>
+                </div>
+                <button onclick="redeemSpecificCode('582914')" class="redeem-btn px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold">
+                  تأیید پذیرش
+                </button>
+              </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="coupon-row bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-status="pending" data-code="741295">
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-black text-sm bg-slate-100 px-2.5 py-1 rounded-lg">کد: ۷۴۱۲۹۵</span>
+                  <span class="badge-status px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-amber-50 text-amber-700 border border-amber-200">در انتظار مراجعه</span>
+                  <span class="text-[11px] text-slate-400">انقضا: ۱۴۰۵/۰۴/۱۵</span>
+                </div>
+                <div class="text-xs text-slate-700 font-bold">
+                  مشتری: فاطمه رضایی (۰۹۳۵۶۷۱۸۹۰۰) • خدمت: فیشیال تخصصی پوست و هیدرودرمی
+                </div>
+                <div class="text-[11px] text-slate-400">
+                  تاریخ مراجعه ترجیحی: <strong>۱۴۰۵/۰۳/۱۸</strong> (بازه: ۱۱:۰۰ تا ۱۳:۰۰)
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="text-left text-xs">
+                  <div class="text-slate-400 line-through">۱,۱۰۰,۰۰۰ تومان (۳۰٪ تخفیف)</div>
+                  <strong class="text-emerald-600 text-sm">سهم سالن: ۷۷۰,۰۰۰ تومان</strong>
+                </div>
+                <button onclick="redeemSpecificCode('741295')" class="redeem-btn px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold">
+                  تأیید پذیرش
+                </button>
+              </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="coupon-row bg-white rounded-2xl p-4 border border-slate-200 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4" data-status="used" data-code="963852">
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-black text-sm bg-slate-100 px-2.5 py-1 rounded-lg">کد: ۹۶۳۸۵۲</span>
+                  <span class="badge-status px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">استفاده شده</span>
+                  <span class="text-[11px] text-slate-400">زمان استفاده: ۱۴۰۵/۰۳/۱۰ - ۱۶:۴۵</span>
+                </div>
+                <div class="text-xs text-slate-700 font-bold">
+                  مشتری: سحر تهرانی (۰۹۱۲۳۴۵۶۷۸۹) • خدمت: کراتینه و احیای ابریشمی مو
+                </div>
+              </div>
+              <div class="text-left text-xs">
+                <strong class="text-slate-700 text-sm">واریز شده: ۱,۶۵۰,۰۰۰ تومان</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: SALON PROFILE -->
+        <div id="tab-profile" class="tab-pane hidden space-y-6">
+          <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-6">
+            <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+              <div>
+                <h2 class="text-base font-black text-slate-900">مجموعه من و پروفایل سالن (مدل Vendor)</h2>
+                <p class="text-xs text-slate-400">اطلاعات پایه، آدرس و موقعیت روی نقشه تعاملی، جدول ساعات کاری و شماره شبا</p>
+              </div>
+              <button onclick="alert('تغییرات با موفقیت ذخیره شد!')" class="px-5 py-2.5 bg-[#F47A20] hover:bg-[#d66311] text-white text-xs font-bold rounded-xl shadow-xs">
+                ذخیره تغییرات سالن
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">نام سالن (title):</label>
+                  <input type="text" value="سالن زیبایی نازنین" class="w-full h-11 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">دسته‌بندی (category):</label>
+                  <input type="text" value="خدمات تخصصی مو، پوست و ناخن" class="w-full h-11 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">تلفن کمکی / ثابت (auxiliaryPhone):</label>
+                  <input type="text" value="034-32456789" dir="ltr" class="w-full h-11 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-right">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">آدرس متنی سالن:</label>
+                  <input type="text" value="کرمان، خیابان بهمنیار، کوچه ۸، پلاک ۱۲" class="w-full h-11 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs">
+                </div>
+              </div>
+
+              <!-- Interactive map box -->
+              <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-700">موقعیت جغرافیایی روی نقشه (lat, lng):</label>
+                <div class="h-48 bg-slate-200 rounded-2xl relative overflow-hidden flex items-center justify-center border border-slate-300">
+                  <div class="text-center space-y-1">
+                    <i class="fa-solid fa-location-dot text-3xl text-[#F47A20] animate-bounce"></i>
+                    <p class="text-xs font-bold text-slate-800">مختصات: 30.2839, 57.0788</p>
+                    <span class="text-[10px] text-slate-500">کرمان، بهمنیار</span>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <input type="text" value="30.2839" class="h-9 px-2 bg-slate-50 border rounded-lg text-center font-mono">
+                  <input type="text" value="57.0788" class="h-9 px-2 bg-slate-50 border rounded-lg text-center font-mono">
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule & IBAN -->
+            <div class="pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <h3 class="text-xs font-bold text-slate-800">برنامه کاری هفتگی (workingDays):</h3>
+                <div class="text-xs space-y-1.5 bg-slate-50 p-3 rounded-2xl border">
+                  <div class="flex justify-between"><span>شنبه تا چهارشنبه:</span> <strong>۰۹:۰۰ تا ۲۰:۰۰</strong></div>
+                  <div class="flex justify-between"><span>پنج‌شنبه:</span> <strong>۰۹:۰۰ تا ۱۸:۰۰</strong></div>
+                  <div class="flex justify-between text-rose-500"><span>جمعه:</span> <strong>تعطیل رسمی سالن</strong></div>
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <h3 class="text-xs font-bold text-slate-800">شماره شبا جهت واریز دوره‌ای درآمد (iban):</h3>
+                <input type="text" value="IR820120000000001234567890" dir="ltr" class="w-full h-11 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold">
+                <p class="text-[11px] text-slate-400">تسویه منظم هفتگی توسط لوپُن به این شماره شبا انجام می‌گردد.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: SERVICES -->
+        <div id="tab-services" class="tab-pane hidden space-y-6">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex justify-between items-center">
+            <div>
+              <h2 class="text-base font-black text-slate-900">خدمات مجموعه و قیمت‌گذاری</h2>
+              <p class="text-xs text-slate-400">مدیریت قیمت مصوب، درصد تخفیف، قیمت نهایی و سقف سفارش</p>
+            </div>
+            <button onclick="switchTab('catalog')" class="px-4 py-2 bg-[#F47A20] text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> افزودن از کاتالوگ
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-orange-100 text-[#F47A20] font-bold">مو و کراتین</span>
+                  <h3 class="font-bold text-sm text-slate-900 mt-1">کراتینه و احیای ابریشمی مو</h3>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">فعال</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-2xl space-y-1 text-xs">
+                <div class="flex justify-between text-slate-400 line-through"><span>قیمت مصوب:</span> ۲,۲۰۰,۰۰۰ ت</div>
+                <div class="flex justify-between text-slate-700 font-bold"><span>تخفیف لوپُن:</span> ۲۵٪</div>
+                <div class="flex justify-between text-[#F47A20] font-black pt-1 border-t"><span>قیمت نهایی:</span> ۱,۶۵۰,۰۰۰ ت</div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-400">
+                <span>اعتبار کوپن: ۳۰ روز</span>
+                <span>فروش: ۱۹/۳۰ کوپن</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-bold">ناخن و پدیکور</span>
+                  <h3 class="font-bold text-sm text-slate-900 mt-1">کاشت ناخن با ژل و پلی‌ژل</h3>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">فعال</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-2xl space-y-1 text-xs">
+                <div class="flex justify-between text-slate-400 line-through"><span>قیمت مصوب:</span> ۷۰۰,۰۰۰ ت</div>
+                <div class="flex justify-between text-slate-700 font-bold"><span>تخفیف لوپُن:</span> ۲۰٪</div>
+                <div class="flex justify-between text-[#F47A20] font-black pt-1 border-t"><span>قیمت نهایی:</span> ۵۶۰,۰۰۰ ت</div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-400">
+                <span>اعتبار کوپن: ۳۰ روز</span>
+                <span>فروش: ۴۲/۵۰ کوپن</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">پوست و فیشیال</span>
+                  <h3 class="font-bold text-sm text-slate-900 mt-1">فیشیال تخصصی و هیدرودرمی</h3>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">فعال</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-2xl space-y-1 text-xs">
+                <div class="flex justify-between text-slate-400 line-through"><span>قیمت مصوب:</span> ۱,۱۰۰,۰۰۰ ت</div>
+                <div class="flex justify-between text-slate-700 font-bold"><span>تخفیف لوپُن:</span> ۳۰٪</div>
+                <div class="flex justify-between text-[#F47A20] font-black pt-1 border-t"><span>قیمت نهایی:</span> ۷۷۰,۰۰۰ ت</div>
+              </div>
+              <div class="flex justify-between text-[11px] text-slate-400">
+                <span>اعتبار کوپن: ۳۰ روز</span>
+                <span>فروش: ۲۶/۴۰ کوپن</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: SYSTEM CATALOG -->
+        <div id="tab-catalog" class="tab-pane hidden space-y-6">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-3">
+            <h2 class="text-base font-black text-slate-900">کاتالوگ مرجع خدمات لوپُن</h2>
+            <p class="text-xs text-slate-400">انتخاب سریع از میان عناوین استاندارد و جلوگیری از نام‌گذاری‌های سلیقه‌ای</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between">
+                <span class="text-[10px] font-bold text-slate-400">مژه و ابرو</span>
+                <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">در حال ارائه در سالن</span>
+              </div>
+              <h3 class="font-bold text-sm text-slate-800">لیفت و لمینت ابرو با مای‌لمینیشن</h3>
+              <p class="text-xs text-slate-500">تقویت و حالت‌دهی تار موهای ابرو به صورت طبیعی</p>
+              <div class="text-xs font-bold text-slate-700">مدت زمان: ۵۰ دقیقه</div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between">
+                <span class="text-[10px] font-bold text-slate-400">میکاپ و گریم</span>
+                <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">جدید</span>
+              </div>
+              <h3 class="font-bold text-sm text-slate-800">میکاپ لایت اروپایی و گریم صورت</h3>
+              <p class="text-xs text-slate-500">کانتورینگ حرفه‌ای صورت با برندهای اورجینال</p>
+              <div class="text-xs font-bold text-slate-700">مدت زمان: ۹۰ دقیقه</div>
+              <button onclick="alert('پنجره تعیین قیمت سالن و درصد تخفیف باز شد')" class="w-full py-2 bg-[#F47A20] text-white text-xs font-bold rounded-xl">
+                + افزودن به سالن من
+              </button>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between">
+                <span class="text-[10px] font-bold text-slate-400">ناخن و پدیکور</span>
+                <span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">جدید</span>
+              </div>
+              <h3 class="font-bold text-sm text-slate-800">پدیکور و کفسابی VIP با جکوزی</h3>
+              <p class="text-xs text-slate-500">پارافین‌تراپی و روغن‌های گیاهی معطر</p>
+              <div class="text-xs font-bold text-slate-700">مدت زمان: ۶۰ دقیقه</div>
+              <button onclick="alert('پنجره تعیین قیمت سالن و درصد تخفیف باز شد')" class="w-full py-2 bg-[#F47A20] text-white text-xs font-bold rounded-xl">
+                + افزودن به سالن من
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 6: CRM -->
+        <div id="tab-crm" class="tab-pane hidden space-y-6">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <div>
+              <h2 class="text-base font-black text-slate-900">باشگاه مشتریان و CRM</h2>
+              <p class="text-xs text-slate-400">ارزش طول عمر (LTV)، یادداشت‌های پرسنلی و کمپین‌های بازگشت مشتری</p>
+            </div>
+            <button onclick="alert('پیامک پیشنهاد تخفیف برای ۶ عضو باشگاه ارسال شد')" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-paper-plane"></i> ارسال پیامک تخفیف به اعضا
+            </button>
+          </div>
+
+          <!-- 45 days retention alert -->
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-900">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-bell text-[#F47A20] text-base"></i>
+              <span><strong>کمپین بازگشت:</strong> ۳ مشتری بیش از ۴۵ روز است به سالن مراجعه نکرده‌اند.</span>
+            </div>
+            <button onclick="alert('پیامک یادآوری و کد تخفیف اختصاصی برای مشتریان غایب ارسال شد')" class="px-3 py-1.5 bg-[#F47A20] text-white rounded-lg font-bold">
+              ارسال پیامک بازگشت
+            </button>
+          </div>
+
+          <!-- Customer Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <strong class="text-slate-900 text-sm">مبینا کاربخش</strong>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">مشتری VIP</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mt-0.5" dir="ltr">09138824590</p>
+                </div>
+                <div class="text-left">
+                  <span class="text-[10px] text-slate-400 block">ارزش طول عمر (LTV):</span>
+                  <strong class="text-purple-700 text-sm">۶,۸۵۰,۰۰۰ تومان</strong>
+                </div>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-2xl text-xs space-y-1">
+                <div class="flex justify-between text-slate-600"><span>مراجعات:</span> ۴ آنلاین لوپُن • ۳ حضوری سالن</div>
+                <div class="flex justify-between text-slate-600"><span>آخرین مراجعه:</span> ۸ روز پیش (۱۴۰۵/۰۳/۱۰)</div>
+              </div>
+              <div class="bg-amber-50 text-amber-900 p-2.5 rounded-xl border border-amber-200 text-xs">
+                <strong>یادداشت پرسنلی:</strong> حساسیت به پرایمر اسیدی ناخن؛ همیشه پرایمر غیراسیدی استفاده شود. ترکیب رنگ دودی پایه ۸.
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <strong class="text-slate-900 text-sm">مریم منصوری</strong>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">برنز (>۴۵ روز غایب)</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mt-0.5" dir="ltr">09134569874</p>
+                </div>
+                <div class="text-left">
+                  <span class="text-[10px] text-slate-400 block">ارزش طول عمر (LTV):</span>
+                  <strong class="text-purple-700 text-sm">۳,۱۵۰,۰۰۰ تومان</strong>
+                </div>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-2xl text-xs space-y-1">
+                <div class="flex justify-between text-slate-600"><span>مراجعات:</span> ۱ آنلاین • ۱ حضوری</div>
+                <div class="flex justify-between text-rose-500 font-bold"><span>آخرین مراجعه:</span> ۱۱۵ روز پیش (هدف بازگشت)</div>
+              </div>
+              <div class="bg-slate-100 text-slate-700 p-2.5 rounded-xl text-xs">
+                <strong>یادداشت پرسنلی:</strong> علاقه‌مند به متدهای کوتاهی مدرن و کوپ ژورنالی.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 7: OFFLINE BOOKINGS & POS -->
+        <div id="tab-bookings" class="tab-pane hidden space-y-6">
+          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex justify-between items-center">
+            <div>
+              <h2 class="text-base font-black text-slate-900">سفارشات آفلاین، تقویم پرسنل و صندوق سالن</h2>
+              <p class="text-xs text-slate-400">کنترل تداخل نوبت، تایم‌لاین روزانه و گزارش فروش نقدی و دستگاه پوز</p>
+            </div>
+            <button onclick="openBookingModal()" class="px-4 py-2 bg-[#F47A20] text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> ثبت نوبت جدید
+            </button>
+          </div>
+
+          <!-- Cashier / POS Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-2xl p-4 border text-xs space-y-1">
+              <span class="text-slate-400">کل صندوق آفلاین:</span>
+              <strong class="text-base text-slate-900 block">۳,۶۵۰,۰۰۰ ت</strong>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border text-xs space-y-1">
+              <span class="text-slate-400">کارتخوان (POS):</span>
+              <strong class="text-base text-blue-600 block">۲,۱۰۰,۰۰۰ ت</strong>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border text-xs space-y-1">
+              <span class="text-slate-400">نقدی:</span>
+              <strong class="text-base text-emerald-600 block">۶۵۰,۰۰۰ ت</strong>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border text-xs space-y-1">
+              <span class="text-slate-400">کارت‌به‌کارت و نسیه:</span>
+              <strong class="text-base text-amber-600 block">۹۰۰,۰۰۰ ت</strong>
+            </div>
+          </div>
+
+          <!-- Staff Timeline Columns -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-white rounded-3xl border border-slate-200 p-4 space-y-3">
+              <div class="pb-2 border-b border-orange-500 font-bold text-xs text-slate-800 flex justify-between">
+                <span>نازنین ابراهیمی (رنگ)</span>
+                <span class="text-orange-500">۱ نوبت</span>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl text-xs space-y-1 border">
+                <span class="font-bold text-[#F47A20]">۱۱:۳۰ (۱۲۰ دقیقه)</span>
+                <div class="font-bold text-slate-800">پریسا نامدار</div>
+                <div class="text-[11px] text-slate-500">رنگ ریشه و براشینگ</div>
+                <div class="text-[10px] text-slate-400">۱,۴۰۰,۰۰۰ ت (کارت‌به‌کارت)</div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-4 space-y-3">
+              <div class="pb-2 border-b border-purple-500 font-bold text-xs text-slate-800 flex justify-between">
+                <span>مهسا مرادی (ناخن)</span>
+                <span class="text-purple-600">۱ نوبت</span>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl text-xs space-y-1 border">
+                <span class="font-bold text-purple-600">۱۰:۰۰ (۹۰ دقیقه)</span>
+                <div class="font-bold text-slate-800">زهرا کاظمی</div>
+                <div class="text-[11px] text-slate-500">کاشت ناخن با ژل</div>
+                <div class="text-[10px] text-slate-400">۷۰۰,۰۰۰ ت (کارتخوان)</div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-4 space-y-3">
+              <div class="pb-2 border-b border-cyan-500 font-bold text-xs text-slate-800 flex justify-between">
+                <span>یلدا رحیمی (پوست)</span>
+                <span class="text-cyan-600">۱ نوبت</span>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl text-xs space-y-1 border">
+                <span class="font-bold text-cyan-600">۱۴:۳۰ (۶۰ دقیقه)</span>
+                <div class="font-bold text-slate-800">رویا حسنی</div>
+                <div class="text-[11px] text-slate-500">فیشیال آبرسانی</div>
+                <div class="text-[10px] text-slate-400">۹۰۰,۰۰۰ ت (۳۰۰ بیعانه)</div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-200 p-4 space-y-3">
+              <div class="pb-2 border-b border-pink-500 font-bold text-xs text-slate-800 flex justify-between">
+                <span>سارا حسینی (مژه)</span>
+                <span class="text-pink-600">۱ نوبت</span>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl text-xs space-y-1 border">
+                <span class="font-bold text-pink-600">۱۶:۰۰ (۹۰ دقیقه)</span>
+                <div class="font-bold text-slate-800">سمانه امیری</div>
+                <div class="text-[11px] text-slate-500">اکستنشن مژه کلاسیک</div>
+                <div class="text-[10px] text-slate-400">۶۵۰,۰۰۰ ت (نقدی)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ================= QUICK REDEEM MODAL ================= -->
+  <div id="quickRedeemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden">
+      <div class="p-4 border-b flex justify-between items-center bg-slate-50">
+        <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-qrcode text-[#F47A20]"></i>
+          استعلام و ثبت سریع کوپن
+        </h3>
+        <button onclick="closeRedeemModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-2">کد یکتای ۶ رقمی کوپن لوپُن:</label>
+          <input type="text" id="modalCouponCode" placeholder="مثلاً: ۵۸۲۹۱۴" maxlength="6" class="w-full h-14 text-center font-bold text-2xl tracking-widest bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#F47A20] outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="handleQuickRedeemInput('modalCouponCode')" class="h-12 bg-[#F47A20] hover:bg-[#d66311] text-white font-bold text-xs rounded-xl shadow-xs">
+            استعلام و ثبت
+          </button>
+          <button onclick="simulateBarcodeScan()" class="h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-2">
+            <i class="fa-solid fa-barcode"></i> اسکن بارکد
+          </button>
+        </div>
+        <div id="modalFeedback" class="hidden p-3 rounded-xl text-xs font-bold text-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCRIPT FOR INTERACTION ================= -->
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-item').forEach(el => {
+        if (el.getAttribute('data-tab') === tabId) {
+          el.className = 'nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs font-bold transition-all text-right cursor-pointer bg-[#F47A20] text-white shadow-md shadow-orange-500/20';
+        } else {
+          el.className = 'nav-item w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-xs transition-all text-right cursor-pointer text-slate-600 hover:bg-slate-100';
+        }
+      });
+    }
+
+    function toggleSalonStatus() {
+      const dot = document.getElementById('sidebarStatusDot');
+      const text = document.getElementById('sidebarStatusText');
+      const headerBadge = document.getElementById('receptionStatusBadge');
+
+      if (dot.classList.contains('bg-emerald-500')) {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-rose-500';
+        text.innerText = 'سالن تعطیل است';
+        headerBadge.className = 'hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800';
+        headerBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="font-bold">سالن تعطیل است</span>';
+      } else {
+        dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500';
+        text.innerText = 'سالن باز است';
+        headerBadge.className = 'hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800';
+        headerBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span class="font-bold">پذیرش فعال است</span>';
+      }
+    }
+
+    function openRedeemModal() {
+      document.getElementById('quickRedeemModal').classList.remove('hidden');
+      document.getElementById('modalFeedback').classList.add('hidden');
+      document.getElementById('modalCouponCode').value = '';
+    }
+
+    function closeRedeemModal() {
+      document.getElementById('quickRedeemModal').classList.add('hidden');
+    }
+
+    function simulateBarcodeScan() {
+      document.getElementById('modalCouponCode').value = '582914';
+      handleQuickRedeemInput('modalCouponCode');
+    }
+
+    function handleQuickRedeemInput(inputId) {
+      const val = document.getElementById(inputId).value.trim();
+      if (!val) return;
+
+      redeemSpecificCode(val);
+      const feedback = document.getElementById('modalFeedback');
+      if (feedback) {
+        feedback.className = 'p-3 rounded-xl text-xs font-bold text-center bg-emerald-100 text-emerald-800 border border-emerald-200 block';
+        feedback.innerText = 'کوپن کد ' + val + ' با موفقیت به عنوان استفاده‌شده در سیستم ثبت شد!';
+      }
+    }
+
+    function redeemSpecificCode(code) {
+      const rows = document.querySelectorAll('.coupon-row');
+      rows.forEach(r => {
+        if (r.getAttribute('data-code') === code) {
+          const badge = r.querySelector('.badge-status');
+          if (badge) {
+            badge.className = 'badge-status px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
+            badge.innerText = 'استفاده شده (اکنون)';
+          }
+          const btn = r.querySelector('.redeem-btn');
+          if (btn) btn.remove();
+          r.setAttribute('data-status', 'used');
+        }
+      });
+      alert('کوپن کد ' + code + ' با موفقیت ثبت استفاده شد و به حساب تسویه سالن اضافه گردید.');
+    }
+
+    function filterCoupons(status, btn) {
+      document.querySelectorAll('.coupon-filter-btn').forEach(b => {
+        b.className = 'coupon-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-600';
+      });
+      btn.className = 'coupon-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#F47A20] text-white';
+
+      document.querySelectorAll('.coupon-row').forEach(row => {
+        if (status === 'all') {
+          row.classList.remove('hidden');
+        } else if (status === 'today') {
+          if (row.getAttribute('data-status') === 'pending') {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        } else {
+          if (row.getAttribute('data-status') === status) {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    function exportSampleExcel() {
+      const csv = '\uFEFFکد کوپن,نام مشتری,شماره تماس,خدمت,مبلغ پرداختی,سهم خالص سالن,وضعیت\n' +
+        '582914,مبینا کاربخش,09138824590,کاشت ناخن ژل,560000,560000,در انتظار مراجعه\n' +
+        '741295,فاطمه رضایی,09356718900,فیشیال پوست,770000,770000,در انتظار مراجعه\n' +
+        '963852,سحر تهرانی,09123456789,کراتین مو,1650000,1650000,استفاده شده';
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'گزارش_سفارشات_لوپن.csv';
+      a.click();
+    }
+
+    function setViewport(mode) {
+      const container = document.getElementById('mainContainer');
+      const btnDesk = document.getElementById('btnDesk');
+      const btnMob = document.getElementById('btnMob');
+      const sidebar = document.getElementById('desktopSidebar');
+
+      if (mode === 'mobile') {
+        container.style.maxWidth = '480px';
+        container.style.margin = '0 auto';
+        container.style.boxShadow = '0 0 40px rgba(0,0,0,0.15)';
+        sidebar.style.display = 'none';
+        btnMob.className = 'px-2.5 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs';
+        btnDesk.className = 'px-2.5 py-1 rounded-lg text-slate-500 hover:text-slate-800';
+      } else {
+        container.style.maxWidth = '100%';
+        container.style.margin = '0';
+        container.style.boxShadow = 'none';
+        sidebar.style.display = 'flex';
+        btnDesk.className = 'px-2.5 py-1 rounded-lg font-bold bg-white text-slate-800 shadow-xs';
+        btnMob.className = 'px-2.5 py-1 rounded-lg text-slate-500 hover:text-slate-800';
+      }
+    }
+
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('desktopSidebar');
+      if (sidebar.style.display === 'flex') {
+        sidebar.style.display = 'none';
+      } else {
+        sidebar.style.display = 'flex';
+      }
+    }
+  </script>
+</body>
+</html>
