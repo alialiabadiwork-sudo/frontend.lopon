@@ -705,78 +705,464 @@
 
         <!-- TAB 6: CRM -->
         <div id="tab-crm" class="tab-pane hidden space-y-6">
+          <!-- CRM Header & Action Buttons -->
           <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <div>
-              <h2 class="text-base font-black text-slate-900">باشگاه مشتریان و CRM</h2>
-              <p class="text-xs text-slate-400">ارزش طول عمر (LTV)، یادداشت‌های پرسنلی و کمپین‌های بازگشت مشتری</p>
+              <h2 class="text-base font-black text-slate-900">باشگاه مشتریان و مدیریت ارتباط با مشتری (CRM)</h2>
+              <p class="text-xs text-slate-400">ارزش طول عمر (LTV)، یادداشت‌های پرسنلی، نظرات مراجعین و کمپین‌های بازگشت</p>
             </div>
-            <button onclick="alert('پیامک پیشنهاد تخفیف برای ۶ عضو باشگاه ارسال شد')" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5">
-              <i class="fa-solid fa-paper-plane"></i> ارسال پیامک تخفیف به اعضا
-            </button>
+            <div class="flex items-center gap-2">
+              <button onclick="openAddCustomerModal()" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer">
+                <i class="fa-solid fa-user-plus"></i> افزودن مشتری جدید
+              </button>
+              <button onclick="alert('پیامک پیشنهاد تخفیف اختصاصی برای تمامی اعضای باشگاه ارسال گردید.')" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer border border-slate-200">
+                <i class="fa-solid fa-paper-plane text-purple-600"></i> پیامک تخفیف
+              </button>
+            </div>
           </div>
 
           <!-- 45 days retention alert -->
-          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-900">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-bell text-[#F47A20] text-base"></i>
-              <span><strong>کمپین بازگشت:</strong> ۳ مشتری بیش از ۴۵ روز است به سالن مراجعه نکرده‌اند.</span>
+          <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-orange-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-amber-900 gap-3">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-[#F47A20] text-white flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-fire text-sm"></i>
+              </div>
+              <div>
+                <strong class="font-bold">کمپین بازگشت مشتریان:</strong>
+                <span class="text-slate-600">۳ مشتری بیش از ۴۵ روز است به سالن مراجعه نکرده‌اند.</span>
+              </div>
             </div>
-            <button onclick="alert('پیامک یادآوری و کد تخفیف اختصاصی برای مشتریان غایب ارسال شد')" class="px-3 py-1.5 bg-[#F47A20] text-white rounded-lg font-bold">
+            <button onclick="alert('پیامک یادآوری و کد تخفیف اختصاصی ۲۰٪ برای مشتریان غایب ارسال شد.')" class="px-3.5 py-1.5 bg-[#F47A20] hover:bg-[#d66311] text-white rounded-xl font-bold cursor-pointer transition-colors shadow-2xs whitespace-nowrap">
               ارسال پیامک بازگشت
             </button>
           </div>
 
-          <!-- Customer Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+          <!-- Customer Cards Grid (with Edit, Staff Notes and Customer Feedback) -->
+          <div id="crmCustomerCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!-- Customer 1 -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3.5 shadow-xs hover:border-purple-300 transition-all">
               <div class="flex justify-between items-start">
                 <div>
                   <div class="flex items-center gap-2">
                     <strong class="text-slate-900 text-sm">مبینا کاربخش</strong>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">مشتری VIP</span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">مشتری VIP</span>
                   </div>
                   <p class="text-xs text-slate-400 mt-0.5" dir="ltr">09138824590</p>
                 </div>
-                <div class="text-left">
+                <div class="flex items-center gap-1.5">
+                  <button onclick="openEditCustomerModal('مبینا کاربخش', '09138824590', 'VIP', '۱۴۰۵/۰۴/۱۵')" class="px-2.5 py-1 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-pen text-[10px]"></i> ویرایش
+                  </button>
+                  <button onclick="openCrmCustomerDetail('مبینا کاربخش', '09138824590', 'VIP', '۶,۸۵۰,۰۰۰', 'حساسیت به پرایمر اسیدی ناخن؛ همیشه پرایمر غیراسیدی استفاده شود. ترکیب رنگ دودی پایه ۸.', 'کار خانم مرادی در کاشت ژل بسیار ظریف و بی‌نقص بود، واقعاً راضی هستم.')" class="px-3 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-colors cursor-pointer">
+                    پرونده
+                  </button>
+                </div>
+              </div>
+
+              <!-- Stats bar -->
+              <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl text-xs">
+                <div>
                   <span class="text-[10px] text-slate-400 block">ارزش طول عمر (LTV):</span>
                   <strong class="text-purple-700 text-sm">۶,۸۵۰,۰۰۰ تومان</strong>
                 </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">مراجعات:</span>
+                  <span class="text-slate-700 font-bold">۴ آنلاین • ۳ حضوری</span>
+                </div>
               </div>
-              <div class="bg-slate-50 p-3 rounded-2xl text-xs space-y-1">
-                <div class="flex justify-between text-slate-600"><span>مراجعات:</span> ۴ آنلاین لوپُن • ۳ حضوری سالن</div>
-                <div class="flex justify-between text-slate-600"><span>آخرین مراجعه:</span> ۸ روز پیش (۱۴۰۵/۰۳/۱۰)</div>
-              </div>
-              <div class="bg-amber-50 text-amber-900 p-2.5 rounded-xl border border-amber-200 text-xs">
-                <strong>یادداشت پرسنلی:</strong> حساسیت به پرایمر اسیدی ناخن؛ همیشه پرایمر غیراسیدی استفاده شود. ترکیب رنگ دودی پایه ۸.
+
+              <!-- Side-by-Side: Staff Note & Customer Feedback -->
+              <div class="space-y-2 text-xs">
+                <!-- Staff Note -->
+                <div class="bg-amber-50/80 text-amber-950 p-2.5 rounded-xl border border-amber-200/70 text-[11.5px] leading-relaxed">
+                  <span class="font-bold text-amber-800 flex items-center gap-1 mb-0.5">
+                    <i class="fa-solid fa-clipboard text-[#F47A20]"></i> یادداشت پرسنلی:
+                  </span>
+                  <span>حساسیت به پرایمر اسیدی ناخن؛ ترکیب رنگ مورد علاقه دودی زیتونی پایه ۸. چای سبز با هل میل می‌کنند.</span>
+                </div>
+
+                <!-- Customer Feedback / Review -->
+                <div class="bg-purple-50/70 text-purple-950 p-2.5 rounded-xl border border-purple-200/70 text-[11.5px] leading-relaxed">
+                  <div class="flex items-center justify-between font-bold text-purple-800 mb-0.5">
+                    <span class="flex items-center gap-1">
+                      <i class="fa-solid fa-comment-dots text-purple-600"></i> نظر و بازخورد مشتری:
+                    </span>
+                    <span class="text-amber-500 text-[10px] tracking-widest">★★★★★</span>
+                  </div>
+                  <span>کار خانم مرادی در کاشت ژل بسیار ظریف و بی‌نقص بود، بدون ذره‌ای هواگرفتگی. برخورد پرسنل هم عالی بود.</span>
+                </div>
               </div>
             </div>
 
-            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3 shadow-xs">
+            <!-- Customer 2 -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3.5 shadow-xs hover:border-purple-300 transition-all">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <strong class="text-slate-900 text-sm">سحر تهرانی</strong>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">مشتری VIP</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mt-0.5" dir="ltr">09123456789</p>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="openEditCustomerModal('سحر تهرانی', '09123456789', 'VIP', '۱۴۰۵/۰۶/۱۸')" class="px-2.5 py-1 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-pen text-[10px]"></i> ویرایش
+                  </button>
+                  <button onclick="openCrmCustomerDetail('سحر تهرانی', '09123456789', 'VIP', '۹,۴۰۰,۰۰۰', 'تار موی نازک و شکننده؛ اتوکشی کراتین با دمای حداکثر ۲۱۰ درجه. مشتری بسیار وقت‌شناس.', 'کراتینه خانم ابراهیمی معجزه کرد، بدون ریزش و کاملاً شلاقی شد.')" class="px-3 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-colors cursor-pointer">
+                    پرونده
+                  </button>
+                </div>
+              </div>
+
+              <!-- Stats bar -->
+              <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl text-xs">
+                <div>
+                  <span class="text-[10px] text-slate-400 block">ارزش طول عمر (LTV):</span>
+                  <strong class="text-purple-700 text-sm">۹,۴۰۰,۰۰۰ تومان</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">مراجعات:</span>
+                  <span class="text-slate-700 font-bold">۵ آنلاین • ۴ حضوری</span>
+                </div>
+              </div>
+
+              <!-- Side-by-Side: Staff Note & Customer Feedback -->
+              <div class="space-y-2 text-xs">
+                <!-- Staff Note -->
+                <div class="bg-amber-50/80 text-amber-950 p-2.5 rounded-xl border border-amber-200/70 text-[11.5px] leading-relaxed">
+                  <span class="font-bold text-amber-800 flex items-center gap-1 mb-0.5">
+                    <i class="fa-solid fa-clipboard text-[#F47A20]"></i> یادداشت پرسنلی:
+                  </span>
+                  <span>تار موی نازک و شکننده؛ اتوکشی کراتین با دمای حداکثر ۲۱۰ درجه انجام شود.</span>
+                </div>
+
+                <!-- Customer Feedback -->
+                <div class="bg-purple-50/70 text-purple-950 p-2.5 rounded-xl border border-purple-200/70 text-[11.5px] leading-relaxed">
+                  <div class="flex items-center justify-between font-bold text-purple-800 mb-0.5">
+                    <span class="flex items-center gap-1">
+                      <i class="fa-solid fa-comment-dots text-purple-600"></i> نظر و بازخورد مشتری:
+                    </span>
+                    <span class="text-amber-500 text-[10px] tracking-widest">★★★★★</span>
+                  </div>
+                  <span>کراتینه خانم ابراهیمی فوق‌العاده بود، موهام کاملاً احیا و شلاقی شده و ماندگاری بالایی داره.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer 3 -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3.5 shadow-xs hover:border-purple-300 transition-all">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <strong class="text-slate-900 text-sm">فاطمه رضایی</strong>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">مشتری نقره‌ای</span>
+                  </div>
+                  <p class="text-xs text-slate-400 mt-0.5" dir="ltr">09356718900</p>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="openEditCustomerModal('فاطمه رضایی', '09356718900', 'silver', '۱۴۰۵/۰۵/۰۲')" class="px-2.5 py-1 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-pen text-[10px]"></i> ویرایش
+                  </button>
+                  <button onclick="openCrmCustomerDetail('فاطمه رضایی', '09356718900', 'silver', '۲,۲۰۰,۰۰۰', 'پوست حساس و دهیدراته؛ استفاده از ماسک آبرسان عمیق.', 'فیشیال تخصصی پوستم رو بسیار روشن و شفاف کرد.')" class="px-3 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-colors cursor-pointer">
+                    پرونده
+                  </button>
+                </div>
+              </div>
+
+              <!-- Stats bar -->
+              <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl text-xs">
+                <div>
+                  <span class="text-[10px] text-slate-400 block">ارزش طول عمر (LTV):</span>
+                  <strong class="text-purple-700 text-sm">۲,۲۰۰,۰۰۰ تومان</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">مراجعات:</span>
+                  <span class="text-slate-700 font-bold">۲ آنلاین • ۱ حضوری</span>
+                </div>
+              </div>
+
+              <!-- Side-by-Side: Staff Note & Customer Feedback -->
+              <div class="space-y-2 text-xs">
+                <div class="bg-amber-50/80 text-amber-950 p-2.5 rounded-xl border border-amber-200/70 text-[11.5px] leading-relaxed">
+                  <span class="font-bold text-amber-800 flex items-center gap-1 mb-0.5">
+                    <i class="fa-solid fa-clipboard text-[#F47A20]"></i> یادداشت پرسنلی:
+                  </span>
+                  <span>پوست حساس و دهیدراته؛ حتماً از سرم هیالورونیک و ماسک آبرسان عمیق استفاده شود.</span>
+                </div>
+
+                <div class="bg-purple-50/70 text-purple-950 p-2.5 rounded-xl border border-purple-200/70 text-[11.5px] leading-relaxed">
+                  <div class="flex items-center justify-between font-bold text-purple-800 mb-0.5">
+                    <span class="flex items-center gap-1">
+                      <i class="fa-solid fa-comment-dots text-purple-600"></i> نظر و بازخورد مشتری:
+                    </span>
+                    <span class="text-amber-500 text-[10px] tracking-widest">★★★★★</span>
+                  </div>
+                  <span>فیشیال تخصصی خانم رحیمی عالی بود، بعد از پاکسازی پوستم کاملاً سبک و شفاف شد.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer 4 (Retention target) -->
+            <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3.5 shadow-xs hover:border-purple-300 transition-all">
               <div class="flex justify-between items-start">
                 <div>
                   <div class="flex items-center gap-2">
                     <strong class="text-slate-900 text-sm">مریم منصوری</strong>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">برنز (>۴۵ روز غایب)</span>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700 border border-rose-200">>۴۵ روز غیبت</span>
                   </div>
                   <p class="text-xs text-slate-400 mt-0.5" dir="ltr">09134569874</p>
                 </div>
-                <div class="text-left">
+                <div class="flex items-center gap-1.5">
+                  <button onclick="openEditCustomerModal('مریم منصوری', '09134569874', 'bronze', '۱۴۰۵/۰۳/۲۵')" class="px-2.5 py-1 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-pen text-[10px]"></i> ویرایش
+                  </button>
+                  <button onclick="openCrmCustomerDetail('مریم منصوری', '09134569874', 'bronze', '۳,۱۵۰,۰۰۰', 'علاقه‌مند به متدهای کوتاهی مدرن و کوپ ژورنالی.', 'رنگ و لایت قشنگ بود ولی زمان انتظار کمی طولانی شد.')" class="px-3 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-colors cursor-pointer">
+                    پرونده
+                  </button>
+                </div>
+              </div>
+
+              <!-- Stats bar -->
+              <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl text-xs">
+                <div>
                   <span class="text-[10px] text-slate-400 block">ارزش طول عمر (LTV):</span>
                   <strong class="text-purple-700 text-sm">۳,۱۵۰,۰۰۰ تومان</strong>
                 </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">آخرین مراجعه:</span>
+                  <span class="text-rose-600 font-bold">۱۱۵ روز پیش</span>
+                </div>
               </div>
-              <div class="bg-slate-50 p-3 rounded-2xl text-xs space-y-1">
-                <div class="flex justify-between text-slate-600"><span>مراجعات:</span> ۱ آنلاین • ۱ حضوری</div>
-                <div class="flex justify-between text-rose-500 font-bold"><span>آخرین مراجعه:</span> ۱۱۵ روز پیش (هدف بازگشت)</div>
+
+              <!-- Side-by-Side: Staff Note & Customer Feedback -->
+              <div class="space-y-2 text-xs">
+                <div class="bg-amber-50/80 text-amber-950 p-2.5 rounded-xl border border-amber-200/70 text-[11.5px] leading-relaxed">
+                  <span class="font-bold text-amber-800 flex items-center gap-1 mb-0.5">
+                    <i class="fa-solid fa-clipboard text-[#F47A20]"></i> یادداشت پرسنلی:
+                  </span>
+                  <span>علاقه‌مند به متدهای کوتاهی مدرن و کوپ ژورنالی.</span>
+                </div>
+
+                <div class="bg-purple-50/70 text-purple-950 p-2.5 rounded-xl border border-purple-200/70 text-[11.5px] leading-relaxed">
+                  <div class="flex items-center justify-between font-bold text-purple-800 mb-0.5">
+                    <span class="flex items-center gap-1">
+                      <i class="fa-solid fa-comment-dots text-purple-600"></i> نظر و بازخورد مشتری:
+                    </span>
+                    <span class="text-amber-500 text-[10px] tracking-widest">★★★★☆</span>
+                  </div>
+                  <span>رنگ و لایت قشنگ شد اما معطلی سالن کمی زیاد بود، اگر زمان‌بندی دقیق‌تر بشه عالیه.</span>
+                </div>
               </div>
-              <div class="bg-slate-100 text-slate-700 p-2.5 rounded-xl text-xs">
-                <strong>یادداشت پرسنلی:</strong> علاقه‌مند به متدهای کوتاهی مدرن و کوپ ژورنالی.
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= MODALS FOR CRM ================= -->
+        <!-- Add Customer Modal -->
+        <div id="addCustomerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" dir="rtl">
+          <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <div>
+                  <h3 class="font-black text-slate-900 text-sm">افزودن مشتری جدید به باشگاه</h3>
+                  <p class="text-[11px] text-slate-400">ثبت مشخصات، یادداشت پرسنلی و نظر اولیه مشتری</p>
+                </div>
+              </div>
+              <button onclick="closeAddCustomerModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <form onsubmit="handleCreateCustomerSubmit(event)" class="p-5 space-y-3.5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">نام و نام خانوادگی:</label>
+                  <input id="addCustName" type="text" required placeholder="مثال: نگار صادقی" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">شماره موبایل:</label>
+                  <input id="addCustPhone" type="text" required placeholder="0913..." dir="ltr" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500 text-left">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">سطح مشتری:</label>
+                  <select id="addCustTier" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none cursor-pointer">
+                    <option value="bronze">برنز (عادی)</option>
+                    <option value="silver">نقره‌ای</option>
+                    <option value="VIP">طلایی (VIP)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">تاریخ تولد / سالگرد:</label>
+                  <input id="addCustBirthday" type="text" placeholder="مثال: ۱۴۰۵/۰۶/۱۵" dir="ltr" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none text-left">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">یادداشت پرسنلی (فرمول رنگ، حساسیت):</label>
+                <textarea id="addCustStaffNote" rows="2" placeholder="نکات مهم برای آرایشگران و پرسنل..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none resize-none"></textarea>
+              </div>
+
+              <div class="bg-purple-50/50 p-3 rounded-2xl border border-purple-100 space-y-1.5">
+                <div class="flex justify-between items-center">
+                  <label class="text-xs font-bold text-purple-900">نظر و بازخورد مشتری (اختیاری):</label>
+                  <select id="addCustRating" class="h-7 px-2 bg-white border border-slate-200 rounded-lg text-xs text-amber-600 outline-none">
+                    <option value="5">★★★★★ (۵ ستاره)</option>
+                    <option value="4">★★★★ (۴ ستاره)</option>
+                    <option value="3">★★★ (۳ ستاره)</option>
+                  </select>
+                </div>
+                <textarea id="addCustReview" rows="2" placeholder="بازخورد مشتری از کیفیت کار، برخورد یا محیط سالن..." class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs outline-none resize-none"></textarea>
+              </div>
+
+              <div class="pt-2 flex gap-2">
+                <button type="submit" class="flex-1 h-11 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer">
+                  ثبت مشتری در باشگاه
+                </button>
+                <button type="button" onclick="closeAddCustomerModal()" class="px-5 h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors cursor-pointer">
+                  انصراف
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Edit Customer Modal -->
+        <div id="editCustomerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" dir="rtl">
+          <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                  <i class="fa-solid fa-pen text-xs"></i>
+                </div>
+                <div>
+                  <h3 class="font-black text-slate-900 text-sm">ویرایش مشخصات مشتری</h3>
+                  <p class="text-[11px] text-slate-400">به‌روزرسانی نام، سطح و شماره تماس</p>
+                </div>
+              </div>
+              <button onclick="closeEditCustomerModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <form onsubmit="handleSaveEditSubmit(event)" class="p-5 space-y-3.5">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">نام و نام خانوادگی:</label>
+                <input id="editCustName" type="text" required class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500">
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">شماره موبایل:</label>
+                <input id="editCustPhone" type="text" required dir="ltr" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500 text-left">
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">سطح اشتراک:</label>
+                  <select id="editCustTier" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none cursor-pointer">
+                    <option value="bronze">برنز</option>
+                    <option value="silver">نقره‌ای</option>
+                    <option value="VIP">VIP</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">تاریخ تولد / سالگرد:</label>
+                  <input id="editCustBirthday" type="text" dir="ltr" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none text-left">
+                </div>
+              </div>
+
+              <div class="pt-2 flex gap-2">
+                <button type="submit" class="flex-1 h-11 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer">
+                  ذخیره تغییرات
+                </button>
+                <button type="button" onclick="closeEditCustomerModal()" class="px-5 h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors cursor-pointer">
+                  انصراف
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Customer Detail Modal (پرونده با یادداشت پرسنلی و نظرات مشتری) -->
+        <div id="crmCustomerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" dir="rtl">
+          <div class="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-black" id="modalCustInitial">م</div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-black text-slate-900 text-base" id="modalCustName">مبینا کاربخش</h3>
+                    <span id="modalCustTierBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">VIP</span>
+                  </div>
+                  <p class="text-xs text-slate-400" id="modalCustPhone" dir="ltr">09138824590</p>
+                </div>
+              </div>
+              <button onclick="closeCrmCustomerDetail()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-5 custom-scrollbar">
+              <!-- Stats Row -->
+              <div class="grid grid-cols-2 bg-purple-50/50 p-3.5 rounded-2xl border border-purple-100 text-xs">
+                <div>
+                  <span class="text-slate-400 block text-[10px]">مجموع هزینه سالن (LTV):</span>
+                  <strong class="text-purple-700 text-sm font-black" id="modalCustLtv">۶,۸۵۰,۰۰۰ تومان</strong>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[10px]">وضعیت وفاداری:</span>
+                  <span class="text-emerald-600 font-bold">مشتری دائم و وفادار</span>
+                </div>
+              </div>
+
+              <!-- Staff Notes Section -->
+              <div class="space-y-2.5 bg-amber-50/40 p-4 rounded-2xl border border-amber-200/80">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-amber-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-clipboard text-[#F47A20]"></i> یادداشت‌های پرسنلی (فرمول رنگ، حساسیت):
+                  </span>
+                </div>
+                <div id="modalCustStaffNote" class="bg-white p-3 rounded-xl border border-amber-200 text-xs text-amber-950 leading-relaxed">
+                  حساسیت به پرایمر اسیدی ناخن؛ همیشه پرایمر غیراسیدی استفاده شود. ترکیب رنگ دودی پایه ۸.
+                </div>
+                <div class="flex gap-2 pt-1">
+                  <input id="inputNewStaffNote" type="text" placeholder="افزودن یادداشت جدید پرسنلی..." class="flex-1 h-9 px-3 text-xs bg-white border border-slate-200 rounded-xl outline-none focus:border-[#F47A20]">
+                  <button onclick="appendStaffNote()" class="h-9 px-3.5 bg-[#F47A20] hover:bg-[#d66311] text-white text-xs font-bold rounded-xl transition-colors cursor-pointer">
+                    ثبت
+                  </button>
+                </div>
+              </div>
+
+              <!-- Customer Feedback Section -->
+              <div class="space-y-2.5 bg-purple-50/40 p-4 rounded-2xl border border-purple-200/80">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-purple-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-comment-dots text-purple-600"></i> نظرات و بازخوردهای مشتری:
+                  </span>
+                  <span class="text-amber-500 font-bold" id="modalCustReviewStars">★★★★★</span>
+                </div>
+                <div id="modalCustReview" class="bg-white p-3 rounded-xl border border-purple-200 text-xs text-slate-800 leading-relaxed">
+                  کار خانم مرادی در کاشت ژل بسیار ظریف و بی‌نقص بود، بدون ذره‌ای هواگرفتگی.
+                </div>
+                <div class="flex gap-2 pt-1">
+                  <input id="inputNewCustReview" type="text" placeholder="ثبت نظر یا بازخورد جدید مشتری..." class="flex-1 h-9 px-3 text-xs bg-white border border-slate-200 rounded-xl outline-none focus:border-purple-500">
+                  <button onclick="appendCustomerReview()" class="h-9 px-3.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer">
+                    ثبت نظر
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- TAB 7: OFFLINE BOOKINGS & POS -->
+        <!-- TAB 7: OFFLINE BOOKINGS & POS --><!-- TAB 7: OFFLINE BOOKINGS & POS -->
         <div id="tab-bookings" class="tab-pane hidden space-y-6">
           <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex justify-between items-center">
             <div>
@@ -1045,6 +1431,122 @@
         sidebar.style.display = 'flex';
       }
     }
-  </script>
+  
+    // ================= CRM MODAL FUNCTIONS =================
+    function openAddCustomerModal() {
+      document.getElementById('addCustomerModal').classList.remove('hidden');
+    }
+    function closeAddCustomerModal() {
+      document.getElementById('addCustomerModal').classList.add('hidden');
+    }
+    function handleCreateCustomerSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('addCustName').value.trim();
+      const phone = document.getElementById('addCustPhone').value.trim();
+      const tier = document.getElementById('addCustTier').value;
+      const staffNote = document.getElementById('addCustStaffNote').value.trim() || 'بدون یادداشت پرسنلی';
+      const review = document.getElementById('addCustReview').value.trim() || 'خدمات باکیفیت و رضایت‌بخش بود.';
+      
+      const grid = document.getElementById('crmCustomerCardsGrid');
+      const newCard = document.createElement('div');
+      newCard.className = 'bg-white rounded-3xl border border-purple-300 p-5 space-y-3.5 shadow-xs hover:border-purple-400 transition-all';
+      newCard.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="flex items-center gap-2">
+              <strong class="text-slate-900 text-sm">${name}</strong>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${tier === 'VIP' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-200 text-slate-700'}">${tier === 'VIP' ? 'مشتری VIP' : 'عضو جدید'}</span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5" dir="ltr">${phone}</p>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="openEditCustomerModal('${name}', '${phone}', '${tier}', '۱۴۰۵/۰۱/۰۱')" class="px-2.5 py-1 text-slate-500 hover:text-purple-600 hover:bg-purple-50 rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer">
+              <i class="fa-solid fa-pen text-[10px]"></i> ویرایش
+            </button>
+            <button onclick="openCrmCustomerDetail('${name}', '${phone}', '${tier}', '۰', '${staffNote}', '${review}')" class="px-3 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-colors cursor-pointer">
+              پرونده
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl text-xs">
+          <div>
+            <span class="text-[10px] text-slate-400 block">ارزش طول عمر (LTV):</span>
+            <strong class="text-purple-700 text-sm">۰ تومان</strong>
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block">مراجعات:</span>
+            <span class="text-slate-700 font-bold">۰ نوبت (تازه عضو شده)</span>
+          </div>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div class="bg-amber-50/80 text-amber-950 p-2.5 rounded-xl border border-amber-200/70 text-[11.5px] leading-relaxed">
+            <span class="font-bold text-amber-800 flex items-center gap-1 mb-0.5">
+              <i class="fa-solid fa-clipboard text-[#F47A20]"></i> یادداشت پرسنلی:
+            </span>
+            <span>${staffNote}</span>
+          </div>
+          <div class="bg-purple-50/70 text-purple-950 p-2.5 rounded-xl border border-purple-200/70 text-[11.5px] leading-relaxed">
+            <div class="flex items-center justify-between font-bold text-purple-800 mb-0.5">
+              <span class="flex items-center gap-1">
+                <i class="fa-solid fa-comment-dots text-purple-600"></i> نظر و بازخورد مشتری:
+              </span>
+              <span class="text-amber-500 text-[10px] tracking-widest">★★★★★</span>
+            </div>
+            <span>${review}</span>
+          </div>
+        </div>
+      `;
+      grid.prepend(newCard);
+      closeAddCustomerModal();
+      alert('مشتری جدید با موفقیت به باشگاه مشتریان اضافه شد!');
+    }
+
+    let currentEditingCustomerName = '';
+    function openEditCustomerModal(name, phone, tier, birthday) {
+      currentEditingCustomerName = name;
+      document.getElementById('editCustName').value = name;
+      document.getElementById('editCustPhone').value = phone;
+      document.getElementById('editCustTier').value = tier;
+      document.getElementById('editCustBirthday').value = birthday || '';
+      document.getElementById('editCustomerModal').classList.remove('hidden');
+    }
+    function closeEditCustomerModal() {
+      document.getElementById('editCustomerModal').classList.add('hidden');
+    }
+    function handleSaveEditSubmit(e) {
+      e.preventDefault();
+      closeEditCustomerModal();
+      alert('اطلاعات مشتری با موفقیت به‌روزرسانی شد.');
+    }
+
+    function openCrmCustomerDetail(name, phone, tier, ltv, staffNote, review) {
+      document.getElementById('modalCustName').innerText = name;
+      document.getElementById('modalCustPhone').innerText = phone;
+      document.getElementById('modalCustInitial').innerText = name[0];
+      document.getElementById('modalCustLtv').innerText = ltv + ' تومان';
+      document.getElementById('modalCustStaffNote').innerText = staffNote;
+      document.getElementById('modalCustReview').innerText = review;
+      document.getElementById('crmCustomerModal').classList.remove('hidden');
+    }
+    function closeCrmCustomerDetail() {
+      document.getElementById('crmCustomerModal').classList.add('hidden');
+    }
+    function appendStaffNote() {
+      const input = document.getElementById('inputNewStaffNote');
+      if (!input.value.trim()) return;
+      const box = document.getElementById('modalCustStaffNote');
+      box.innerText = input.value.trim() + ' | ' + box.innerText;
+      input.value = '';
+      alert('یادداشت پرسنلی جدید به پرونده افزوده شد.');
+    }
+    function appendCustomerReview() {
+      const input = document.getElementById('inputNewCustReview');
+      if (!input.value.trim()) return;
+      const box = document.getElementById('modalCustReview');
+      box.innerText = input.value.trim() + ' | ' + box.innerText;
+      input.value = '';
+      alert('نظر مشتری با موفقیت ثبت شد.');
+    }
+</script>
 </body>
 </html>

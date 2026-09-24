@@ -358,6 +358,10 @@ const INITIAL_CRM_CUSTOMERS = [
       'ترکیب رنگ مورد علاقه: دودی زیتونی پایه ۸',
       'چای سبز با هل میل می‌کنند.',
     ],
+    customerReviews: [
+      { id: 'cr_1', text: 'کار خانم مرادی در کاشت ژل بسیار ظریف و بی‌نقص بود، واقعاً راضی هستم.', rating: 5, date: '۱۴۰۵/۰۳/۱۰' },
+      { id: 'cr_2', text: 'برخورد گرم پرسنل و تمیزی سالن فوق‌العاده است.', rating: 5, date: '۱۴۰۵/۰۲/۱۵' },
+    ],
     history: [
       { date: '۱۴۰۵/۰۳/۱۰', service: 'ترمیم ناخن با ژل', staff: 'مهسا مرادی', amount: 350000, type: 'offline' },
       { date: '۱۴۰۵/۰۲/۱۵', service: 'کراتینه و احیا', staff: 'نازنین ابراهیمی', amount: 1650000, type: 'online' },
@@ -379,6 +383,9 @@ const INITIAL_CRM_CUSTOMERS = [
     staffNotes: [
       'پوست حساس و دهیدراته؛ استفاده از ماسک آبرسان عمیق.',
     ],
+    customerReviews: [
+      { id: 'cr_3', text: 'فیشیال تخصصی خانم رحیمی پوستم رو روشن و شفاف کرد، محصولات عالی بودن.', rating: 5, date: '۱۴۰۵/۰۲/۲۴' },
+    ],
     history: [
       { date: '۱۴۰۵/۰۲/۲۴', service: 'پاکسازی پوست', staff: 'یلدا رحیمی', amount: 650000, type: 'offline' },
       { date: '۱۴۰۵/۰۱/۱۵', service: 'فیشیال تخصصی', staff: 'یلدا رحیمی', amount: 770000, type: 'online' },
@@ -398,6 +405,10 @@ const INITIAL_CRM_CUSTOMERS = [
     staffNotes: [
       'تار موی نازک و شکننده؛ اتوکشی کراتین با دمای حداکثر ۲۱۰ درجه.',
       'مشتری بسیار وقت‌شناس و منظم.',
+    ],
+    customerReviews: [
+      { id: 'cr_4', text: 'کراتینه خانم ابراهیمی معجزه کرد، بدون ریزش و کاملاً شلاقی شد.', rating: 5, date: '۱۴۰۵/۰۳/۰۲' },
+      { id: 'cr_5', text: 'سرعت عمل و دقت کار پرسنل عالی بود.', rating: 4, date: '۱۴۰۵/۰۲/۰۱' },
     ],
     history: [
       { date: '۱۴۰۵/۰۳/۰۲', service: 'کراتینه ابریشمی', staff: 'نازنین ابراهیمی', amount: 1650000, type: 'online' },
@@ -419,6 +430,9 @@ const INITIAL_CRM_CUSTOMERS = [
     staffNotes: [
       'علاقه‌مند به متدهای کوتاهی مدرن.',
     ],
+    customerReviews: [
+      { id: 'cr_6', text: 'رنگ و لایت قشنگ بود ولی زمان انتظارم کمی طولانی شد.', rating: 4, date: '۱۴۰۴/۱۱/۲۰' },
+    ],
     history: [
       { date: '۱۴۰۴/۱۱/۲۰', service: 'رنگ و لایت', staff: 'نازنین ابراهیمی', amount: 2800000, type: 'online' },
       { date: '۱۴۰۴/۱۰/۱۲', service: 'کوپ ژورنالی', staff: 'سارا حسینی', amount: 350000, type: 'offline' },
@@ -436,6 +450,9 @@ const INITIAL_CRM_CUSTOMERS = [
     tier: 'bronze',
     birthday: '۱۴۰۵/۰۸/۱۰',
     staffNotes: ['مدل ابروی پهن را می‌پسندد.'],
+    customerReviews: [
+      { id: 'cr_7', text: 'لیفت ابرو ماندگاری خیلی خوبی داشت، ممنون از خانم حسینی.', rating: 5, date: '۱۴۰۴/۱۲/۰۵' },
+    ],
     history: [
       { date: '۱۴۰۴/۱۲/۰۵', service: 'لیفت مژه و ابرو', staff: 'سارا حسینی', amount: 750000, type: 'offline' },
       { date: '۱۴۰۴/۱۰/۲۸', service: 'مانیکور روسی', staff: 'مهسا مرادی', amount: 450000, type: 'offline' },
@@ -453,6 +470,9 @@ const INITIAL_CRM_CUSTOMERS = [
     tier: 'silver',
     birthday: '۱۴۰۵/۰۹/۰۴',
     staffNotes: ['کاشت فرم بادامی متوسط.'],
+    customerReviews: [
+      { id: 'cr_8', text: 'ژلیش ناخن تا یک ماه سالم موند بدون پریدگی، عالی بود.', rating: 5, date: '۱۴۰۵/۰۱/۱۵' },
+    ],
     history: [
       { date: '۱۴۰۵/۰۱/۱۵', service: 'ژلیش و لمینت ناخن', staff: 'مهسا مرادی', amount: 420000, type: 'offline' },
       { date: '۱۴۰۴/۱۲/۱۸', service: 'فیشیال هیدرودرمی', staff: 'یلدا رحیمی', amount: 770000, type: 'online' },
@@ -763,19 +783,90 @@ export const useVendorStore = create((set, get) => ({
   },
 
   // 4. CRM Actions
-  addCustomerNote: (customerId, noteText) => {
+  addCrmCustomer: (customerData) => {
+    const newCustomer = {
+      id: `crm_${Date.now()}`,
+      name: customerData.name || 'مشتری جدید',
+      phone: customerData.phone || '',
+      tier: customerData.tier || 'bronze',
+      birthday: customerData.birthday || '',
+      anniversary: customerData.anniversary || '',
+      onlineOrdersCount: 0,
+      offlineVisitsCount: 0,
+      totalLtv: 0,
+      lastVisitDate: 'ثبت نشده',
+      lastVisitDaysAgo: 0,
+      staffNotes: customerData.staffNote ? [customerData.staffNote] : [],
+      customerReviews: customerData.customerReview
+        ? [{ id: `cr_${Date.now()}`, text: customerData.customerReview, rating: customerData.rating || 5, date: 'امروز' }]
+        : [],
+      history: [],
+    };
+
+    set((state) => {
+      const updated = [newCustomer, ...state.crmCustomers];
+      const next = { ...state, crmCustomers: updated };
+      saveState(next);
+      return { crmCustomers: updated };
+    });
+
+    return { success: true, customer: newCustomer };
+  },
+
+  updateCrmCustomer: (customerId, updatedData) => {
     set((state) => {
       const updated = state.crmCustomers.map((c) => {
         if (c.id !== customerId) return c;
         return {
           ...c,
-          staffNotes: [noteText, ...c.staffNotes],
+          ...updatedData,
         };
       });
       const next = { ...state, crmCustomers: updated };
       saveState(next);
       return { crmCustomers: updated };
     });
+
+    return { success: true };
+  },
+
+  addCustomerNote: (customerId, noteText) => {
+    set((state) => {
+      const updated = state.crmCustomers.map((c) => {
+        if (c.id !== customerId) return c;
+        return {
+          ...c,
+          staffNotes: [noteText, ...(c.staffNotes || [])],
+        };
+      });
+      const next = { ...state, crmCustomers: updated };
+      saveState(next);
+      return { crmCustomers: updated };
+    });
+  },
+
+  addCustomerReview: (customerId, { text, rating = 5, date = 'امروز' }) => {
+    const newReview = {
+      id: `cr_${Date.now()}`,
+      text,
+      rating: Number(rating) || 5,
+      date,
+    };
+
+    set((state) => {
+      const updated = state.crmCustomers.map((c) => {
+        if (c.id !== customerId) return c;
+        return {
+          ...c,
+          customerReviews: [newReview, ...(c.customerReviews || [])],
+        };
+      });
+      const next = { ...state, crmCustomers: updated };
+      saveState(next);
+      return { crmCustomers: updated };
+    });
+
+    return { success: true, review: newReview };
   },
 
   sendMarketingSms: ({ targetPhones, message, discountCode }) => {
