@@ -468,8 +468,8 @@ export default function VendorDashboard() {
 
         {/* Left (4 cols): Quick Management Shortcuts & Revenue Split */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Daily Missions Checklist (ماموریت‌های امروز) - طراحی مینیمال با تک CTA ثبت پذیرش */}
-          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
+          {/* Daily Missions Checklist (ماموریت‌های امروز) */}
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
             <div className="pb-3 border-b border-slate-100">
               <div className="flex items-center justify-between">
                 <h3 className="font-kal-3 font-bold text-slate-800 text-sm flex items-center gap-2">
@@ -489,41 +489,38 @@ export default function VendorDashboard() {
               </div>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {dailyMissions.map((mission) => (
-                <label
+                <div
                   key={mission.id}
-                  className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors"
+                  className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2"
                 >
-                  <input
-                    type="checkbox"
-                    checked={mission.completed}
-                    onChange={() => toggleDailyMission(mission.id)}
-                    className="w-4 h-4 rounded text-slate-900 focus:ring-slate-400 cursor-pointer accent-slate-900"
-                  />
-                  <span
-                    className={`font-kal-2 text-xs transition-colors ${
-                      mission.completed
-                        ? 'line-through text-slate-400 font-normal'
-                        : 'text-slate-700 font-medium'
-                    }`}
-                  >
-                    {mission.title}
-                  </span>
-                </label>
-              ))}
-            </div>
+                  <label className="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+                    <input
+                      type="checkbox"
+                      checked={mission.completed}
+                      onChange={() => toggleDailyMission(mission.id)}
+                      className="w-4 h-4 rounded text-slate-900 focus:ring-slate-400 cursor-pointer accent-slate-900 shrink-0"
+                    />
+                    <span
+                      className={`font-kal-2 text-xs truncate transition-colors ${
+                        mission.completed
+                          ? 'line-through text-slate-400 font-normal'
+                          : 'text-slate-700 font-medium'
+                      }`}
+                    >
+                      {mission.title}
+                    </span>
+                  </label>
 
-            {/* Single CTA on Card: ثبت پذیرش */}
-            <div className="pt-3 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={() => setQuickRedeemModalOpen(true)}
-                className="w-full h-10 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
-              >
-                <QrCode className="w-4 h-4 text-orange-400" />
-                <span>ثبت پذیرش</span>
-              </button>
+                  <Link
+                    to={mission.link || '/vendor/services'}
+                    className="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs whitespace-nowrap"
+                  >
+                    انجام ماموریت
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پیش‌نمایش ماموریت‌های روزانه و ابعاد آیکون لوپُن</title>
+  <title>پیش‌نمایش ماموریت‌های روزانه (با دکمه انجام ماموریت)</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -20,15 +20,15 @@
 
   <div class="w-full max-w-lg space-y-6">
 
-    <!-- Top Info Bar -->
+    <!-- Top Navigation / Info Bar -->
     <div class="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-xl bg-orange-50 text-[#F47A20] flex items-center justify-center text-sm font-bold">
-          <i class="fa-solid fa-check-double"></i>
+        <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center text-sm font-bold">
+          <i class="fa-solid fa-list-check"></i>
         </div>
         <div>
-          <h1 class="text-xs font-bold text-slate-800">پیش‌نمایش تغییرات داشبورد وندور</h1>
-          <p class="text-[11px] text-slate-400">کارت مینیمال ماموریت‌ها + تناسب ابعاد آیکون لوپُن</p>
+          <h1 class="text-xs font-bold text-slate-800">ماموریت‌های روزانه با دکمه «انجام ماموریت»</h1>
+          <p class="text-[11px] text-slate-400">حذف دکمه ثبت پذیرش و قرارگیری دکمه مقابل هر سطر</p>
         </div>
       </div>
       <a href="vendor_panel_preview.html" class="text-xs text-[#F47A20] font-bold hover:underline flex items-center gap-1">
@@ -37,7 +37,7 @@
       </a>
     </div>
 
-    <!-- Section 1: فروش در کل امروز (بررسی متناسب‌سازی آیکون لوپُن) -->
+    <!-- Section 1: فروش در کل امروز (نمایش آیکون متناسب لوپُن) -->
     <div class="space-y-2">
       <div class="flex items-center justify-between text-xs text-slate-500 px-1 font-medium">
         <span>۱. ابعاد آیکون لوپُن در کارت فروش:</span>
@@ -79,15 +79,15 @@
       </div>
     </div>
 
-    <!-- Section 2: ماموریت‌های امروز (طراحی کاملاً مینیمال با تک CTA ثبت پذیرش) -->
+    <!-- Section 2: ماموریت‌های امروز (تک‌تک سطرها دارای دکمه «انجام ماموریت») -->
     <div class="space-y-2">
       <div class="flex items-center justify-between text-xs text-slate-500 px-1 font-medium">
-        <span>۲. کارت ماموریت‌های امروز (طراحی مینیمال + دکمه ثبت پذیرش):</span>
-        <span class="text-[10px] text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-md font-bold">تک CTA ثبت پذیرش</span>
+        <span>۲. کارت ماموریت‌های امروز:</span>
+        <span class="text-[10px] text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-md font-bold">دکمه انجام ماموریت در هر سطر</span>
       </div>
 
-      <!-- Minimal Daily Missions Card -->
-      <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
+      <!-- Minimal Daily Missions Card without Redeem button -->
+      <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
         
         <!-- Header -->
         <div class="pb-3 border-b border-slate-100">
@@ -106,84 +106,70 @@
           </div>
         </div>
 
-        <!-- 4 Checklist Items -->
-        <div class="space-y-1.5 text-xs" id="missionsList">
-          <!-- Item 1 -->
-          <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-            <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-            <span class="text-slate-400 line-through text-xs font-normal">بروزرسانی قیمت‌ها و پکیج‌های فصلی</span>
-          </label>
+        <!-- 4 Checklist Items with "انجام ماموریت" buttons -->
+        <div class="space-y-2 text-xs" id="missionsList">
 
-          <!-- Item 2 -->
-          <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-            <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-            <span class="text-slate-700 text-xs font-medium">آپدیت کردن عکس‌ها در گالری نمونه‌کارها</span>
-          </label>
+          <!-- Task 1: بروزرسانی قیمت ها -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+              <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+              <span class="text-slate-400 line-through text-xs font-normal truncate">بروزرسانی قیمت‌ها و پکیج‌های فصلی</span>
+            </label>
+            <button onclick="handleDoMission('بروزرسانی قیمت‌ها و پکیج‌های فصلی', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+              انجام ماموریت
+            </button>
+          </div>
 
-          <!-- Item 3 -->
-          <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-            <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-            <span class="text-slate-400 line-through text-xs font-normal">پاسخ به نظرات و بازخوردهای مراجعین</span>
-          </label>
+          <!-- Task 2: آپدیت کردن عکس ها -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+              <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+              <span class="text-slate-700 text-xs font-medium truncate">آپدیت کردن عکس‌ها در گالری نمونه‌کارها</span>
+            </label>
+            <button onclick="handleDoMission('آپدیت کردن عکس‌ها در گالری نمونه‌کارها', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+              انجام ماموریت
+            </button>
+          </div>
 
-          <!-- Item 4 -->
-          <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-            <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-            <span class="text-slate-700 text-xs font-medium">ارسال پیامک انبوه به مشتریان</span>
-          </label>
+          <!-- Task 3: پاسخ به نظرات -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+              <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+              <span class="text-slate-400 line-through text-xs font-normal truncate">پاسخ به نظرات و بازخوردهای مراجعین</span>
+            </label>
+            <button onclick="handleDoMission('پاسخ به نظرات و بازخوردهای مراجعین', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+              انجام ماموریت
+            </button>
+          </div>
+
+          <!-- Task 4: ارسال پیامک انبوه -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+              <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+              <span class="text-slate-700 text-xs font-medium truncate">ارسال پیامک انبوه به مشتریان</span>
+            </label>
+            <button onclick="handleDoMission('ارسال پیامک انبوه به مشتریان', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+              انجام ماموریت
+            </button>
+          </div>
+
         </div>
 
-        <!-- Single CTA on Card: ثبت پذیرش -->
-        <div class="pt-3 border-t border-slate-100">
-          <button onclick="openRedeemModal()" class="w-full h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs">
-            <i class="fa-solid fa-qrcode text-xs text-orange-400"></i>
-            <span>ثبت پذیرش</span>
-          </button>
-        </div>
+        <div id="actionToast" class="hidden p-3 rounded-xl text-xs font-bold text-center bg-slate-900 text-white transition-all"></div>
       </div>
     </div>
 
-  </div>
-
-  <!-- Quick Redeem Modal for Admission -->
-  <div id="quickRedeemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden">
-      <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-        <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-qrcode text-[#F47A20]"></i>
-          <span>استعلام و ثبت پذیرش کوپن مشتری</span>
-        </h3>
-        <button onclick="closeRedeemModal()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200 transition-colors cursor-pointer">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="p-6 space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-2">کد ۶ رقمی کوپن لوپُن:</label>
-          <input type="text" id="modalCouponCode" placeholder="مثال: ۵۸۲۹۱۴" maxlength="6" class="w-full h-14 text-center font-bold text-2xl tracking-widest bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#F47A20] outline-none">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <button onclick="handleQuickRedeemInput()" class="h-12 bg-[#F47A20] hover:bg-[#d66311] text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer">
-            استعلام و ثبت
-          </button>
-          <button onclick="simulateTestCode()" class="h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer">
-            کد تستی (۵۸۲۹۱۴)
-          </button>
-        </div>
-        <div id="modalFeedback" class="hidden p-3 rounded-xl text-xs font-bold text-center"></div>
-      </div>
-    </div>
   </div>
 
   <script>
     function toggleMissionCheck(cb) {
-      const parent = cb.closest('label');
+      const parent = cb.closest('div.flex');
       const textSpan = parent ? parent.querySelector('span') : null;
       if (textSpan) {
         if (cb.checked) {
-          textSpan.className = 'text-slate-400 line-through text-xs font-normal';
+          textSpan.className = 'text-slate-400 line-through text-xs font-normal truncate';
         } else {
-          textSpan.className = 'text-slate-700 text-xs font-medium';
+          textSpan.className = 'text-slate-700 text-xs font-medium truncate';
         }
       }
 
@@ -196,27 +182,20 @@
       if (badge) badge.innerText = checkedCbs.length + ' از ' + allCbs.length + ' انجام شده';
     }
 
-    function openRedeemModal() {
-      document.getElementById('quickRedeemModal').classList.remove('hidden');
-      document.getElementById('modalFeedback').classList.add('hidden');
-      document.getElementById('modalCouponCode').value = '';
-    }
+    function handleDoMission(title, btn) {
+      const parent = btn.closest('div.flex');
+      const cb = parent ? parent.querySelector('input[type="checkbox"]') : null;
+      if (cb && !cb.checked) {
+        cb.checked = true;
+        toggleMissionCheck(cb);
+      }
 
-    function closeRedeemModal() {
-      document.getElementById('quickRedeemModal').classList.add('hidden');
-    }
-
-    function simulateTestCode() {
-      document.getElementById('modalCouponCode').value = '582914';
-      handleQuickRedeemInput();
-    }
-
-    function handleQuickRedeemInput() {
-      const val = document.getElementById('modalCouponCode').value.trim();
-      if (!val) return;
-      const feedback = document.getElementById('modalFeedback');
-      feedback.className = 'p-3 rounded-xl text-xs font-bold text-center bg-emerald-50 text-emerald-800 border border-emerald-200 block';
-      feedback.innerText = 'کوپن کد ' + val + ' (مبینا کاربخش - کاشت ناخن ژل) با موفقیت پذیرش شد!';
+      const toast = document.getElementById('actionToast');
+      toast.classList.remove('hidden');
+      toast.innerText = 'ماموریت «' + title + '» با موفقیت تکمیل شد و درصد پیشرفت روزانه افزایش یافت.';
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
     }
   </script>
 </body>

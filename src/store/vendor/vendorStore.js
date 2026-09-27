@@ -587,13 +587,13 @@ const INITIAL_OFFLINE_BOOKINGS = [
 ];
 
 const INITIAL_DAILY_MISSIONS = [
-  { id: 'm_1', title: 'بروزرسانی قیمت‌ها و پکیج‌های فصلی', completed: true },
-  { id: 'm_2', title: 'آپدیت کردن عکس‌ها در گالری نمونه‌کارها', completed: false },
-  { id: 'm_3', title: 'پاسخ به نظرات و بازخوردهای مراجعین', completed: true },
-  { id: 'm_4', title: 'ارسال پیامک انبوه به مشتریان', completed: false },
+  { id: 'm_1', title: 'بروزرسانی قیمت‌ها و پکیج‌های فصلی', completed: true, link: '/vendor/services', tab: 'services' },
+  { id: 'm_2', title: 'آپدیت کردن عکس‌ها در گالری نمونه‌کارها', completed: false, link: '/vendor/profile', tab: 'profile' },
+  { id: 'm_3', title: 'پاسخ به نظرات و بازخوردهای مراجعین', completed: true, link: '/vendor/crm', tab: 'crm' },
+  { id: 'm_4', title: 'ارسال پیامک انبوه به مشتریان', completed: false, link: '/vendor/crm', tab: 'crm' },
 ];
 
-const LOCAL_STORAGE_KEY = 'lopon_vendor_state_v5';
+const LOCAL_STORAGE_KEY = 'lopon_vendor_state_v6';
 
 const loadSavedState = () => {
   if (typeof window === 'undefined') return null;

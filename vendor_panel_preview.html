@@ -7,13 +7,13 @@
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js">
     // ================= DAILY MISSIONS FUNCTIONS =================
     function toggleMissionCheck(cb) {
-      const parent = cb.closest('label');
+      const parent = cb.closest('label') || cb.closest('div');
       const textSpan = parent ? parent.querySelector('span') : null;
       if (textSpan) {
         if (cb.checked) {
-          textSpan.className = 'text-slate-400 line-through text-xs font-normal';
+          textSpan.className = 'text-slate-400 line-through text-xs font-normal truncate';
         } else {
-          textSpan.className = 'text-slate-700 text-xs font-medium';
+          textSpan.className = 'text-slate-700 text-xs font-medium truncate';
         }
       }
 
@@ -467,8 +467,8 @@
               </div>
             </div>
 
-            <!-- Daily Missions (ماموریت‌های امروز) - Minimalist & Single CTA: ثبت پذیرش -->
-            <div id="vendorDailyMissionsCard" class="lg:col-span-4 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
+            <!-- Daily Missions (ماموریت‌های امروز) -->
+            <div id="vendorDailyMissionsCard" class="lg:col-span-4 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
               
               <div class="pb-3 border-b border-slate-100">
                 <div class="flex items-center justify-between">
@@ -485,38 +485,50 @@
                 </div>
               </div>
 
-              <div class="space-y-1.5 text-xs" id="missionsList">
+              <div class="space-y-2 text-xs" id="missionsList">
                 <!-- Task 1 -->
-                <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-                  <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-                  <span class="text-slate-400 line-through text-xs font-normal">بروزرسانی قیمت‌ها و پکیج‌های فصلی</span>
-                </label>
+                <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+                  <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+                    <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+                    <span class="text-slate-400 line-through text-xs font-normal truncate">بروزرسانی قیمت‌ها و پکیج‌های فصلی</span>
+                  </label>
+                  <button onclick="switchTab('services')" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+                    انجام ماموریت
+                  </button>
+                </div>
 
                 <!-- Task 2 -->
-                <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-                  <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-                  <span class="text-slate-700 text-xs font-medium">آپدیت کردن عکس‌ها در گالری نمونه‌کارها</span>
-                </label>
+                <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+                  <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+                    <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+                    <span class="text-slate-700 text-xs font-medium truncate">آپدیت کردن عکس‌ها در گالری نمونه‌کارها</span>
+                  </label>
+                  <button onclick="switchTab('profile')" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+                    انجام ماموریت
+                  </button>
+                </div>
 
                 <!-- Task 3 -->
-                <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-                  <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-                  <span class="text-slate-400 line-through text-xs font-normal">پاسخ به نظرات و بازخوردهای مراجعین</span>
-                </label>
+                <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+                  <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+                    <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+                    <span class="text-slate-400 line-through text-xs font-normal truncate">پاسخ به نظرات و بازخوردهای مراجعین</span>
+                  </label>
+                  <button onclick="switchTab('crm')" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+                    انجام ماموریت
+                  </button>
+                </div>
 
                 <!-- Task 4 -->
-                <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors">
-                  <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer">
-                  <span class="text-slate-700 text-xs font-medium">ارسال پیامک انبوه به مشتریان</span>
-                </label>
-              </div>
-
-              <!-- Only CTA on Card: ثبت پذیرش -->
-              <div class="pt-3 border-t border-slate-100">
-                <button onclick="openRedeemModal()" class="w-full h-10 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs">
-                  <i class="fa-solid fa-qrcode text-xs text-orange-400"></i>
-                  <span>ثبت پذیرش</span>
-                </button>
+                <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
+                  <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
+                    <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
+                    <span class="text-slate-700 text-xs font-medium truncate">ارسال پیامک انبوه به مشتریان</span>
+                  </label>
+                  <button onclick="switchTab('crm')" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
+                    انجام ماموریت
+                  </button>
+                </div>
               </div>
             </div>
           </div>
