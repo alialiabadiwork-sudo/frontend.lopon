@@ -468,59 +468,55 @@ export default function VendorDashboard() {
 
         {/* Left (4 cols): Quick Management Shortcuts & Revenue Split */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Daily Missions Checklist (ماموریت‌های امروز) */}
+          {/* ماموریت‌های امروز */}
           <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-            <div className="pb-3 border-b border-slate-100">
-              <div className="flex items-center justify-between">
-                <h3 className="font-kal-3 font-bold text-slate-800 text-sm flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-slate-500" />
-                  <span>ماموریت‌های امروز</span>
-                </h3>
-                <span className="text-[11px] font-kal-4 font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
-                  {completedMissionsCount} از {dailyMissions.length} انجام شده
-                </span>
-              </div>
-              {/* Minimal progress bar */}
-              <div className="w-full h-1.5 bg-slate-100 rounded-full mt-2.5 overflow-hidden">
-                <div
-                  className="h-full bg-slate-800 rounded-full transition-all duration-300"
-                  style={{ width: `${missionsProgressPercent}%` }}
-                />
-              </div>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 className="font-kal-3 font-bold text-slate-800 text-sm flex items-center gap-2">
+                <CheckCircle2 className="w-4.5 h-4.5 text-[#F47A20]" />
+                <span>ماموریت‌های امروز</span>
+              </h3>
             </div>
 
-            <div className="space-y-2">
-              {dailyMissions.map((mission) => (
-                <div
-                  key={mission.id}
-                  className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2"
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+                <span className="font-kal-3 text-xs font-bold text-slate-800">بروزرسانی قیمت‌ها</span>
+                <Link
+                  to="/vendor/services"
+                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
                 >
-                  <label className="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
-                    <input
-                      type="checkbox"
-                      checked={mission.completed}
-                      onChange={() => toggleDailyMission(mission.id)}
-                      className="w-4 h-4 rounded text-slate-900 focus:ring-slate-400 cursor-pointer accent-slate-900 shrink-0"
-                    />
-                    <span
-                      className={`font-kal-2 text-xs truncate transition-colors ${
-                        mission.completed
-                          ? 'line-through text-slate-400 font-normal'
-                          : 'text-slate-700 font-medium'
-                      }`}
-                    >
-                      {mission.title}
-                    </span>
-                  </label>
+                  انجام ماموریت
+                </Link>
+              </div>
 
-                  <Link
-                    to={mission.link || '/vendor/services'}
-                    className="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs whitespace-nowrap"
-                  >
-                    انجام ماموریت
-                  </Link>
-                </div>
-              ))}
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+                <span className="font-kal-3 text-xs font-bold text-slate-800">آپدیت کردن عکس‌ها</span>
+                <Link
+                  to="/vendor/profile"
+                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
+                >
+                  انجام ماموریت
+                </Link>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+                <span className="font-kal-3 text-xs font-bold text-slate-800">پاسخ به نظرات</span>
+                <Link
+                  to="/vendor/crm"
+                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
+                >
+                  انجام ماموریت
+                </Link>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+                <span className="font-kal-3 text-xs font-bold text-slate-800">ارسال پیامک انبوه</span>
+                <Link
+                  to="/vendor/crm"
+                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
+                >
+                  انجام ماموریت
+                </Link>
+              </div>
             </div>
           </div>
 

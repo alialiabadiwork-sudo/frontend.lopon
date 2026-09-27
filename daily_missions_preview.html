@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پیش‌نمایش ماموریت‌های روزانه (با دکمه انجام ماموریت)</title>
+  <title>ماموریت‌های امروز سالن - لوپُن</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -18,185 +18,67 @@
 </head>
 <body class="bg-slate-100 min-h-screen p-4 sm:p-8 flex flex-col items-center justify-center antialiased">
 
-  <div class="w-full max-w-lg space-y-6">
+  <div class="w-full max-w-md space-y-4">
 
-    <!-- Top Navigation / Info Bar -->
-    <div class="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center text-sm font-bold">
-          <i class="fa-solid fa-list-check"></i>
-        </div>
-        <div>
-          <h1 class="text-xs font-bold text-slate-800">ماموریت‌های روزانه با دکمه «انجام ماموریت»</h1>
-          <p class="text-[11px] text-slate-400">حذف دکمه ثبت پذیرش و قرارگیری دکمه مقابل هر سطر</p>
-        </div>
+    <!-- Card: ماموریت‌های امروز -->
+    <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-md space-y-4">
+      
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-3.5 border-b border-slate-100">
+        <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-[#F47A20]"></i>
+          <span>ماموریت‌های امروز</span>
+        </h3>
       </div>
-      <a href="vendor_panel_preview.html" class="text-xs text-[#F47A20] font-bold hover:underline flex items-center gap-1">
-        <span>پنل کامل</span>
+
+      <!-- Mission Rows -->
+      <div class="space-y-3 text-xs">
+        
+        <!-- Row 1: بروزرسانی قیمت ها -->
+        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+          <span class="text-xs font-bold text-slate-800">بروزرسانی قیمت‌ها</span>
+          <a href="vendor_panel_preview.html#services" onclick="window.location.href='vendor_panel_preview.html'; return false;" class="h-8.5 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center transition-colors cursor-pointer shadow-xs whitespace-nowrap">
+            انجام ماموریت
+          </a>
+        </div>
+
+        <!-- Row 2: آپدیت کردن عکس ها -->
+        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+          <span class="text-xs font-bold text-slate-800">آپدیت کردن عکس‌ها</span>
+          <a href="vendor_panel_preview.html#profile" onclick="window.location.href='vendor_panel_preview.html'; return false;" class="h-8.5 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center transition-colors cursor-pointer shadow-xs whitespace-nowrap">
+            انجام ماموریت
+          </a>
+        </div>
+
+        <!-- Row 3: پاسخ به نظرات -->
+        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+          <span class="text-xs font-bold text-slate-800">پاسخ به نظرات</span>
+          <a href="vendor_panel_preview.html#crm" onclick="window.location.href='vendor_panel_preview.html'; return false;" class="h-8.5 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center transition-colors cursor-pointer shadow-xs whitespace-nowrap">
+            انجام ماموریت
+          </a>
+        </div>
+
+        <!-- Row 4: ارسال پیامک انبوه -->
+        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+          <span class="text-xs font-bold text-slate-800">ارسال پیامک انبوه</span>
+          <a href="vendor_panel_preview.html#crm" onclick="window.location.href='vendor_panel_preview.html'; return false;" class="h-8.5 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center transition-colors shadow-xs whitespace-nowrap">
+            انجام ماموریت
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Link to full panel -->
+    <div class="text-center pt-2">
+      <a href="vendor_panel_preview.html" class="text-xs text-[#F47A20] font-bold hover:underline inline-flex items-center gap-1.5">
+        <span>مشاهده در پنل کامل وندور</span>
         <i class="fa-solid fa-arrow-left text-[10px]"></i>
       </a>
     </div>
 
-    <!-- Section 1: فروش در کل امروز (نمایش آیکون متناسب لوپُن) -->
-    <div class="space-y-2">
-      <div class="flex items-center justify-between text-xs text-slate-500 px-1 font-medium">
-        <span>۱. ابعاد آیکون لوپُن در کارت فروش:</span>
-        <span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md font-bold">متناسب‌سازی شده (14px)</span>
-      </div>
-
-      <!-- Card 1: فروش کل امروز -->
-      <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <span class="text-xs sm:text-sm font-bold text-slate-700">فروش در کل امروز:</span>
-          <button class="inline-flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold text-slate-600 transition-colors shadow-2xs">
-            <span class="text-xs text-[#F47A20] font-black">+</span>
-            <span>افزایش فروش</span>
-          </button>
-        </div>
-
-        <div class="my-3 flex items-baseline gap-1.5">
-          <span class="font-black text-2xl sm:text-[28px] text-slate-900 tracking-tight">۱۵,۸۰۰,۰۰۰</span>
-          <span class="text-xs text-slate-400 font-normal">تومان</span>
-        </div>
-
-        <!-- دو باکس تفکیک فروش -->
-        <div class="grid grid-cols-2 gap-2.5 pt-1">
-          <!-- لوپُن -->
-          <div class="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100">
-            <div class="h-5 flex items-center justify-center gap-1.5">
-              <img src="lopon-logo-icon.png" alt="لوپُن" class="w-3.5 h-3.5 max-w-[14px] max-h-[14px] object-contain shrink-0" style="width: 14px; height: 14px; object-fit: contain;">
-              <span class="text-[11px] font-bold text-slate-700">لوپُن</span>
-            </div>
-            <div class="font-bold text-xs sm:text-sm text-slate-800">۵,۰۰۰,۰۰۰</div>
-          </div>
-
-          <!-- سالن -->
-          <div class="bg-[#F4F5F7] rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100">
-            <span class="text-xs font-bold text-slate-600 h-5 flex items-center justify-center">سالن</span>
-            <div class="font-bold text-xs sm:text-sm text-slate-800">۱۰,۸۰۰,۰۰۰</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 2: ماموریت‌های امروز (تک‌تک سطرها دارای دکمه «انجام ماموریت») -->
-    <div class="space-y-2">
-      <div class="flex items-center justify-between text-xs text-slate-500 px-1 font-medium">
-        <span>۲. کارت ماموریت‌های امروز:</span>
-        <span class="text-[10px] text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-md font-bold">دکمه انجام ماموریت در هر سطر</span>
-      </div>
-
-      <!-- Minimal Daily Missions Card without Redeem button -->
-      <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-        
-        <!-- Header -->
-        <div class="pb-3 border-b border-slate-100">
-          <div class="flex items-center justify-between">
-            <h3 class="font-bold text-sm text-slate-800 flex items-center gap-2">
-              <i class="fa-regular fa-calendar-check text-slate-500"></i>
-              <span>ماموریت‌های امروز</span>
-            </h3>
-            <span id="missionsCountBadge" class="text-[11px] font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
-              ۲ از ۴ انجام شده
-            </span>
-          </div>
-          <!-- Minimal progress bar -->
-          <div class="w-full h-1.5 bg-slate-100 rounded-full mt-2.5 overflow-hidden">
-            <div id="missionsProgressBar" class="h-full bg-slate-800 rounded-full transition-all duration-300" style="width: 50%"></div>
-          </div>
-        </div>
-
-        <!-- 4 Checklist Items with "انجام ماموریت" buttons -->
-        <div class="space-y-2 text-xs" id="missionsList">
-
-          <!-- Task 1: بروزرسانی قیمت ها -->
-          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
-            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
-              <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
-              <span class="text-slate-400 line-through text-xs font-normal truncate">بروزرسانی قیمت‌ها و پکیج‌های فصلی</span>
-            </label>
-            <button onclick="handleDoMission('بروزرسانی قیمت‌ها و پکیج‌های فصلی', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
-              انجام ماموریت
-            </button>
-          </div>
-
-          <!-- Task 2: آپدیت کردن عکس ها -->
-          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
-            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
-              <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
-              <span class="text-slate-700 text-xs font-medium truncate">آپدیت کردن عکس‌ها در گالری نمونه‌کارها</span>
-            </label>
-            <button onclick="handleDoMission('آپدیت کردن عکس‌ها در گالری نمونه‌کارها', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
-              انجام ماموریت
-            </button>
-          </div>
-
-          <!-- Task 3: پاسخ به نظرات -->
-          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
-            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
-              <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
-              <span class="text-slate-400 line-through text-xs font-normal truncate">پاسخ به نظرات و بازخوردهای مراجعین</span>
-            </label>
-            <button onclick="handleDoMission('پاسخ به نظرات و بازخوردهای مراجعین', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
-              انجام ماموریت
-            </button>
-          </div>
-
-          <!-- Task 4: ارسال پیامک انبوه -->
-          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50/60 hover:bg-slate-50 border border-slate-100 transition-colors gap-2">
-            <label class="flex items-center gap-2.5 cursor-pointer min-w-0 flex-1">
-              <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-slate-900 rounded cursor-pointer shrink-0">
-              <span class="text-slate-700 text-xs font-medium truncate">ارسال پیامک انبوه به مشتریان</span>
-            </label>
-            <button onclick="handleDoMission('ارسال پیامک انبوه به مشتریان', this)" class="h-8 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold flex items-center justify-center shrink-0 transition-colors shadow-2xs cursor-pointer whitespace-nowrap">
-              انجام ماموریت
-            </button>
-          </div>
-
-        </div>
-
-        <div id="actionToast" class="hidden p-3 rounded-xl text-xs font-bold text-center bg-slate-900 text-white transition-all"></div>
-      </div>
-    </div>
-
   </div>
 
-  <script>
-    function toggleMissionCheck(cb) {
-      const parent = cb.closest('div.flex');
-      const textSpan = parent ? parent.querySelector('span') : null;
-      if (textSpan) {
-        if (cb.checked) {
-          textSpan.className = 'text-slate-400 line-through text-xs font-normal truncate';
-        } else {
-          textSpan.className = 'text-slate-700 text-xs font-medium truncate';
-        }
-      }
-
-      const allCbs = document.querySelectorAll('#missionsList input[type="checkbox"]');
-      const checkedCbs = document.querySelectorAll('#missionsList input[type="checkbox"]:checked');
-      const percent = allCbs.length ? Math.round((checkedCbs.length / allCbs.length) * 100) : 0;
-      const bar = document.getElementById('missionsProgressBar');
-      if (bar) bar.style.width = percent + '%';
-      const badge = document.getElementById('missionsCountBadge');
-      if (badge) badge.innerText = checkedCbs.length + ' از ' + allCbs.length + ' انجام شده';
-    }
-
-    function handleDoMission(title, btn) {
-      const parent = btn.closest('div.flex');
-      const cb = parent ? parent.querySelector('input[type="checkbox"]') : null;
-      if (cb && !cb.checked) {
-        cb.checked = true;
-        toggleMissionCheck(cb);
-      }
-
-      const toast = document.getElementById('actionToast');
-      toast.classList.remove('hidden');
-      toast.innerText = 'ماموریت «' + title + '» با موفقیت تکمیل شد و درصد پیشرفت روزانه افزایش یافت.';
-      setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 3000);
-    }
-  </script>
 </body>
 </html>
