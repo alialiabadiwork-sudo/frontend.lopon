@@ -740,6 +740,63 @@
           <!-- Customer Cards Grid (with Edit, Staff Notes and Customer Feedback) -->
           <div id="crmCustomerCardsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
+            <!-- Customer Ali Aliabadi (Newly synced from store) -->
+            <div id="custCard_ali" class="bg-white rounded-3xl border-2 border-purple-300 p-5 space-y-3.5 shadow-sm hover:border-purple-500 transition-all">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <strong class="text-slate-900 text-sm font-black">علی علی آبادی</strong>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-300">مشتری نقره‌ای</span>
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-purple-100 text-purple-700">همگام با استور</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5 font-mono" dir="ltr">09381778920</p>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="openEditCustomerModal('علی علی آبادی', '09381778920', 'silver', '۱۴۰۵/۰۷/۱۰', '۵,۰۰۰,۰۰۰', 'ترجیح می‌دهند نوبت‌های عصر رزرو شود؛ مشتری با دقت و وقت‌شناس.', 'کار خانوم مرادی عالی بود یکی از بهترین های کرمان که میشه رفت پیشون', 5)" class="px-2.5 py-1 text-slate-600 hover:text-purple-600 hover:bg-purple-50 rounded-xl border border-slate-200 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-pen text-[10px]"></i> ویرایش
+                  </button>
+                  <button onclick="openCrmCustomerDetail('علی علی آبادی', '09381778920', 'نقره‌ای', '۵,۰۰۰,۰۰۰', 'ترجیح می‌دهند نوبت‌های عصر رزرو شود؛ مشتری با دقت و وقت‌شناس.', 'کار خانوم مرادی عالی بود یکی از بهترین های کرمان که میشه رفت پیشون')" class="px-3 py-1 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl text-xs font-bold transition-colors cursor-pointer">
+                    پرونده
+                  </button>
+                </div>
+              </div>
+
+              <!-- Stats bar -->
+              <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl text-xs border border-slate-100">
+                <div>
+                  <span class="text-[10px] text-slate-400 block">مجموع خریدها (LTV):</span>
+                  <strong class="text-purple-700 text-sm font-black">۵,۰۰۰,۰۰۰ تومان</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">مراجعات:</span>
+                  <span class="text-slate-700 font-bold">۲ آنلاین • ۱ حضوری</span>
+                </div>
+              </div>
+
+              <!-- Side-by-Side: Staff Note & Customer Feedback -->
+              <div class="space-y-2 text-xs">
+                <!-- Staff Note -->
+                <div class="bg-amber-50/90 text-amber-950 p-2.5 rounded-xl border border-amber-200 text-[11.5px] leading-relaxed">
+                  <span class="font-bold text-amber-800 flex items-center gap-1 mb-0.5">
+                    <i class="fa-solid fa-clipboard text-[#F47A20]"></i> یادداشت پرسنلی سالن:
+                  </span>
+                  <span>ترجیح می‌دهند نوبت‌های عصر رزرو شود؛ مشتری با دقت و وقت‌شناس.</span>
+                </div>
+
+                <!-- Customer Feedback / Review -->
+                <div class="bg-purple-50/90 text-purple-950 p-2.5 rounded-xl border border-purple-200 text-[11.5px] leading-relaxed">
+                  <div class="flex items-center justify-between font-bold text-purple-800 mb-0.5">
+                    <span class="flex items-center gap-1">
+                      <i class="fa-solid fa-comment-dots text-purple-600"></i> نظر و بازخورد مشتری:
+                    </span>
+                    <span class="text-amber-500 text-[11px] tracking-wider">★★★★★</span>
+                  </div>
+                  <span>کار خانوم مرادی عالی بود یکی از بهترین های کرمان که میشه رفت پیشون</span>
+                </div>
+              </div>
+            </div>
+
+
             <!-- Customer 1 -->
             <div class="bg-white rounded-3xl border border-slate-200 p-5 space-y-3.5 shadow-xs hover:border-purple-300 transition-all">
               <div class="flex justify-between items-start">
@@ -1053,17 +1110,19 @@
             </div>
 
             <form onsubmit="handleSaveEditSubmit(event)" class="p-5 space-y-3.5">
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">نام و نام خانوادگی:</label>
-                <input id="editCustName" type="text" required class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">نام و نام خانوادگی:</label>
+                  <input id="editCustName" type="text" required class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">شماره موبایل:</label>
+                  <input id="editCustPhone" type="text" required dir="ltr" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500 text-left">
+                </div>
               </div>
 
-              <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">شماره موبایل:</label>
-                <input id="editCustPhone" type="text" required dir="ltr" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500 text-left">
-              </div>
-
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">سطح اشتراک:</label>
                   <select id="editCustTier" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none cursor-pointer">
@@ -1073,9 +1132,34 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-xs font-bold text-slate-700 mb-1">تاریخ تولد / سالگرد:</label>
-                  <input id="editCustBirthday" type="text" dir="ltr" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none text-left">
+                  <label class="block text-xs font-bold text-slate-700 mb-1">مجموع خریدها (تومان):</label>
+                  <input id="editCustLtv" type="text" placeholder="مثال: ۵,۰۰۰,۰۰۰" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none">
                 </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">تاریخ تولد / سالگرد:</label>
+                  <input id="editCustBirthday" type="text" dir="ltr" placeholder="۱۴۰۵/۰۱/۰۱" class="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none text-left">
+                </div>
+              </div>
+
+              <!-- Staff Note -->
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">یادداشت پرسنلی سالن:</label>
+                <textarea id="editCustStaffNote" rows="2" placeholder="نکات مهم و سلیقه مشتری برای پرسنل..." class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500 resize-none"></textarea>
+              </div>
+
+              <!-- Customer Feedback & Star Rating -->
+              <div class="bg-purple-50/50 p-3 rounded-2xl border border-purple-100 space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="text-xs font-bold text-slate-800">نظر و بازخورد مشتری:</label>
+                  <select id="editCustRating" class="h-8 px-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-amber-600 outline-none">
+                    <option value="5">⭐⭐⭐⭐⭐ (۵ ستاره)</option>
+                    <option value="4">⭐⭐⭐⭐ (۴ ستاره)</option>
+                    <option value="3">⭐⭐⭐ (۳ ستاره)</option>
+                    <option value="2">⭐⭐ (۲ ستاره)</option>
+                    <option value="1">⭐ (۱ ستاره)</option>
+                  </select>
+                </div>
+                <textarea id="editCustReview" rows="2" placeholder="متن نظر ثبت شده توسط مشتری..." class="w-full p-2 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-purple-500 resize-none"></textarea>
               </div>
 
               <div class="pt-2 flex gap-2">
@@ -1502,12 +1586,20 @@
     }
 
     let currentEditingCustomerName = '';
-    function openEditCustomerModal(name, phone, tier, birthday) {
+    function openEditCustomerModal(name, phone, tier, birthday, ltv = '۰', staffNote = '', review = '', rating = 5) {
       currentEditingCustomerName = name;
       document.getElementById('editCustName').value = name;
       document.getElementById('editCustPhone').value = phone;
       document.getElementById('editCustTier').value = tier;
       document.getElementById('editCustBirthday').value = birthday || '';
+      const ltvInput = document.getElementById('editCustLtv');
+      if (ltvInput) ltvInput.value = ltv;
+      const noteInput = document.getElementById('editCustStaffNote');
+      if (noteInput) noteInput.value = staffNote;
+      const reviewInput = document.getElementById('editCustReview');
+      if (reviewInput) reviewInput.value = review;
+      const ratingSelect = document.getElementById('editCustRating');
+      if (ratingSelect) ratingSelect.value = rating;
       document.getElementById('editCustomerModal').classList.remove('hidden');
     }
     function closeEditCustomerModal() {
@@ -1515,8 +1607,15 @@
     }
     function handleSaveEditSubmit(e) {
       e.preventDefault();
+      const name = document.getElementById('editCustName').value;
+      const phone = document.getElementById('editCustPhone').value;
+      const tier = document.getElementById('editCustTier').value;
+      const ltv = document.getElementById('editCustLtv') ? document.getElementById('editCustLtv').value : '';
+      const note = document.getElementById('editCustStaffNote') ? document.getElementById('editCustStaffNote').value : '';
+      const review = document.getElementById('editCustReview') ? document.getElementById('editCustReview').value : '';
+      
       closeEditCustomerModal();
-      alert('اطلاعات مشتری با موفقیت به‌روزرسانی شد.');
+      alert('تغییرات پرونده «' + name + '» با موفقیت ذخیره و در استور ثبت گردید.');
     }
 
     function openCrmCustomerDetail(name, phone, tier, ltv, staffNote, review) {

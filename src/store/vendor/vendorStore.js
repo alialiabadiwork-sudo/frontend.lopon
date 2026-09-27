@@ -342,6 +342,34 @@ const INITIAL_COUPONS = [
 
 const INITIAL_CRM_CUSTOMERS = [
   {
+    id: 'crm_ali',
+    name: 'علی علی آبادی',
+    phone: '۰۹۳۸۱۷۷۸۹۲۰',
+    onlineOrdersCount: 2,
+    offlineVisitsCount: 1,
+    totalLtv: 5000000,
+    lastVisitDate: '۱۴۰۵/۰۳/۱۵',
+    lastVisitDaysAgo: 5,
+    tier: 'silver', // نقره‌ای
+    birthday: '۱۴۰۵/۰۷/۱۰',
+    anniversary: '',
+    staffNotes: [
+      'ترجیح می‌دهند نوبت‌های عصر رزرو شود؛ مشتری با دقت و وقت‌شناس.',
+    ],
+    customerReviews: [
+      {
+        id: 'cr_ali_1',
+        text: 'کار خانوم مرادی عالی بود یکی از بهترین های کرمان که میشه رفت پیشون',
+        rating: 5,
+        date: '۱۴۰۵/۰۳/۱۵',
+      },
+    ],
+    history: [
+      { date: '۱۴۰۵/۰۳/۱۵', service: 'رنگ و لایت بالیاژ', staff: 'خانوم مرادی', amount: 3500000, type: 'online' },
+      { date: '۱۴۰۵/۰۲/۱۰', service: 'براشینگ و حالت‌دهی', staff: 'خانوم مرادی', amount: 1500000, type: 'offline' },
+    ],
+  },
+  {
     id: 'crm_1',
     name: 'مبینا کاربخش',
     phone: '۰۹۱۳۸۸۲۴۵۹۰',
@@ -558,7 +586,7 @@ const INITIAL_OFFLINE_BOOKINGS = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = 'lopon_vendor_state_v1';
+const LOCAL_STORAGE_KEY = 'lopon_vendor_state_v3';
 
 const loadSavedState = () => {
   if (typeof window === 'undefined') return null;
@@ -793,8 +821,8 @@ export const useVendorStore = create((set, get) => ({
       anniversary: customerData.anniversary || '',
       onlineOrdersCount: 0,
       offlineVisitsCount: 0,
-      totalLtv: 0,
-      lastVisitDate: 'ثبت نشده',
+      totalLtv: Number(customerData.totalLtv) || 0,
+      lastVisitDate: 'امروز',
       lastVisitDaysAgo: 0,
       staffNotes: customerData.staffNote ? [customerData.staffNote] : [],
       customerReviews: customerData.customerReview

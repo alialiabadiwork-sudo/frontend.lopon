@@ -22,9 +22,170 @@ import {
   Flame,
   CheckCircle2,
   Edit2,
+  Pencil,
   MessageCircle,
 } from 'lucide-react';
 import { useVendorStore } from '@store/vendor/vendorStore';
+import LoponLogo from '@assets/images/lopon-logo.png';
+
+const getTierBadge = (tier) => {
+  switch (tier?.toLowerCase()) {
+    case 'vip':
+      return (
+        <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-kal-3 font-medium bg-amber-100 text-amber-800 shrink-0">
+          مشتری VIP
+        </span>
+      );
+    case 'silver':
+      return (
+        <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-kal-3 font-medium bg-[#ECEEF2] text-slate-600 shrink-0">
+          مشتری نقره ای
+        </span>
+      );
+    case 'bronze':
+    default:
+      return (
+        <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-kal-3 font-medium bg-slate-100 text-slate-500 shrink-0">
+          مشتری برنز
+        </span>
+      );
+  }
+};
+
+function CustomerCard({ cust, onSelect, onEdit }) {
+  const hasReview = cust.customerReviews && cust.customerReviews.length > 0;
+  const hasNote = cust.staffNotes && cust.staffNotes.length > 0;
+
+  // Review is active by default (matching user's screenshot)
+  const [activeTab, setActiveTab] = useState(hasReview ? 'review' : 'note');
+
+  return (
+    <div
+      onClick={() => onSelect(cust)}
+      className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-slate-300 transition-all p-4.5 flex flex-col justify-between cursor-pointer group"
+    >
+      <div>
+        {/* 1. Header row: Customer Name & Phone on right, Badge & Edit pencil on left */}
+        <div className="flex items-start justify-between gap-3">
+          {/* Right side: Name and Phone */}
+          <div>
+            <h3 className="font-kal-4 font-bold text-slate-900 text-[17px] leading-snug group-hover:text-purple-600 transition-colors">
+              {cust.name}
+            </h3>
+            <p className="font-kal-2 text-xs text-slate-400 mt-1" dir="ltr">
+              {cust.phone}
+            </p>
+          </div>
+
+          {/* Left side: Edit Pencil and Tier Badge */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(cust);
+              }}
+              className="text-slate-400 hover:text-purple-600 p-1 rounded-lg transition-colors cursor-pointer"
+              title="ویرایش اطلاعات مشتری"
+            >
+              <Pencil className="w-4 h-4 text-slate-500 hover:text-purple-600" />
+            </button>
+            {getTierBadge(cust.tier)}
+          </div>
+        </div>
+
+        {/* 2. Full-width subtle horizontal divider */}
+        <div className="border-t border-slate-150 my-3.5" />
+
+        {/* 3. Middle Metric: Total purchases (مجموع خرید ها:) */}
+        <div className="flex items-center justify-between pb-3.5">
+          <span className="font-kal-3 text-xs sm:text-sm text-slate-600 font-medium">
+            مجموع خرید ها:
+          </span>
+          <span className="font-kal-4 font-bold text-sm sm:text-base text-slate-900 tracking-tight">
+            {Number(cust.totalLtv || 0).toLocaleString('fa-IR')}
+          </span>
+        </div>
+
+        {/* 4. Bottom Box: Customer Review / Staff Note matching exact screenshot */}
+        <div className="bg-[#F4F5F7] rounded-2xl p-3.5 space-y-2">
+          {/* Header inside gray box */}
+          <div className="flex items-center justify-between">
+            {/* Right side: Title or Tabs */}
+            {hasReview && hasNote ? (
+              <div
+                className="flex items-center gap-2"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('review')}
+                  className={`font-kal-4 font-bold text-xs sm:text-[13px] transition-colors cursor-pointer ${
+                    activeTab === 'review'
+                      ? 'text-[#C25E1A]'
+                      : 'text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  نظرات مشتری
+                </button>
+                <span className="text-slate-300 text-xs">|</span>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('note')}
+                  className={`font-kal-4 font-bold text-xs sm:text-[13px] transition-colors cursor-pointer ${
+                    activeTab === 'note'
+                      ? 'text-purple-700'
+                      : 'text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  یادداشت پرسنلی
+                </button>
+              </div>
+            ) : hasReview ? (
+              <span className="font-kal-4 font-bold text-xs sm:text-[13px] text-[#C25E1A]">
+                نظرات مشتری
+              </span>
+            ) : hasNote ? (
+              <span className="font-kal-4 font-bold text-xs sm:text-[13px] text-purple-700">
+                یادداشت پرسنلی
+              </span>
+            ) : (
+              <span className="font-kal-3 text-xs text-slate-400">
+                یادداشت و نظرات
+              </span>
+            )}
+
+            {/* Left side: Icon */}
+            {activeTab === 'review' || (hasReview && !hasNote) ? (
+              <MessageSquare className="w-4 h-4 text-slate-400 shrink-0" />
+            ) : (
+              <FileText className="w-4 h-4 text-slate-400 shrink-0" />
+            )}
+          </div>
+
+          {/* Text inside gray box */}
+          {activeTab === 'review' && hasReview ? (
+            <p className="font-kal-2 text-xs text-slate-600 leading-relaxed text-right line-clamp-2">
+              {cust.customerReviews[0].text}
+            </p>
+          ) : hasNote ? (
+            <p className="font-kal-2 text-xs text-slate-600 leading-relaxed text-right line-clamp-2">
+              {cust.staffNotes[0]}
+            </p>
+          ) : hasReview ? (
+            <p className="font-kal-2 text-xs text-slate-600 leading-relaxed text-right line-clamp-2">
+              {cust.customerReviews[0].text}
+            </p>
+          ) : (
+            <p className="font-kal-2 text-xs text-slate-400 italic text-right">
+              هنوز نظری یا یادداشتی برای این مشتری ثبت نشده است.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function VendorCRM() {
   const crmCustomers = useVendorStore((s) => s.crmCustomers);
@@ -49,6 +210,7 @@ export default function VendorCRM() {
     name: '',
     phone: '',
     tier: 'bronze',
+    totalLtv: 0,
     birthday: '',
     staffNote: '',
     customerReview: '',
@@ -62,7 +224,11 @@ export default function VendorCRM() {
     name: '',
     phone: '',
     tier: 'bronze',
+    totalLtv: 0,
     birthday: '',
+    staffNote: '',
+    customerReview: '',
+    rating: 5,
   });
 
   // Marketing SMS Modal state
@@ -92,6 +258,13 @@ export default function VendorCRM() {
   });
 
   const inactive45Count = crmCustomers.filter((c) => c.lastVisitDaysAgo > 45).length;
+  const totalCrmLtv = crmCustomers.reduce((acc, c) => acc + (Number(c.totalLtv) || 0), 0);
+  const totalOnlineVisits = crmCustomers.reduce((acc, c) => acc + (Number(c.onlineOrdersCount) || 0), 0);
+  const totalOfflineVisits = crmCustomers.reduce((acc, c) => acc + (Number(c.offlineVisitsCount) || 0), 0);
+  const totalVisits = totalOnlineVisits + totalOfflineVisits;
+  const vipCount = crmCustomers.filter((c) => c.tier?.toLowerCase() === 'vip').length;
+  const silverBronzeCount = crmCustomers.filter((c) => c.tier?.toLowerCase() !== 'vip').length;
+  const activeRecentCount = crmCustomers.filter((c) => c.lastVisitDaysAgo <= 45).length;
 
   // Add Staff Note handler
   const handleAddNote = (e) => {
@@ -133,11 +306,15 @@ export default function VendorCRM() {
     e.preventDefault();
     if (!newCustomerForm.name.trim() || !newCustomerForm.phone.trim()) return;
 
-    addCrmCustomer(newCustomerForm);
+    addCrmCustomer({
+      ...newCustomerForm,
+      totalLtv: Number(newCustomerForm.totalLtv) || 0,
+    });
     setNewCustomerForm({
       name: '',
       phone: '',
       tier: 'bronze',
+      totalLtv: 0,
       birthday: '',
       staffNote: '',
       customerReview: '',
@@ -153,7 +330,11 @@ export default function VendorCRM() {
       name: customer.name || '',
       phone: customer.phone || '',
       tier: customer.tier || 'bronze',
+      totalLtv: customer.totalLtv ?? 0,
       birthday: customer.birthday || '',
+      staffNote: customer.staffNotes?.[0] || '',
+      customerReview: customer.customerReviews?.[0]?.text || '',
+      rating: customer.customerReviews?.[0]?.rating || 5,
     });
     setEditModalOpen(true);
   };
@@ -163,12 +344,38 @@ export default function VendorCRM() {
     e.preventDefault();
     if (!editingCustomerId) return;
 
-    updateCrmCustomer(editingCustomerId, editCustomerForm);
+    const currentCustomer = crmCustomers.find((c) => c.id === editingCustomerId);
+
+    const updatedData = {
+      name: editCustomerForm.name.trim(),
+      phone: editCustomerForm.phone.trim(),
+      tier: editCustomerForm.tier,
+      birthday: editCustomerForm.birthday.trim(),
+      totalLtv: Number(editCustomerForm.totalLtv) || 0,
+    };
+
+    if (editCustomerForm.staffNote?.trim()) {
+      const remainingNotes = (currentCustomer?.staffNotes || []).slice(1);
+      updatedData.staffNotes = [editCustomerForm.staffNote.trim(), ...remainingNotes];
+    }
+
+    if (editCustomerForm.customerReview?.trim()) {
+      const remainingReviews = (currentCustomer?.customerReviews || []).slice(1);
+      const newOrUpdatedReview = {
+        id: currentCustomer?.customerReviews?.[0]?.id || `cr_${Date.now()}`,
+        text: editCustomerForm.customerReview.trim(),
+        rating: Number(editCustomerForm.rating) || 5,
+        date: currentCustomer?.customerReviews?.[0]?.date || 'امروز',
+      };
+      updatedData.customerReviews = [newOrUpdatedReview, ...remainingReviews];
+    }
+
+    updateCrmCustomer(editingCustomerId, updatedData);
 
     if (selectedCustomer && selectedCustomer.id === editingCustomerId) {
       setSelectedCustomer((prev) => ({
         ...prev,
-        ...editCustomerForm,
+        ...updatedData,
       }));
     }
 
@@ -189,32 +396,6 @@ export default function VendorCRM() {
       setSmsResult(null);
       setSmsModalOpen(false);
     }, 2500);
-  };
-
-  const getTierBadge = (tier) => {
-    switch (tier.toLowerCase()) {
-      case 'vip':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-kal-4 font-bold bg-amber-100 text-amber-800 border border-amber-300 flex items-center gap-1">
-            <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-            <span>مشتری VIP</span>
-          </span>
-        );
-      case 'silver':
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-kal-3 font-bold bg-slate-200 text-slate-700 border border-slate-300 flex items-center gap-1">
-            <Award className="w-3 h-3 text-slate-500" />
-            <span>مشتری نقره‌ای</span>
-          </span>
-        );
-      case 'bronze':
-      default:
-        return (
-          <span className="px-2.5 py-0.5 rounded-full text-[10.5px] font-kal-3 font-bold bg-amber-50 text-amber-900 border border-amber-200">
-            مشتری برنز
-          </span>
-        );
-    }
   };
 
   return (
@@ -339,109 +520,35 @@ export default function VendorCRM() {
         </div>
       </div>
 
-      {/* 4. Customer Directory Cards */}
+      {/* 4. Customer Directory Cards (طراحی منطبق با کارت اختصاصی ارسالی) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredCustomers.map((cust) => (
-          <div
+          <CustomerCard
             key={cust.id}
-            className="bg-white rounded-3xl border border-slate-200/80 hover:border-purple-300 shadow-xs p-5 flex flex-col justify-between space-y-4 transition-all"
-          >
-            {/* Top header with Edit button */}
-            <div className="flex items-start justify-between">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-kal-4 font-bold text-slate-900 text-sm">{cust.name}</h3>
-                  {getTierBadge(cust.tier)}
-                </div>
-                <div className="flex items-center gap-1.5 text-xs text-slate-400 font-kal-1" dir="ltr">
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>{cust.phone}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => handleOpenEdit(cust)}
-                  className="px-2.5 py-1.5 text-slate-500 hover:text-purple-600 hover:bg-purple-50 border border-slate-200 rounded-xl transition-colors cursor-pointer text-xs font-kal-3 flex items-center gap-1"
-                  title="ویرایش مشخصات مشتری"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                  <span>ویرایش</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedCustomer(cust)}
-                  className="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-kal-3 font-bold rounded-xl transition-colors cursor-pointer"
-                >
-                  پرونده
-                </button>
-              </div>
-            </div>
-
-            {/* Metrics: LTV + Visits */}
-            <div className="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-100 text-xs">
-              <div>
-                <span className="text-[11px] text-slate-400 font-kal-2 block">ارزش طول عمر (LTV):</span>
-                <span className="font-kal-4 font-bold text-purple-700 text-sm mt-0.5 block">
-                  {cust.totalLtv.toLocaleString('fa-IR')} ت
-                </span>
-              </div>
-
-              <div>
-                <span className="text-[11px] text-slate-400 font-kal-2 block">تفکیک مراجعات:</span>
-                <span className="font-kal-3 text-slate-700 mt-0.5 block">
-                  {cust.onlineOrdersCount} آنلاین • {cust.offlineVisitsCount} آفلاین
-                </span>
-              </div>
-            </div>
-
-            {/* Timing, Staff Notes & Customer Reviews Side-by-Side */}
-            <div className="space-y-2 text-xs font-kal-2">
-              <div className="flex items-center justify-between text-slate-500 pb-1">
-                <span>آخرین مراجعه:</span>
-                <span className={`font-kal-3 font-bold ${cust.lastVisitDaysAgo > 45 ? 'text-rose-500' : 'text-slate-800'}`}>
-                  {cust.lastVisitDaysAgo} روز پیش ({cust.lastVisitDate})
-                </span>
-              </div>
-
-              {/* 1. Staff Note Prompt */}
-              {cust.staffNotes?.length > 0 ? (
-                <div className="bg-amber-50/70 text-amber-950 p-2.5 rounded-xl border border-amber-200/60 text-[11.5px] leading-relaxed">
-                  <span className="font-bold text-amber-800 flex items-center gap-1 mb-0.5">
-                    <FileText className="w-3.5 h-3.5 text-[#F47A20]" />
-                    <span>یادداشت پرسنلی سالن:</span>
-                  </span>
-                  <p className="line-clamp-2">{cust.staffNotes[0]}</p>
-                </div>
-              ) : (
-                <div className="bg-slate-50 text-slate-400 p-2 rounded-xl text-[11px] border border-dashed border-slate-200 text-center">
-                  بدون یادداشت پرسنلی
-                </div>
-              )}
-
-              {/* 2. Customer Feedback & Review */}
-              {cust.customerReviews?.length > 0 ? (
-                <div className="bg-purple-50/60 text-purple-950 p-2.5 rounded-xl border border-purple-200/60 text-[11.5px] leading-relaxed">
-                  <div className="flex items-center justify-between font-bold text-purple-800 mb-0.5">
-                    <span className="flex items-center gap-1">
-                      <MessageCircle className="w-3.5 h-3.5 text-purple-600" />
-                      <span>نظر و بازخورد مشتری:</span>
-                    </span>
-                    <span className="flex items-center text-amber-500 text-[10px]" dir="ltr">
-                      {'★'.repeat(cust.customerReviews[0].rating || 5)}
-                    </span>
-                  </div>
-                  <p className="line-clamp-2">{cust.customerReviews[0].text}</p>
-                </div>
-              ) : (
-                <div className="bg-slate-50 text-slate-400 p-2 rounded-xl text-[11px] border border-dashed border-slate-200 text-center">
-                  هنوز نظری از سمت مشتری ثبت نشده است
-                </div>
-              )}
-            </div>
-          </div>
+            cust={cust}
+            onSelect={setSelectedCustomer}
+            onEdit={handleOpenEdit}
+          />
         ))}
+
+        {/* Add Customer Card directly in the grid */}
+        <button
+          type="button"
+          onClick={() => setAddModalOpen(true)}
+          className="border-2 border-dashed border-slate-200 hover:border-purple-400 hover:bg-purple-50/20 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-3 transition-all cursor-pointer min-h-[190px] group"
+        >
+          <div className="w-11 h-11 rounded-2xl bg-purple-50 group-hover:bg-purple-100 text-purple-600 flex items-center justify-center transition-colors">
+            <Plus className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="font-kal-4 font-bold text-sm text-slate-800 group-hover:text-purple-700 block transition-colors">
+              افزودن مشتری جدید
+            </span>
+            <span className="font-kal-1 text-xs text-slate-400 mt-0.5 block">
+              ثبت مشخصات، یادداشت پرسنلی و نظرات
+            </span>
+          </div>
+        </button>
       </div>
 
       {/* 5. Customer Profile Drawer / Modal (پرونده اختصاصی مشتری) */}
@@ -713,7 +820,7 @@ export default function VendorCRM() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-xs font-kal-3 text-slate-700 mb-1">سطح مشتری:</label>
                     <select
@@ -721,10 +828,21 @@ export default function VendorCRM() {
                       onChange={(e) => setNewCustomerForm({ ...newCustomerForm, tier: e.target.value })}
                       className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-3 focus:border-purple-500 focus:bg-white outline-none cursor-pointer"
                     >
-                      <option value="bronze">برنز (مشتری جدید / عادی)</option>
-                      <option value="silver">نقره‌ای (مشتری وفادار)</option>
+                      <option value="bronze">برنز (مشتری عادی)</option>
+                      <option value="silver">نقره‌ای (وفادار)</option>
                       <option value="VIP">طلایی (VIP)</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-kal-3 text-slate-700 mb-1">مجموع خرید ها (تومان):</label>
+                    <input
+                      type="number"
+                      placeholder="مثال: ۵۰۰۰۰۰۰"
+                      value={newCustomerForm.totalLtv || ''}
+                      onChange={(e) => setNewCustomerForm({ ...newCustomerForm, totalLtv: e.target.value })}
+                      className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none"
+                    />
                   </div>
 
                   <div>
@@ -806,7 +924,7 @@ export default function VendorCRM() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden"
+              className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden"
             >
               <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <div className="flex items-center gap-2.5">
@@ -815,7 +933,7 @@ export default function VendorCRM() {
                   </div>
                   <div>
                     <h3 className="font-kal-4 font-bold text-slate-900 text-sm">ویرایش مشخصات مشتری</h3>
-                    <p className="text-[11px] font-kal-1 text-slate-400">به‌روزرسانی نام، سطح و شماره تماس</p>
+                    <p className="text-[11px] font-kal-1 text-slate-400">به‌روزرسانی نام، سطح، یادداشت پرسنلی و نظرات</p>
                   </div>
                 </div>
                 <button
@@ -827,30 +945,32 @@ export default function VendorCRM() {
               </div>
 
               <form onSubmit={handleSaveEdit} className="p-5 space-y-4">
-                <div>
-                  <label className="block text-xs font-kal-3 text-slate-700 mb-1">نام و نام خانوادگی:</label>
-                  <input
-                    type="text"
-                    required
-                    value={editCustomerForm.name}
-                    onChange={(e) => setEditCustomerForm({ ...editCustomerForm, name: e.target.value })}
-                    className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-kal-3 text-slate-700 mb-1">نام و نام خانوادگی:</label>
+                    <input
+                      type="text"
+                      required
+                      value={editCustomerForm.name}
+                      onChange={(e) => setEditCustomerForm({ ...editCustomerForm, name: e.target.value })}
+                      className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-kal-3 text-slate-700 mb-1">شماره موبایل:</label>
+                    <input
+                      type="text"
+                      required
+                      dir="ltr"
+                      value={editCustomerForm.phone}
+                      onChange={(e) => setEditCustomerForm({ ...editCustomerForm, phone: e.target.value })}
+                      className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none text-left"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-kal-3 text-slate-700 mb-1">شماره موبایل:</label>
-                  <input
-                    type="text"
-                    required
-                    dir="ltr"
-                    value={editCustomerForm.phone}
-                    onChange={(e) => setEditCustomerForm({ ...editCustomerForm, phone: e.target.value })}
-                    className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none text-left"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-xs font-kal-3 text-slate-700 mb-1">سطح مشتری:</label>
                     <select
@@ -865,15 +985,64 @@ export default function VendorCRM() {
                   </div>
 
                   <div>
+                    <label className="block text-xs font-kal-3 text-slate-700 mb-1">مجموع خرید ها (تومان):</label>
+                    <input
+                      type="number"
+                      placeholder="مثال: ۵۰۰۰۰۰۰"
+                      value={editCustomerForm.totalLtv ?? ''}
+                      onChange={(e) => setEditCustomerForm({ ...editCustomerForm, totalLtv: e.target.value })}
+                      className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none"
+                    />
+                  </div>
+
+                  <div>
                     <label className="block text-xs font-kal-3 text-slate-700 mb-1">تاریخ تولد / سالگرد:</label>
                     <input
                       type="text"
                       dir="ltr"
+                      placeholder="مثال: ۱۴۰۵/۰۶/۱۵"
                       value={editCustomerForm.birthday}
                       onChange={(e) => setEditCustomerForm({ ...editCustomerForm, birthday: e.target.value })}
                       className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none text-left"
                     />
                   </div>
+                </div>
+
+                {/* Staff Note */}
+                <div>
+                  <label className="block text-xs font-kal-3 text-slate-700 mb-1">یادداشت پرسنلی (فرمول رنگ، حساسیت):</label>
+                  <textarea
+                    rows={2}
+                    placeholder="نکات مهم برای آرایشگران و پرسنل..."
+                    value={editCustomerForm.staffNote}
+                    onChange={(e) => setEditCustomerForm({ ...editCustomerForm, staffNote: e.target.value })}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 focus:bg-white outline-none resize-none"
+                  />
+                </div>
+
+                {/* Customer Review & Rating */}
+                <div className="space-y-2 bg-purple-50/40 p-3 rounded-2xl border border-purple-100">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-kal-3 text-slate-800">نظر و بازخورد مشتری:</label>
+                    <select
+                      value={editCustomerForm.rating}
+                      onChange={(e) => setEditCustomerForm({ ...editCustomerForm, rating: Number(e.target.value) })}
+                      className="h-8 px-2 bg-white border border-slate-200 rounded-lg text-xs font-kal-3 text-amber-600 outline-none"
+                    >
+                      <option value={5}>⭐⭐⭐⭐⭐ (۵ ستاره)</option>
+                      <option value={4}>⭐⭐⭐⭐ (۴ ستاره)</option>
+                      <option value={3}>⭐⭐⭐ (۳ ستاره)</option>
+                      <option value={2}>⭐⭐ (۲ ستاره)</option>
+                      <option value={1}>⭐ (۱ ستاره)</option>
+                    </select>
+                  </div>
+                  <textarea
+                    rows={2}
+                    placeholder="بازخورد مشتری از کیفیت کار، محیط یا پرسنل..."
+                    value={editCustomerForm.customerReview}
+                    onChange={(e) => setEditCustomerForm({ ...editCustomerForm, customerReview: e.target.value })}
+                    className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-kal-2 focus:border-purple-500 outline-none resize-none"
+                  />
                 </div>
 
                 <div className="pt-2 flex gap-3">
