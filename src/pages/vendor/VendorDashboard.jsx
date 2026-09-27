@@ -33,6 +33,8 @@ export default function VendorDashboard() {
   const redeemCoupon = useVendorStore((s) => s.redeemCoupon);
   const dailyMissions = useVendorStore((s) => s.dailyMissions || []);
   const toggleDailyMission = useVendorStore((s) => s.toggleDailyMission);
+  const quickRedeemModalOpen = useVendorStore((s) => s.quickRedeemModalOpen);
+  const setQuickRedeemModalOpen = useVendorStore((s) => s.setQuickRedeemModalOpen);
 
   const [quickCode, setQuickCode] = useState('');
   const [quickResult, setQuickResult] = useState(null);
@@ -174,8 +176,8 @@ export default function VendorDashboard() {
           <div className="grid grid-cols-2 gap-2.5 pt-1">
             {/* لوپُن (راست) */}
             <div className="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100/80">
-              <div className="h-5 flex items-center justify-center gap-1">
-                <img src="/lopon-logo-icon.png" alt="لوپُن" className="h-4.5 w-auto object-contain" />
+              <div className="h-5 flex items-center justify-center gap-1.5">
+                <img src="/lopon-logo-icon.png" alt="لوپُن" className="w-3.5 h-3.5 max-w-[14px] max-h-[14px] object-contain shrink-0" />
                 <span className="text-[11px] font-kal-3 font-bold text-slate-700">لوپُن</span>
               </div>
               <div className="font-kal-4 font-bold text-xs sm:text-sm text-slate-800">
@@ -466,58 +468,62 @@ export default function VendorDashboard() {
 
         {/* Left (4 cols): Quick Management Shortcuts & Revenue Split */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Daily Missions Checklist (ماموریت‌های امروز سالن) */}
-          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+          {/* Daily Missions Checklist (ماموریت‌های امروز) - طراحی مینیمال با تک CTA ثبت پذیرش */}
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between space-y-4">
             <div className="pb-3 border-b border-slate-100">
               <div className="flex items-center justify-between">
-                <h3 className="font-kal-3 font-bold text-slate-900 text-sm flex items-center gap-2">
-                  <CheckCircle2 className="w-4.5 h-4.5 text-[#F47A20]" />
-                  <span>ماموریت‌های امروز سالن</span>
+                <h3 className="font-kal-3 font-bold text-slate-800 text-sm flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-slate-500" />
+                  <span>ماموریت‌های امروز</span>
                 </h3>
-                <span className="text-[11px] font-kal-4 font-bold text-slate-600 bg-orange-50 text-[#F47A20] px-2.5 py-0.5 rounded-full border border-orange-200/60">
+                <span className="text-[11px] font-kal-4 font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
                   {completedMissionsCount} از {dailyMissions.length} انجام شده
                 </span>
               </div>
-              {/* Progress bar */}
-              <div className="w-full h-2 bg-slate-100 rounded-full mt-2.5 overflow-hidden">
+              {/* Minimal progress bar */}
+              <div className="w-full h-1.5 bg-slate-100 rounded-full mt-2.5 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-orange-400 to-[#F47A20] rounded-full transition-all duration-300"
+                  className="h-full bg-slate-800 rounded-full transition-all duration-300"
                   style={{ width: `${missionsProgressPercent}%` }}
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {dailyMissions.map((mission) => (
-                <div
+                <label
                   key={mission.id}
-                  className={`flex items-center justify-between p-3 rounded-2xl border transition-all text-xs ${
-                    mission.completed
-                      ? 'bg-emerald-50/40 border-emerald-100 text-slate-400'
-                      : 'bg-slate-50 hover:bg-slate-100/80 border-slate-100 text-slate-800'
-                  }`}
+                  className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50/80 cursor-pointer transition-colors"
                 >
-                  <label className="flex items-center gap-2.5 cursor-pointer flex-1">
-                    <input
-                      type="checkbox"
-                      checked={mission.completed}
-                      onChange={() => toggleDailyMission(mission.id)}
-                      className="w-4 h-4 rounded text-[#F47A20] focus:ring-orange-400 cursor-pointer accent-[#F47A20]"
-                    />
-                    <span className={`font-kal-2 text-[11.5px] ${mission.completed ? 'line-through text-slate-400 font-normal' : 'text-slate-700 font-medium'}`}>
-                      {mission.title}
-                    </span>
-                  </label>
-
-                  <Link
-                    to={mission.link}
-                    className="p-1.5 text-slate-400 hover:text-[#F47A20] hover:bg-white rounded-lg transition-colors shrink-0"
-                    title="انجام در بخش مربوطه"
+                  <input
+                    type="checkbox"
+                    checked={mission.completed}
+                    onChange={() => toggleDailyMission(mission.id)}
+                    className="w-4 h-4 rounded text-slate-900 focus:ring-slate-400 cursor-pointer accent-slate-900"
+                  />
+                  <span
+                    className={`font-kal-2 text-xs transition-colors ${
+                      mission.completed
+                        ? 'line-through text-slate-400 font-normal'
+                        : 'text-slate-700 font-medium'
+                    }`}
                   >
-                    <ChevronLeft className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+                    {mission.title}
+                  </span>
+                </label>
               ))}
+            </div>
+
+            {/* Single CTA on Card: ثبت پذیرش */}
+            <div className="pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setQuickRedeemModalOpen(true)}
+                className="w-full h-10 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs"
+              >
+                <QrCode className="w-4 h-4 text-orange-400" />
+                <span>ثبت پذیرش</span>
+              </button>
             </div>
           </div>
 
@@ -571,6 +577,81 @@ export default function VendorDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Quick Redeem Modal for Admission (ثبت پذیرش مشتری) */}
+      {quickRedeemModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 w-full max-w-md overflow-hidden">
+            <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+              <h3 className="font-kal-3 font-bold text-sm text-slate-800 flex items-center gap-2">
+                <QrCode className="w-4 h-4 text-[#F47A20]" />
+                <span>استعلام و ثبت پذیرش کوپن مشتری</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => setQuickRedeemModalOpen(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-200 transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-kal-3 font-bold text-slate-700 mb-2">
+                  کد ۶ رقمی کوپن لوپُن:
+                </label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={quickCode}
+                  onChange={(e) => setQuickCode(e.target.value.replace(/\D/g, ''))}
+                  placeholder="مثال: ۵۸۲۹۱۴"
+                  className="w-full h-14 text-center font-kal-4 font-bold text-2xl tracking-widest bg-slate-50 border-2 border-slate-200 rounded-2xl focus:border-[#F47A20] focus:bg-white outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (quickCode.length >= 5) {
+                      const res = redeemCoupon(quickCode);
+                      setQuickResult(res);
+                    }
+                  }}
+                  disabled={quickCode.length < 5}
+                  className="h-12 bg-[#F47A20] hover:bg-[#d66311] disabled:opacity-50 text-white font-kal-3 font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer"
+                >
+                  استعلام و ثبت
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuickCode('582914');
+                    const res = redeemCoupon('582914');
+                    setQuickResult(res);
+                  }}
+                  className="h-12 bg-slate-100 hover:bg-slate-200 text-slate-700 font-kal-3 font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  کد تستی (۵۸۲۹۱۴)
+                </button>
+              </div>
+
+              {quickResult && (
+                <div
+                  className={`p-3 rounded-xl text-xs font-kal-2 text-center border ${
+                    quickResult.success
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                      : 'bg-rose-50 text-rose-800 border-rose-200'
+                  }`}
+                >
+                  {quickResult.message}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
