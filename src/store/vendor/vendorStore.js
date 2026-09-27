@@ -586,7 +586,15 @@ const INITIAL_OFFLINE_BOOKINGS = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = 'lopon_vendor_state_v3';
+const INITIAL_DAILY_MISSIONS = [
+  { id: 'm_1', title: 'بروزرسانی قیمت‌ها و پکیج‌های فصلی سالن', category: 'خدمات', completed: true, link: '/vendor/services' },
+  { id: 'm_2', title: 'آپدیت کردن عکس‌ها و نمونه‌کارها در گالری لوپُن', category: 'پروفایل', completed: false, link: '/vendor/profile' },
+  { id: 'm_3', title: 'پاسخ به نظرات و بازخوردهای جدید مراجعین', category: 'باشگاه مشتریان', completed: true, link: '/vendor/crm' },
+  { id: 'm_4', title: 'ارسال پیامک انبوه یا یادآوری بازگشت مشتریان (>۴۵ روز)', category: 'بازاریابی', completed: false, link: '/vendor/crm' },
+  { id: 'm_5', title: 'بررسی و آزادسازی ظرفیت اسلات‌های نوبت‌های فردا', category: 'نوبت‌دهی', completed: false, link: '/vendor/bookings' },
+];
+
+const LOCAL_STORAGE_KEY = 'lopon_vendor_state_v4';
 
 const loadSavedState = () => {
   if (typeof window === 'undefined') return null;
@@ -602,10 +610,10 @@ const loadSavedState = () => {
 const saveState = (state) => {
   if (typeof window === 'undefined') return;
   try {
-    const { vendor, services, coupons, crmCustomers, staff, offlineBookings } = state;
+    const { vendor, services, coupons, crmCustomers, staff, offlineBookings, dailyMissions } = state;
     localStorage.setItem(
       LOCAL_STORAGE_KEY,
-      JSON.stringify({ vendor, services, coupons, crmCustomers, staff, offlineBookings })
+      JSON.stringify({ vendor, services, coupons, crmCustomers, staff, offlineBookings, dailyMissions })
     );
   } catch (e) {
     console.error('Error saving vendor state', e);
@@ -624,10 +632,23 @@ export const useVendorStore = create((set, get) => ({
   crmCustomers: saved?.crmCustomers || INITIAL_CRM_CUSTOMERS,
   staff: saved?.staff || INITIAL_STAFF,
   offlineBookings: saved?.offlineBookings || INITIAL_OFFLINE_BOOKINGS,
+  dailyMissions: saved?.dailyMissions || INITIAL_DAILY_MISSIONS,
   quickRedeemModalOpen: false,
 
   // UI helpers
   setQuickRedeemModalOpen: (open) => set({ quickRedeemModalOpen: open }),
+
+  // Daily Missions
+  toggleDailyMission: (missionId) => {
+    set((state) => {
+      const updated = state.dailyMissions.map((m) =>
+        m.id === missionId ? { ...m, completed: !m.completed } : m
+      );
+      const next = { ...state, dailyMissions: updated };
+      saveState(next);
+      return { dailyMissions: updated };
+    });
+  },
 
   // 1. Vendor Profile Actions
   updateVendorProfile: (fields) => {
@@ -999,6 +1020,28 @@ export const useVendorStore = create((set, get) => ({
       message: `نوبت با موفقیت برای خانم ${bookingData.customerName} ثبت و پرونده مشتری به‌روز شد.`,
       booking: newBooking,
     };
+  },
+
+  updateOfflineBooking: (bookingId, updatedData) => {
+    set((state) => {
+      const updated = state.offlineBookings.map((b) =>
+        b.id === bookingId ? { ...b, ...updatedData } : b
+      );
+      const next = { ...state, offlineBookings: updated };
+      saveState(next);
+      return { offlineBookings: updated };
+    });
+    return { success: true };
+  },
+
+  deleteOfflineBooking: (bookingId) => {
+    set((state) => {
+      const updated = state.offlineBookings.filter((b) => b.id !== bookingId);
+      const next = { ...state, offlineBookings: updated };
+      saveState(next);
+      return { offlineBookings: updated };
+    });
+    return { success: true };
   },
 
   // Reset to default

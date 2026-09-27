@@ -31,9 +31,17 @@ export default function VendorDashboard() {
   const crmCustomers = useVendorStore((s) => s.crmCustomers);
   const services = useVendorStore((s) => s.services);
   const redeemCoupon = useVendorStore((s) => s.redeemCoupon);
+  const dailyMissions = useVendorStore((s) => s.dailyMissions || []);
+  const toggleDailyMission = useVendorStore((s) => s.toggleDailyMission);
 
   const [quickCode, setQuickCode] = useState('');
   const [quickResult, setQuickResult] = useState(null);
+
+  // Daily Missions Calculations
+  const completedMissionsCount = dailyMissions.filter((m) => m.completed).length;
+  const missionsProgressPercent = dailyMissions.length > 0
+    ? Math.round((completedMissionsCount / dailyMissions.length) * 100)
+    : 0;
 
   // Calculations
   const pendingCoupons = coupons.filter((c) => c.status === 'pending');
@@ -165,9 +173,10 @@ export default function VendorDashboard() {
           {/* دو باکس پایین: لوپُن و سالن */}
           <div className="grid grid-cols-2 gap-2.5 pt-1">
             {/* لوپُن (راست) */}
-            <div className="bg-[#F4F5F7] rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100/80">
-              <div className="h-5 flex items-center justify-center">
-                <img src={LoponLogo} alt="لوپُن" className="h-4.5 w-auto object-contain" />
+            <div className="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100/80">
+              <div className="h-5 flex items-center justify-center gap-1">
+                <img src="/lopon-logo-icon.png" alt="لوپُن" className="h-4.5 w-auto object-contain" />
+                <span className="text-[11px] font-kal-3 font-bold text-slate-700">لوپُن</span>
               </div>
               <div className="font-kal-4 font-bold text-xs sm:text-sm text-slate-800">
                 {displayOnlineToday.toLocaleString('fa-IR')}
@@ -457,56 +466,58 @@ export default function VendorDashboard() {
 
         {/* Left (4 cols): Quick Management Shortcuts & Revenue Split */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Quick Navigation Cards */}
-          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
-            <h3 className="font-kal-3 font-bold text-slate-900 text-sm pb-2 border-b border-slate-100">
-              دسترسی‌های سریع سالن
-            </h3>
+          {/* Daily Missions Checklist (ماموریت‌های امروز سالن) */}
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <div className="pb-3 border-b border-slate-100">
+              <div className="flex items-center justify-between">
+                <h3 className="font-kal-3 font-bold text-slate-900 text-sm flex items-center gap-2">
+                  <CheckCircle2 className="w-4.5 h-4.5 text-[#F47A20]" />
+                  <span>ماموریت‌های امروز سالن</span>
+                </h3>
+                <span className="text-[11px] font-kal-4 font-bold text-slate-600 bg-orange-50 text-[#F47A20] px-2.5 py-0.5 rounded-full border border-orange-200/60">
+                  {completedMissionsCount} از {dailyMissions.length} انجام شده
+                </span>
+              </div>
+              {/* Progress bar */}
+              <div className="w-full h-2 bg-slate-100 rounded-full mt-2.5 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-orange-400 to-[#F47A20] rounded-full transition-all duration-300"
+                  style={{ width: `${missionsProgressPercent}%` }}
+                />
+              </div>
+            </div>
 
             <div className="space-y-2">
-              <Link
-                to="/vendor/bookings"
-                className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100/90 text-xs font-kal-3 text-slate-700 transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <CalendarDays className="w-4 h-4 text-blue-500" />
-                  <span>ثبت نوبت تلفنی یا حضوری</span>
-                </div>
-                <ChevronLeft className="w-4 h-4 text-slate-400" />
-              </Link>
+              {dailyMissions.map((mission) => (
+                <div
+                  key={mission.id}
+                  className={`flex items-center justify-between p-3 rounded-2xl border transition-all text-xs ${
+                    mission.completed
+                      ? 'bg-emerald-50/40 border-emerald-100 text-slate-400'
+                      : 'bg-slate-50 hover:bg-slate-100/80 border-slate-100 text-slate-800'
+                  }`}
+                >
+                  <label className="flex items-center gap-2.5 cursor-pointer flex-1">
+                    <input
+                      type="checkbox"
+                      checked={mission.completed}
+                      onChange={() => toggleDailyMission(mission.id)}
+                      className="w-4 h-4 rounded text-[#F47A20] focus:ring-orange-400 cursor-pointer accent-[#F47A20]"
+                    />
+                    <span className={`font-kal-2 text-[11.5px] ${mission.completed ? 'line-through text-slate-400 font-normal' : 'text-slate-700 font-medium'}`}>
+                      {mission.title}
+                    </span>
+                  </label>
 
-              <Link
-                to="/vendor/catalog"
-                className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100/90 text-xs font-kal-3 text-slate-700 transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Layers className="w-4 h-4 text-emerald-500" />
-                  <span>افزودن خدمت از کاتالوگ لوپُن</span>
+                  <Link
+                    to={mission.link}
+                    className="p-1.5 text-slate-400 hover:text-[#F47A20] hover:bg-white rounded-lg transition-colors shrink-0"
+                    title="انجام در بخش مربوطه"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
-                <ChevronLeft className="w-4 h-4 text-slate-400" />
-              </Link>
-
-              <Link
-                to="/vendor/services"
-                className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100/90 text-xs font-kal-3 text-slate-700 transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Scissors className="w-4 h-4 text-[#F47A20]" />
-                  <span>ویرایش قیمت و تخفیف‌ها</span>
-                </div>
-                <ChevronLeft className="w-4 h-4 text-slate-400" />
-              </Link>
-
-              <Link
-                to="/vendor/crm"
-                className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100/90 text-xs font-kal-3 text-slate-700 transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Users className="w-4 h-4 text-purple-500" />
-                  <span>کمپین بازگشت مشتریان (&gt;۴۵ روز)</span>
-                </div>
-                <ChevronLeft className="w-4 h-4 text-slate-400" />
-              </Link>
+              ))}
             </div>
           </div>
 
