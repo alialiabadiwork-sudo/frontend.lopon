@@ -469,62 +469,71 @@
               </div>
             </div>
 
-            <!-- Daily Missions (ماموریت‌های امروز سالن) -->
-            <div class="lg:col-span-4 bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-3.5">
-              <div class="pb-2.5 border-b border-slate-100">
+                        <!-- Daily Missions (ماموریت‌های امروز سالن) -->
+            <div id="vendorDailyMissionsCard" class="lg:col-span-4 bg-white rounded-3xl p-5 border-2 border-orange-200 shadow-md space-y-4 relative overflow-hidden">
+              <div class="absolute top-0 right-0 left-0 h-1.5 bg-gradient-to-r from-orange-400 via-[#F47A20] to-amber-500"></div>
+              
+              <div class="pb-3 border-b border-slate-100 pt-1">
                 <div class="flex items-center justify-between">
-                  <h3 class="font-black text-xs text-slate-900 flex items-center gap-1.5">
-                    <i class="fa-solid fa-circle-check text-[#F47A20]"></i>
+                  <h3 class="font-black text-sm text-slate-900 flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-xl bg-orange-100 text-[#F47A20] flex items-center justify-center text-xs">
+                      <i class="fa-solid fa-list-check"></i>
+                    </span>
                     <span>ماموریت‌های امروز سالن</span>
                   </h3>
-                  <span id="missionsCountBadge" class="text-[10px] font-black text-[#F47A20] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200">
-                    ۲ از ۵ انجام شده
+                  <span id="missionsCountBadge" class="text-[11px] font-black text-[#F47A20] bg-orange-50 px-2.5 py-0.5 rounded-full border border-orange-200">
+                    ۲ از ۴ انجام شده
                   </span>
                 </div>
-                <div class="w-full h-1.5 bg-slate-100 rounded-full mt-2 overflow-hidden">
-                  <div id="missionsProgressBar" class="h-full bg-gradient-to-r from-orange-400 to-[#F47A20] rounded-full transition-all duration-300" style="width: 40%"></div>
+                <p class="text-[11px] text-slate-400 mt-1">لیست اقدامات روزانه مدیر سالن برای ارتقای رتبه و فروش:</p>
+                <div class="w-full h-2 bg-slate-100 rounded-full mt-2.5 overflow-hidden">
+                  <div id="missionsProgressBar" class="h-full bg-gradient-to-r from-orange-400 to-[#F47A20] rounded-full transition-all duration-300" style="width: 50%"></div>
                 </div>
               </div>
 
-              <div class="space-y-2 text-xs" id="missionsList">
-                <div class="p-2.5 bg-emerald-50/50 rounded-xl border border-emerald-100 flex items-center justify-between">
-                  <label class="flex items-center gap-2 cursor-pointer flex-1">
-                    <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-3.5 h-3.5 accent-[#F47A20] rounded cursor-pointer">
-                    <span class="text-slate-500 line-through text-[11px]">بروزرسانی قیمت‌ها و پکیج‌های فصلی</span>
+              <div class="space-y-2.5 text-xs" id="missionsList">
+                <!-- Task 1: بروزرسانی قیمت ها -->
+                <div class="p-3 bg-emerald-50/60 rounded-2xl border border-emerald-200/80 flex items-center justify-between transition-all">
+                  <label class="flex items-center gap-2.5 cursor-pointer flex-1">
+                    <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-[#F47A20] rounded cursor-pointer">
+                    <span class="text-slate-500 line-through text-xs">بروزرسانی قیمت‌ها و پکیج‌های فصلی</span>
                   </label>
-                  <button onclick="switchTab('services')" class="text-slate-400 hover:text-[#F47A20] p-1"><i class="fa-solid fa-arrow-left text-[10px]"></i></button>
+                  <button onclick="switchTab('services')" class="text-slate-400 hover:text-[#F47A20] px-2 py-1 bg-white rounded-lg border border-slate-100 text-[11px] font-bold">
+                    انجام <i class="fa-solid fa-arrow-left text-[9px]"></i>
+                  </button>
                 </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
-                  <label class="flex items-center gap-2 cursor-pointer flex-1">
-                    <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-3.5 h-3.5 accent-[#F47A20] rounded cursor-pointer">
-                    <span class="text-slate-700 font-bold text-[11px]">آپدیت کردن عکس‌ها در گالری لوپُن</span>
+                <!-- Task 2: آپدیت کردن عکس ها -->
+                <div class="p-3 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200/80 flex items-center justify-between transition-all">
+                  <label class="flex items-center gap-2.5 cursor-pointer flex-1">
+                    <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-[#F47A20] rounded cursor-pointer">
+                    <span class="text-slate-800 font-black text-xs">آپدیت کردن عکس‌ها در گالری نمونه‌کارها</span>
                   </label>
-                  <button onclick="switchTab('profile')" class="text-slate-400 hover:text-[#F47A20] p-1"><i class="fa-solid fa-arrow-left text-[10px]"></i></button>
+                  <button onclick="switchTab('profile')" class="text-slate-400 hover:text-[#F47A20] px-2 py-1 bg-white rounded-lg border border-slate-100 text-[11px] font-bold">
+                    انجام <i class="fa-solid fa-arrow-left text-[9px]"></i>
+                  </button>
                 </div>
 
-                <div class="p-2.5 bg-emerald-50/50 rounded-xl border border-emerald-100 flex items-center justify-between">
-                  <label class="flex items-center gap-2 cursor-pointer flex-1">
-                    <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-3.5 h-3.5 accent-[#F47A20] rounded cursor-pointer">
-                    <span class="text-slate-500 line-through text-[11px]">پاسخ به نظرات و بازخوردهای مراجعین</span>
+                <!-- Task 3: پاسخ به نظرات -->
+                <div class="p-3 bg-emerald-50/60 rounded-2xl border border-emerald-200/80 flex items-center justify-between transition-all">
+                  <label class="flex items-center gap-2.5 cursor-pointer flex-1">
+                    <input type="checkbox" checked onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-[#F47A20] rounded cursor-pointer">
+                    <span class="text-slate-500 line-through text-xs">پاسخ به نظرات و بازخوردهای مراجعین</span>
                   </label>
-                  <button onclick="switchTab('crm')" class="text-slate-400 hover:text-[#F47A20] p-1"><i class="fa-solid fa-arrow-left text-[10px]"></i></button>
+                  <button onclick="switchTab('crm')" class="text-slate-400 hover:text-[#F47A20] px-2 py-1 bg-white rounded-lg border border-slate-100 text-[11px] font-bold">
+                    انجام <i class="fa-solid fa-arrow-left text-[9px]"></i>
+                  </button>
                 </div>
 
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
-                  <label class="flex items-center gap-2 cursor-pointer flex-1">
-                    <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-3.5 h-3.5 accent-[#F47A20] rounded cursor-pointer">
-                    <span class="text-slate-700 font-bold text-[11px]">ارسال پیامک انبوه بازگشت مشتریان</span>
+                <!-- Task 4: ارسال پیامک انبوه -->
+                <div class="p-3 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200/80 flex items-center justify-between transition-all">
+                  <label class="flex items-center gap-2.5 cursor-pointer flex-1">
+                    <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-4 h-4 accent-[#F47A20] rounded cursor-pointer">
+                    <span class="text-slate-800 font-black text-xs">ارسال پیامک انبوه و بازگشت مشتریان</span>
                   </label>
-                  <button onclick="switchTab('crm')" class="text-slate-400 hover:text-[#F47A20] p-1"><i class="fa-solid fa-arrow-left text-[10px]"></i></button>
-                </div>
-
-                <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
-                  <label class="flex items-center gap-2 cursor-pointer flex-1">
-                    <input type="checkbox" onchange="toggleMissionCheck(this)" class="w-3.5 h-3.5 accent-[#F47A20] rounded cursor-pointer">
-                    <span class="text-slate-700 font-bold text-[11px]">بررسی و تایید اسلات‌های خالی فردا</span>
-                  </label>
-                  <button onclick="switchTab('bookings')" class="text-slate-400 hover:text-[#F47A20] p-1"><i class="fa-solid fa-arrow-left text-[10px]"></i></button>
+                  <button onclick="switchTab('crm')" class="text-slate-400 hover:text-[#F47A20] px-2 py-1 bg-white rounded-lg border border-slate-100 text-[11px] font-bold">
+                    انجام <i class="fa-solid fa-arrow-left text-[9px]"></i>
+                  </button>
                 </div>
               </div>
             </div>
