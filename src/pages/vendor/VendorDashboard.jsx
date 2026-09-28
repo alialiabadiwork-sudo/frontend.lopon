@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import {
@@ -15,14 +15,291 @@ import {
   Scissors,
   Layers,
   ChevronLeft,
+  ChevronRight,
   Sparkles,
   DollarSign,
   Gift,
   CalendarDays,
   Plus,
+  Store,
+  Globe,
+  Phone,
+  User,
 } from 'lucide-react';
 import { useVendorStore } from '@store/vendor/vendorStore';
 import LoponLogo from '@assets/images/lopon-logo.png';
+
+const faToEnDigits = (str) => {
+  if (!str) return '';
+  return String(str).replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+};
+
+const SCHEDULE_DAYS = [
+  { id: '1405-03-18', dateStr: '۱۴۰۵/۰۳/۱۸', dayNum: '۱۸', dayName: 'شنبه', fullDate: 'شنبه ۱۸ خرداد (امروز)' },
+  { id: '1405-03-19', dateStr: '۱۴۰۵/۰۳/۱۹', dayNum: '۱۹', dayName: 'یکشنبه', fullDate: 'یکشنبه ۱۹ خرداد' },
+  { id: '1405-03-20', dateStr: '۱۴۰۵/۰۳/۲۰', dayNum: '۲۰', dayName: 'دوشنبه', fullDate: 'دوشنبه ۲۰ خرداد' },
+  { id: '1405-03-21', dateStr: '۱۴۰۵/۰۳/۲۱', dayNum: '۲۱', dayName: 'سه‌شنبه', fullDate: 'سه‌شنبه ۲۱ خرداد' },
+  { id: '1405-03-22', dateStr: '۱۴۰۵/۰۳/۲۲', dayNum: '۲۲', dayName: 'چهارشنبه', fullDate: 'چهارشنبه ۲۲ خرداد' },
+  { id: '1405-03-23', dateStr: '۱۴۰۵/۰۳/۲۳', dayNum: '۲۳', dayName: 'پنج‌شنبه', fullDate: 'پنج‌شنبه ۲۳ خرداد' },
+  { id: '1405-03-24', dateStr: '۱۴۰۵/۰۳/۲۴', dayNum: '۲۴', dayName: 'جمعه', fullDate: 'جمعه ۲۴ خرداد' },
+];
+
+const TIMELINE_HOURS = [
+  { hour: 9, label: '۰۹:۰۰' },
+  { hour: 10, label: '۱۰:۰۰' },
+  { hour: 11, label: '۱۱:۰۰' },
+  { hour: 12, label: '۱۲:۰۰' },
+  { hour: 13, label: '۱۳:۰۰' },
+  { hour: 14, label: '۱۴:۰۰' },
+  { hour: 15, label: '۱۵:۰۰' },
+  { hour: 16, label: '۱۶:۰۰' },
+  { hour: 17, label: '۱۷:۰۰' },
+  { hour: 18, label: '۱۸:۰۰' },
+  { hour: 19, label: '۱۹:۰۰' },
+  { hour: 20, label: '۲۰:۰۰' },
+];
+
+const OTHER_DAYS_APPOINTMENTS = {
+  '1405-03-19': [
+    {
+      id: 'od_19_1',
+      type: 'online',
+      serviceTitle: 'رنگ و لایت بالیاژ اروپایی',
+      categoryName: 'رنگ و مو',
+      customerName: 'مریم منصوری',
+      customerPhone: '۰۹۱۳۴۵۶۹۸۷۴',
+      staffName: 'نازنین ابراهیمی',
+      timeString: '۱۰:۰۰ تا ۱۳:۰۰',
+      startHour: 10,
+      code: '357159',
+      amount: 2800000,
+      status: 'pending',
+    },
+    {
+      id: 'od_19_2',
+      type: 'offline',
+      serviceTitle: 'کاشت ناخن با ژل و مانیکور روسی',
+      categoryName: 'ناخن و پدیکور',
+      customerName: 'نگار صادقی',
+      customerPhone: '۰۹۱۳۲۲۴۵۱۸۰',
+      staffName: 'مهسا مرادی',
+      timeString: '۱۴:۰۰ تا ۱۵:۳۰',
+      startHour: 14,
+      amount: 700000,
+      status: 'confirmed',
+    },
+    {
+      id: 'od_19_3',
+      type: 'offline',
+      serviceTitle: 'میکاپ لایت اروپایی و شینیون',
+      categoryName: 'میکاپ و گریم',
+      customerName: 'الهام رستمی',
+      customerPhone: '۰۹۱۹۳۳۴۵۶۷۸',
+      staffName: 'سارا حسینی',
+      timeString: '۱۷:۰۰ تا ۱۸:۳۰',
+      startHour: 17,
+      amount: 1800000,
+      status: 'confirmed',
+    },
+  ],
+  '1405-03-20': [
+    {
+      id: 'od_20_1',
+      type: 'online',
+      serviceTitle: 'پدیکور و کفسابی VIP با جکوزی',
+      categoryName: 'ناخن و پدیکور',
+      customerName: 'آرزو کمالی',
+      customerPhone: '۰۹۱۹۸۷۶۵۴۳۲',
+      staffName: 'مهسا مرادی',
+      timeString: '۱۱:۰۰ تا ۱۲:۳۰',
+      startHour: 11,
+      code: '159753',
+      amount: 550000,
+      status: 'pending',
+    },
+    {
+      id: 'od_20_2',
+      type: 'offline',
+      serviceTitle: 'لیفت و لمینت ابرو با کراتین طبیعی',
+      categoryName: 'مژه و ابرو',
+      customerName: 'مهسا صبوری',
+      customerPhone: '۰۹۳۷۴۴۵۱۲۸۰',
+      staffName: 'سارا حسینی',
+      timeString: '۱۵:۰۰ تا ۱۶:۰۰',
+      startHour: 15,
+      amount: 420000,
+      status: 'confirmed',
+    },
+    {
+      id: 'od_20_3',
+      type: 'online',
+      serviceTitle: 'کراتینه و احیای ابریشمی مو',
+      categoryName: 'مو و کراتین',
+      customerName: 'سحر تهرانی',
+      customerPhone: '۰۹۱۲۳۴۵۶۷۸۹',
+      staffName: 'نازنین ابراهیمی',
+      timeString: '۱۷:۰۰ تا ۱۹:۳۰',
+      startHour: 17,
+      code: '963852',
+      amount: 1650000,
+      status: 'pending',
+    },
+  ],
+  '1405-03-21': [
+    {
+      id: 'od_21_1',
+      type: 'offline',
+      serviceTitle: 'پاکسازی و لیفت جوانسازی پلاژن',
+      categoryName: 'پوست و فیشیال',
+      customerName: 'طاهره مرادی',
+      customerPhone: '۰۹۱۳۱۴۵۶۷۲۲',
+      staffName: 'یلدا رحیمی',
+      timeString: '۰۹:۳۰ تا ۱۱:۰۰',
+      startHour: 9,
+      amount: 1500000,
+      status: 'confirmed',
+    },
+    {
+      id: 'od_21_2',
+      type: 'online',
+      serviceTitle: 'اکستنشن مژه اسپایکی و والیوم روسی',
+      categoryName: 'مژه و ابرو',
+      customerName: 'زهرا حیدری',
+      customerPhone: '۰۹۳۵۴۴۵۱۱۲۰',
+      staffName: 'سارا حسینی',
+      timeString: '۱۳:۰۰ تا ۱۴:۳۰',
+      startHour: 13,
+      code: '654321',
+      amount: 850000,
+      status: 'pending',
+    },
+    {
+      id: 'od_21_3',
+      type: 'offline',
+      serviceTitle: 'ترمیم ناخن با ژل و دیزاین',
+      categoryName: 'ناخن و پدیکور',
+      customerName: 'کیمیا باقری',
+      customerPhone: '۰۹۱۲۷۷۸۹۹۰۰',
+      staffName: 'مهسا مرادی',
+      timeString: '۱۶:۰۰ تا ۱۷:۳۰',
+      startHour: 16,
+      amount: 450000,
+      status: 'confirmed',
+    },
+  ],
+  '1405-03-22': [
+    {
+      id: 'od_22_1',
+      type: 'offline',
+      serviceTitle: 'ترمیم کاشت ناخن و لمینت استحکام‌بخش',
+      categoryName: 'ناخن و پدیکور',
+      customerName: 'مبینا کاربخش',
+      customerPhone: '۰۹۱۳۸۸۲۴۵۹۰',
+      staffName: 'مهسا مرادی',
+      timeString: '۱۰:۰۰ تا ۱۱:۳۰',
+      startHour: 10,
+      amount: 350000,
+      status: 'confirmed',
+    },
+    {
+      id: 'od_22_2',
+      type: 'online',
+      serviceTitle: 'فیشیال تخصصی پوست و هیدرودرمی',
+      categoryName: 'پوست و فیشیال',
+      customerName: 'بهاره کریمی',
+      customerPhone: '۰۹۱۳۶۶۷۸۹۰۱',
+      staffName: 'یلدا رحیمی',
+      timeString: '۱۴:۰۰ تا ۱۵:۳۰',
+      startHour: 14,
+      code: '452178',
+      amount: 770000,
+      status: 'pending',
+    },
+    {
+      id: 'od_22_3',
+      type: 'offline',
+      serviceTitle: 'براشینگ هالیوودی و حالت‌دهی مو',
+      categoryName: 'مو و کراتین',
+      customerName: 'نازنین ابراهیمی',
+      customerPhone: '۰۹۱۳۱۲۳۴۵۶۷',
+      staffName: 'سارا حسینی',
+      timeString: '۱۸:۰۰ تا ۱۹:۰۰',
+      startHour: 18,
+      amount: 450000,
+      status: 'confirmed',
+    },
+  ],
+  '1405-03-23': [
+    {
+      id: 'od_23_1',
+      type: 'offline',
+      serviceTitle: 'رنگ و لایت فویلی و آمبره',
+      categoryName: 'مو و کراتین',
+      customerName: 'نیلوفر افشار',
+      customerPhone: '۰۹۳۹۱۱۲۲۳۳۴',
+      staffName: 'نازنین ابراهیمی',
+      timeString: '۱۰:۰۰ تا ۱۳:۰۰',
+      startHour: 10,
+      amount: 3200000,
+      status: 'confirmed',
+    },
+    {
+      id: 'od_23_2',
+      type: 'online',
+      serviceTitle: 'مانیکور روسی و ژلیش ناخن دست',
+      categoryName: 'ناخن و پدیکور',
+      customerName: 'شیوا ابراهیمی',
+      customerPhone: '۰۹۱۳۳۴۰۵۵۲۱',
+      staffName: 'مهسا مرادی',
+      timeString: '۱۲:۰۰ تا ۱۳:۰۰',
+      startHour: 12,
+      code: '882190',
+      amount: 280000,
+      status: 'pending',
+    },
+    {
+      id: 'od_23_3',
+      type: 'offline',
+      serviceTitle: 'بوتاکس و احیای ابریشمی مو',
+      categoryName: 'مو و کراتین',
+      customerName: 'مریم منصوری',
+      customerPhone: '۰۹۱۳۴۵۶۹۸۷۴',
+      staffName: 'نازنین ابراهیمی',
+      timeString: '۱۵:۰۰ تا ۱۷:۰۰',
+      startHour: 15,
+      amount: 2100000,
+      status: 'confirmed',
+    },
+  ],
+  '1405-03-24': [
+    {
+      id: 'od_24_1',
+      type: 'offline',
+      serviceTitle: 'میکاپ و گریم تخصصی عروس و همراهان',
+      categoryName: 'میکاپ و گریم',
+      customerName: 'پریسا نامدار',
+      customerPhone: '۰۹۳۹۵۵۴۱۲۳۱',
+      staffName: 'سارا حسینی',
+      timeString: '۱۱:۰۰ تا ۱۴:۰۰',
+      startHour: 11,
+      amount: 4500000,
+      status: 'confirmed',
+    },
+    {
+      id: 'od_24_2',
+      type: 'offline',
+      serviceTitle: 'شینیون کلاسیک اروپایی',
+      categoryName: 'مو و کراتین',
+      customerName: 'شبنم اکبری',
+      customerPhone: '۰۹۱۲۹۹۸۸۷۷۶',
+      staffName: 'نازنین ابراهیمی',
+      timeString: '۱۴:۰۰ تا ۱۵:۳۰',
+      startHour: 14,
+      amount: 1200000,
+      status: 'confirmed',
+    },
+  ],
+};
 
 export default function VendorDashboard() {
   const vendor = useVendorStore((s) => s.vendor);
@@ -38,6 +315,113 @@ export default function VendorDashboard() {
 
   const [quickCode, setQuickCode] = useState('');
   const [quickResult, setQuickResult] = useState(null);
+
+  // Modal States
+  const [customerModalOpen, setCustomerModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [editBookingModalOpen, setEditBookingModalOpen] = useState(false);
+  const [editingBooking, setEditingBooking] = useState(null);
+  const [createBookingModalOpen, setCreateBookingModalOpen] = useState(false);
+  const [targetSlotHour, setTargetSlotHour] = useState('۱۰:۰۰');
+
+  const updateOfflineBooking = useVendorStore((s) => s.updateOfflineBooking);
+  const deleteOfflineBooking = useVendorStore((s) => s.deleteOfflineBooking);
+  const addOfflineBooking = useVendorStore((s) => s.addOfflineBooking);
+
+  const openCustomerModal = (name, phone) => {
+    const found = crmCustomers.find((c) => c.phone === phone || c.name === name);
+    if (found) {
+      setSelectedCustomer(found);
+    } else {
+      setSelectedCustomer({
+        name,
+        phone,
+        tier: 'silver',
+        totalLtv: 5000000,
+        staffNotes: ['مشتری خوش‌برخورد و وقت‌شناس سالن'],
+        customerReviews: [
+          {
+            id: 'rev_1',
+            text: 'کار خانوم مرادی عالی بود یکی از بهترین های کرمان که میشه رفت پیشون',
+            rating: 5,
+            date: 'امروز',
+          },
+        ],
+      });
+    }
+    setCustomerModalOpen(true);
+  };
+
+  // Selected Schedule Day State (defaults to 18th Saturday / Today)
+  const [selectedScheduleDayId, setSelectedScheduleDayId] = useState('1405-03-18');
+  const selectedDayObj = SCHEDULE_DAYS.find((d) => d.id === selectedScheduleDayId) || SCHEDULE_DAYS[0];
+
+  // Process today's mixed appointments (offline bookings + online coupons)
+  const todayAppointments = useMemo(() => {
+    const list = [];
+
+    // Offline bookings
+    offlineBookings.forEach((b) => {
+      let hour = 10;
+      if (b.time) {
+        const enTime = faToEnDigits(b.time);
+        const parts = enTime.split(':');
+        const parsed = parseInt(parts[0], 10);
+        if (!isNaN(parsed)) hour = parsed;
+      }
+      list.push({
+        id: b.id,
+        type: 'offline',
+        serviceTitle: b.serviceTitle,
+        categoryName: b.serviceLine || 'ناخن و پدیکور',
+        customerName: b.customerName,
+        customerPhone: b.customerPhone,
+        staffName: b.staffName,
+        timeString: `ساعت ${b.time} (${b.duration} دقیقه)`,
+        startHour: hour,
+        amount: b.amount,
+        status: b.status,
+      });
+    });
+
+    // Online coupons ready/pending for visit
+    coupons.forEach((c) => {
+      let hour = 15;
+      if (c.preferredTimeSlot) {
+        const enSlot = faToEnDigits(c.preferredTimeSlot);
+        const match = enSlot.match(/\d+/);
+        if (match) hour = parseInt(match[0], 10);
+      }
+      list.push({
+        id: c.id,
+        type: 'online',
+        serviceTitle: c.serviceTitle,
+        categoryName: c.serviceCategory === 'ناخن' ? 'ناخن و پدیکور' : c.serviceCategory === 'پوست' ? 'پوست و فیشیال' : 'رنگ و مو',
+        customerName: c.customerName,
+        customerPhone: c.customerPhone,
+        staffName: 'لاین تخصصی سالن',
+        timeString: `بازه ترجیحی ${c.preferredTimeSlot || '۱۵:۰۰ تا ۱۸:۰۰'}`,
+        startHour: hour,
+        code: c.code,
+        amount: c.salonShare || c.customerPaid,
+        status: c.status,
+      });
+    });
+
+    return list;
+  }, [offlineBookings, coupons]);
+
+  // Active appointments for selected day
+  const activeDayAppointments = useMemo(() => {
+    if (selectedScheduleDayId === '1405-03-18') {
+      return todayAppointments;
+    }
+    return OTHER_DAYS_APPOINTMENTS[selectedScheduleDayId] || [];
+  }, [selectedScheduleDayId, todayAppointments]);
+
+  const getAppointmentsForHour = (h) => {
+    return activeDayAppointments.filter((item) => item.startHour === h);
+  };
 
   // Daily Missions Calculations
   const completedMissionsCount = dailyMissions.filter((m) => m.completed).length;
@@ -175,13 +559,12 @@ export default function VendorDashboard() {
           {/* دو باکس پایین: لوپُن و سالن */}
           <div className="grid grid-cols-2 gap-2.5 pt-1">
             {/* لوپُن (راست) */}
-            <div className="bg-[#F4F5F7] rounded-2xl py-2 px-2 flex flex-col items-center justify-center text-center gap-1 border border-slate-100/80">
-              <div className="h-5 flex items-center justify-center gap-1.5">
-                <img src="/lopon-logo-icon.png" alt="لوپُن" className="w-3.5 h-3.5 max-w-[14px] max-h-[14px] object-contain shrink-0" />
-                <span className="text-[11px] font-kal-3 font-bold text-slate-700">لوپُن</span>
+            <div className="bg-[#F4F5F7] rounded-2xl py-2.5 px-2 flex flex-col items-center justify-center text-center gap-1.5 border border-slate-100/80">
+              <div className="h-6 flex items-center justify-center">
+                <img src="/lopon-logo-icon.png" alt="لوپُن" className="h-5 w-auto object-contain mx-auto" />
               </div>
               <div className="font-kal-4 font-bold text-xs sm:text-sm text-slate-800">
-                {displayOnlineToday.toLocaleString('fa-IR')}
+                {displayOnlineToday.toLocaleString('fa-IR')} تومان
               </div>
             </div>
 
@@ -369,100 +752,338 @@ export default function VendorDashboard() {
         )}
       </div>
 
-      {/* 4. Two Columns: Today's Appointments Timeline & Quick Shortcuts */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Right (8 cols): Today's Schedule (Online visits + Offline Bookings) */}
-        <div className="lg:col-span-8 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div>
-              <h3 className="font-kal-3 font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#F47A20]" />
-                <span>برنامه نوبت‌ها و مراجعین امروز</span>
-              </h3>
-              <p className="text-[11px] font-kal-1 text-slate-400">ترکیب سفارشات آنلاین لوپُن و نوبت‌های حضوری</p>
-            </div>
-            <Link
-              to="/vendor/bookings"
-              className="text-xs font-kal-3 text-[#F47A20] hover:underline flex items-center gap-1"
-            >
-              <span>مشاهده تقویم کامل</span>
-              <ChevronLeft className="w-3.5 h-3.5" />
-            </Link>
+      {/* 4. Intelligent Schedule Metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
+            <span>ساعت کار مفید سالن:</span>
+            <span className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><Clock className="w-3.5 h-3.5" /></span>
           </div>
+          <div className="font-kal-4 font-black text-xl text-slate-900">۷.۵ <span className="text-xs font-normal text-slate-400">ساعت پر</span></div>
+          <span className="text-[10px] font-kal-3 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">نوبت‌های در حال ارائه</span>
+        </div>
 
-          <div className="space-y-3">
-            {/* List mixed visits */}
-            {offlineBookings.slice(0, 4).map((b) => (
-              <div
-                key={b.id}
-                className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/70 border border-slate-100 transition-all text-xs"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-blue-700 flex flex-col items-center justify-center shrink-0">
-                    <span className="font-kal-4 font-bold text-xs">{b.time}</span>
-                    <span className="text-[9px] font-kal-1">{b.duration} دقیقه</span>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-kal-3 font-bold text-slate-800">{b.customerName}</h4>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-blue-50 text-blue-600 font-kal-3">
-                        نوبت حضوری
-                      </span>
-                    </div>
-                    <p className="text-slate-500 font-kal-2 mt-0.5">
-                      {b.serviceTitle} • پرسنل: {b.staffName}
-                    </p>
-                  </div>
+        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
+            <span>ظرفیت خالی و بیکاری:</span>
+            <span className="w-6 h-6 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center"><Clock className="w-3.5 h-3.5" /></span>
+          </div>
+          <div className="font-kal-4 font-black text-xl text-amber-600">۳.۵ <span className="text-xs font-normal text-slate-400">ساعت خالی</span></div>
+          <span className="text-[10px] font-kal-3 text-amber-800 bg-amber-50 px-2 py-0.5 rounded font-bold">آماده پذیرش و رزرو سریع</span>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
+            <span>سفارشات آنلاین لوپُن:</span>
+            <img src="/lopon-logo-icon.png" alt="" className="h-3.5 w-auto object-contain" />
+          </div>
+          <div className="font-kal-4 font-black text-xl text-[#F47A20]">۴ <span className="text-xs font-normal text-slate-400">نوبت</span></div>
+          <span className="text-[10px] font-kal-3 text-orange-700 bg-orange-50 px-2 py-0.5 rounded font-bold">غیرقابل ویرایش از سالن</span>
+        </div>
+
+        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
+          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
+            <span>نوبت‌های حضوری سالن:</span>
+            <span className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><Scissors className="w-3.5 h-3.5" /></span>
+          </div>
+          <div className="font-kal-4 font-black text-xl text-blue-600">۵ <span className="text-xs font-normal text-slate-400">نوبت</span></div>
+          <span className="text-[10px] font-kal-3 text-blue-700 bg-blue-50 px-2 py-0.5 rounded font-bold">دارای امکان ویرایش</span>
+        </div>
+      </div>
+
+      {/* 5. Two Columns: Today's Appointments Timeline & Quick Shortcuts */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Right (8 cols): Interactive Timeline Schedule (Days strip + Hourly axis + Service Event Cards) */}
+        <div className="lg:col-span-8 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-5">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+            <div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-2xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
+                  <CalendarDays className="w-5 h-5" />
                 </div>
-
-                <div className="text-left font-kal-2">
-                  <span className="font-kal-4 font-bold text-slate-800">
-                    {b.amount.toLocaleString('fa-IR')} تومان
-                  </span>
-                  <p className="text-[10px] text-slate-400 mt-0.5">
-                    {b.paymentMethod === 'pos' ? 'کارتخوان' : b.paymentMethod === 'cash' ? 'نقدی' : 'کارت‌به‌کارت'}
+                <div>
+                  <h3 className="font-kal-3 font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                    <span>برنامه مراجعات و نوبت‌های سالن</span>
+                    <span className="text-[11px] font-kal-4 px-2 py-0.5 rounded-full bg-blue-50 text-[#2563EB] font-bold">
+                      {activeDayAppointments.length.toLocaleString('fa-IR')} نوبت
+                    </span>
+                  </h3>
+                  <p className="text-[11px] font-kal-1 text-slate-400 mt-0.5">
+                    {selectedDayObj.fullDate} • ساعات کاری: ۰۹:۰۰ الی ۲۰:۰۰
                   </p>
                 </div>
               </div>
-            ))}
+            </div>
 
-            {/* Pending online coupons ready for visit */}
-            {pendingCoupons.slice(0, 2).map((c) => (
-              <div
-                key={c.id}
-                className="flex items-center justify-between p-3.5 rounded-2xl bg-orange-50/50 hover:bg-orange-50 border border-orange-100 transition-all text-xs"
+            <div className="flex items-center gap-2 self-end sm:self-auto">
+              <Link
+                to="/vendor/bookings"
+                className="h-9 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-kal-3 font-bold rounded-xl flex items-center gap-1.5 transition-colors shadow-2xs whitespace-nowrap"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-orange-100 text-[#F47A20] flex flex-col items-center justify-center shrink-0">
-                    <span className="font-kal-4 font-bold text-xs">کوپن</span>
-                    <span className="text-[9px] font-kal-1">لوپُن</span>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h4 className="font-kal-3 font-bold text-slate-800">{c.customerName}</h4>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-orange-100 text-[#F47A20] font-kal-3 font-bold">
-                        کد: {c.code}
+                <Plus className="w-3.5 h-3.5" />
+                <span>ثبت نوبت جدید</span>
+              </Link>
+              <Link
+                to="/vendor/bookings"
+                className="h-9 px-3 text-[#2563EB] hover:bg-blue-50 text-xs font-kal-3 font-bold rounded-xl flex items-center gap-1 transition-colors whitespace-nowrap"
+              >
+                <span>تقویم کامل</span>
+                <ChevronLeft className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Top Days & Date Strip (Categorization like the reference image) */}
+          <div className="bg-slate-50/70 p-1.5 sm:p-2 rounded-2xl border border-slate-100">
+            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+              {SCHEDULE_DAYS.map((day) => {
+                const isSelected = selectedScheduleDayId === day.id;
+                const count = day.id === '1405-03-18'
+                  ? todayAppointments.length
+                  : (OTHER_DAYS_APPOINTMENTS[day.id]?.length || 0);
+
+                return (
+                  <button
+                    key={day.id}
+                    type="button"
+                    onClick={() => setSelectedScheduleDayId(day.id)}
+                    className={`py-2 px-1 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer select-none text-center ${
+                      isSelected
+                        ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/25 scale-[1.03]'
+                        : 'bg-white hover:bg-slate-100/90 text-slate-700 border border-slate-200/60 shadow-2xs'
+                    }`}
+                  >
+                    <span
+                      className={`text-sm sm:text-lg font-kal-4 font-black leading-tight ${
+                        isSelected ? 'text-white' : 'text-slate-800'
+                      }`}
+                    >
+                      {day.dayNum}
+                    </span>
+                    <span
+                      className={`text-[10px] sm:text-xs font-kal-2 mt-0.5 ${
+                        isSelected ? 'text-blue-100 font-medium' : 'text-slate-500'
+                      }`}
+                    >
+                      {day.dayName}
+                    </span>
+                    {count > 0 && (
+                      <span
+                        className={`mt-1 text-[9px] px-1.5 py-0.2 rounded-full font-kal-4 font-bold ${
+                          isSelected
+                            ? 'bg-white/25 text-white'
+                            : 'bg-blue-50 text-blue-600'
+                        }`}
+                      >
+                        {count.toLocaleString('fa-IR')}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Summary / Filter Bar */}
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-kal-2 pt-1 pb-1 px-1">
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1.5 text-slate-600">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#F47A20]"></span>
+                <span>سفارشات آنلاین لوپُن: <strong>{activeDayAppointments.filter((a) => a.type === 'online').length.toLocaleString('fa-IR')}</strong></span>
+              </span>
+              <span className="flex items-center gap-1.5 text-slate-600">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#06B6D4]"></span>
+                <span>نوبت‌های حضوری سالن: <strong>{activeDayAppointments.filter((a) => a.type === 'offline').length.toLocaleString('fa-IR')}</strong></span>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-kal-3 bg-emerald-50 px-2.5 py-1 rounded-lg">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+              <span>سالن در این روز باز است</span>
+            </div>
+          </div>
+
+          {/* Timeline Operating Hours & Appointments */}
+          <div className="relative max-h-[620px] overflow-y-auto pr-1 pl-1 space-y-4">
+            {TIMELINE_HOURS.map((slot) => {
+              const hourAppointments = getAppointmentsForHour(slot.hour);
+              const isCurrentTimeHour = selectedScheduleDayId === '1405-03-18' && slot.hour === 11;
+
+              return (
+                <div key={slot.hour} className="relative">
+                  {/* Current Time Indicator line at 11:30 */}
+                  {isCurrentTimeHour && (
+                    <div className="relative my-2.5 flex items-center gap-2 z-10">
+                      <div className="w-14 sm:w-16 shrink-0 flex items-center justify-end pl-2">
+                        <span className="text-[10px] font-kal-4 font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-200/60">
+                          ۱۱:۳۰
+                        </span>
+                      </div>
+                      <div className="relative flex-1 flex items-center">
+                        <div className="w-3 h-3 rounded-full bg-[#2563EB] ring-4 ring-blue-100 shrink-0"></div>
+                        <div className="h-[2px] bg-[#2563EB] flex-1"></div>
+                        <span className="text-[10px] font-kal-3 font-bold bg-[#2563EB] text-white px-2 py-0.5 rounded-full shadow-2xs mr-2 shrink-0">
+                          اکنون
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Hour Row */}
+                  <div className="flex items-start gap-2.5 sm:gap-3">
+                    {/* Time Label Column (Right side in RTL) */}
+                    <div className="w-14 sm:w-16 shrink-0 pt-2 text-left pl-2 select-none">
+                      <span className="font-kal-4 font-bold text-xs sm:text-sm text-slate-500 block">
+                        {slot.label}
                       </span>
                     </div>
-                    <p className="text-slate-500 font-kal-2 mt-0.5">
-                      {c.serviceTitle} • بازه ترجیحی: {c.preferredTimeSlot}
-                    </p>
+
+                    {/* Timeline Content (Left side in RTL) */}
+                    <div className="flex-1 relative pb-2 border-r-2 border-slate-100 pr-3 sm:pr-4">
+                      {hourAppointments.length > 0 ? (
+                        <div className="space-y-2.5">
+                          {hourAppointments.map((app) => {
+                            const isOnline = app.type === 'online';
+                            const accentColorClass = isOnline
+                              ? 'border-r-[#F47A20]'
+                              : app.categoryName?.includes('ناخن')
+                              ? 'border-r-[#06B6D4]'
+                              : app.categoryName?.includes('پوست')
+                              ? 'border-r-[#8B5CF6]'
+                              : 'border-r-[#2563EB]';
+
+                            return (
+                              <div
+                                key={app.id}
+                                className={`group rounded-2xl bg-white p-3.5 sm:p-4 border border-slate-200/90 hover:border-slate-300 shadow-xs hover:shadow-md transition-all border-r-[5px] ${accentColorClass}`}
+                              >
+                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                                  {/* Right side info */}
+                                  <div className="space-y-1.5 flex-1">
+                                    <div className="flex flex-wrap items-center gap-1.5">
+                                      {/* Origin Badge */}
+                                      {isOnline ? (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-orange-50 text-[#F47A20] text-[10px] font-kal-3 font-bold border border-orange-200/70">
+                                          <Globe className="w-3 h-3 text-[#F47A20]" />
+                                          <span>سفارش آنلاین سایت (لوپُن)</span>
+                                        </span>
+                                      ) : (
+                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-cyan-50 text-cyan-700 text-[10px] font-kal-3 font-bold border border-cyan-200/70">
+                                          <Store className="w-3 h-3 text-cyan-600" />
+                                          <span>نوبت سالن (حضوری/تلفنی)</span>
+                                        </span>
+                                      )}
+
+                                      {/* Category */}
+                                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-kal-2">
+                                        {app.categoryName}
+                                      </span>
+
+                                      {/* Status Badge */}
+                                      {app.status === 'completed' || app.status === 'used' ? (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-kal-3 font-bold">
+                                          تکمیل شده
+                                        </span>
+                                      ) : app.status === 'in_progress' ? (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-kal-3 font-bold animate-pulse">
+                                          در حال انجام
+                                        </span>
+                                      ) : (
+                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-kal-3 font-bold">
+                                          در انتظار مراجعه
+                                        </span>
+                                      )}
+                                    </div>
+
+                                    {/* Service Title */}
+                                    <h4 className="font-kal-3 font-bold text-slate-900 text-xs sm:text-sm">
+                                      {app.serviceTitle}
+                                    </h4>
+
+                                    {/* Metadata: Customer, Phone, Staff */}
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-kal-2 text-slate-500 pt-0.5">
+                                      <span className="flex items-center gap-1">
+                                        <User className="w-3 h-3 text-slate-400" />
+                                        <span>مشتری: <strong className="font-kal-3 text-slate-800">{app.customerName}</strong></span>
+                                      </span>
+                                      <span className="flex items-center gap-1">
+                                        <Phone className="w-3 h-3 text-slate-400" />
+                                        <span>تلفن: <strong className="font-kal-4 text-slate-600 dir-ltr inline-block">{app.customerPhone}</strong></span>
+                                      </span>
+                                      <span className="flex items-center gap-1">
+                                        <Scissors className="w-3 h-3 text-slate-400" />
+                                        <span>پرسنل: <strong className="font-kal-3 text-slate-800">{app.staffName}</strong></span>
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  {/* Left side: Time & Action/Price */}
+                                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                                    <div className="inline-flex items-center gap-1 text-[11px] font-kal-4 text-slate-700 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">
+                                      <Clock className="w-3 h-3 text-slate-400" />
+                                      <span>{app.timeString}</span>
+                                    </div>
+
+                                    {isOnline ? (
+                                      <div className="flex items-center gap-1.5">
+                                        <span className="font-kal-4 font-bold text-[11px] bg-orange-100/70 text-[#F47A20] px-2 py-0.5 rounded-md">
+                                          کد: {app.code}
+                                        </span>
+                                        {app.status === 'pending' ? (
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const res = redeemCoupon(app.code);
+                                              setQuickResult(res);
+                                            }}
+                                            className="px-2.5 py-1 bg-[#F47A20] hover:bg-[#d66311] text-white text-[11px] font-kal-3 font-bold rounded-lg transition-colors cursor-pointer shadow-2xs whitespace-nowrap"
+                                          >
+                                            ثبت استفاده
+                                          </button>
+                                        ) : (
+                                          <span className="text-[10px] font-kal-3 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                            تسویه شده
+                                          </span>
+                                        )}
+                                      </div>
+                                    ) : (
+                                      <div className="text-left font-kal-2">
+                                        <span className="font-kal-4 font-bold text-slate-900 text-xs sm:text-sm">
+                                          {app.amount ? app.amount.toLocaleString('fa-IR') : '۰'} تومان
+                                        </span>
+                                        <span className="block text-[10px] text-slate-400">
+                                          {app.status === 'completed' ? 'تسویه کامل' : 'در انتظار پرداخت'}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        /* Empty Hour Slot */
+                        <div className="group/empty flex items-center justify-between py-2 px-3 rounded-xl hover:bg-slate-50 border border-dashed border-slate-200 hover:border-blue-200 transition-all text-xs font-kal-2">
+                          <span className="flex items-center gap-2 text-slate-400 group-hover/empty:text-slate-600">
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/empty:bg-blue-500"></span>
+                            <span>ساعت آزاد سالن - آماده پذیرش و رزرو نوبت</span>
+                          </span>
+                          <Link
+                            to="/vendor/bookings"
+                            className="opacity-0 group-hover/empty:opacity-100 text-[11px] font-kal-3 text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-opacity"
+                          >
+                            <Plus className="w-3 h-3" />
+                            <span>رزرو این ساعت</span>
+                          </Link>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-
-                <div className="text-left font-kal-2">
-                  <button
-                    onClick={() => {
-                      const res = redeemCoupon(c.code);
-                      setQuickResult(res);
-                    }}
-                    className="px-3 py-1.5 bg-[#F47A20] hover:bg-[#d66311] text-white text-[11px] font-kal-3 font-bold rounded-lg transition-colors cursor-pointer"
-                  >
-                    ثبت استفاده
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
