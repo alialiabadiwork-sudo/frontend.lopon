@@ -411,8 +411,8 @@ export default function VendorOfflineBookings() {
 
       {/* 3. Filter Bar and Date Indicator */}
       <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
+        {/* Filter Buttons (تک خط و بدون شکستگی) */}
+        <div className="flex items-center gap-1.5 whitespace-nowrap overflow-x-auto shrink-0 w-full sm:w-auto pb-1 sm:pb-0">
           <span className="text-xs font-kal-3 text-slate-400 ml-2 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5" />
             نمایش:

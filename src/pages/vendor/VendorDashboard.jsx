@@ -25,6 +25,8 @@ import {
   Globe,
   Phone,
   User,
+  Edit3,
+  Star,
 } from 'lucide-react';
 import { useVendorStore } from '@store/vendor/vendorStore';
 import LoponLogo from '@assets/images/lopon-logo.png';
@@ -695,445 +697,458 @@ export default function VendorDashboard() {
         </Link>
       </div>
 
-      {/* 3. Quick Action & Redemption Inline Card */}
-      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+      {/* 3. Quick Action & Redemption Inline Card (ابطال کوپن لوپُن - کاملاً جمع‌وجور و سریع) */}
+      <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-orange-50 text-[#F47A20] flex items-center justify-center shrink-0">
+            <QrCode className="w-5 h-5 text-[#F47A20]" />
+          </div>
           <div>
-            <h3 className="font-kal-3 font-bold text-slate-900 text-base flex items-center gap-2">
-              <QrCode className="w-5 h-5 text-[#F47A20]" />
+            <h3 className="font-kal-3 font-bold text-slate-900 text-sm flex items-center gap-2">
               <span>ابطال کوپن لوپُن</span>
             </h3>
-            <p className="font-kal-1 text-xs text-slate-400 mt-1">
-              کد ۶ رقمی کوپن مشتری را جهت ثبت پذیرش وارد نمایید:
+            <p className="font-kal-1 text-[11px] text-slate-400 mt-0.5">
+              ثبت پذیرش و تسویه با کد ۶ رقمی مشتری:
             </p>
           </div>
-
-          {/* Quick inline code form */}
-          <form onSubmit={handleQuickSubmit} className="flex items-center gap-2 sm:w-auto w-full">
-            <input
-              type="text"
-              maxLength={6}
-              value={quickCode}
-              onChange={(e) => setQuickCode(e.target.value.replace(/\D/g, ''))}
-              placeholder="کد ۶ رقمی کوپن..."
-              className="h-11 px-4 text-center font-kal-4 tracking-widest text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#F47A20] focus:bg-white text-sm"
-            />
-            <button
-              type="submit"
-              disabled={quickCode.length < 5}
-              className="h-11 px-5 bg-[#F47A20] hover:bg-[#d66311] disabled:opacity-50 text-white font-kal-3 font-bold text-xs rounded-xl shadow-xs transition-all cursor-pointer whitespace-nowrap"
-            >
-              ثبت پذیرش
-            </button>
-          </form>
         </div>
 
-        {quickResult && (
-          <div
-            className={`mt-4 p-3.5 rounded-2xl flex items-center gap-3 text-xs font-kal-2 ${
-              quickResult.success
-                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                : 'bg-rose-50 text-rose-800 border border-rose-200'
-            }`}
+        {/* Quick inline code form */}
+        <form onSubmit={handleQuickSubmit} className="flex items-center gap-2 w-full md:w-auto">
+          <input
+            type="text"
+            maxLength={6}
+            value={quickCode}
+            onChange={(e) => setQuickCode(e.target.value.replace(/\D/g, ''))}
+            placeholder="کد ۶ رقمی کوپن..."
+            className="h-10 w-40 px-3 text-center font-kal-4 font-bold tracking-widest text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-[#F47A20] focus:bg-white text-xs"
+          />
+          <button
+            type="submit"
+            disabled={quickCode.length < 5}
+            className="h-10 px-5 bg-[#F47A20] hover:bg-[#d66311] disabled:opacity-50 text-white font-kal-3 font-bold text-xs rounded-xl shadow-2xs transition-all cursor-pointer whitespace-nowrap"
           >
-            {quickResult.success ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-            ) : (
-              <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
-            )}
-            <span className="flex-1">{quickResult.message}</span>
-            <button
-              onClick={() => setQuickResult(null)}
-              className="font-kal-3 underline cursor-pointer text-slate-600"
-            >
-              بستن
-            </button>
-          </div>
-        )}
+            ثبت پذیرش
+          </button>
+        </form>
       </div>
 
-      {/* 4. Intelligent Schedule Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
-            <span>ساعت کار مفید سالن:</span>
-            <span className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><Clock className="w-3.5 h-3.5" /></span>
-          </div>
-          <div className="font-kal-4 font-black text-xl text-slate-900">۷.۵ <span className="text-xs font-normal text-slate-400">ساعت پر</span></div>
-          <span className="text-[10px] font-kal-3 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">نوبت‌های در حال ارائه</span>
+      {quickResult && (
+        <div
+          className={`p-3.5 rounded-2xl flex items-center gap-3 text-xs font-kal-2 ${
+            quickResult.success
+              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+              : 'bg-rose-50 text-rose-800 border border-rose-200'
+          }`}
+        >
+          {quickResult.success ? (
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+          ) : (
+            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          )}
+          <span className="flex-1">{quickResult.message}</span>
+          <button
+            type="button"
+            onClick={() => setQuickResult(null)}
+            className="font-kal-3 underline cursor-pointer text-slate-600"
+          >
+            بستن
+          </button>
         </div>
+      )}
 
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
-            <span>ظرفیت خالی و بیکاری:</span>
-            <span className="w-6 h-6 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center"><Clock className="w-3.5 h-3.5" /></span>
-          </div>
-          <div className="font-kal-4 font-black text-xl text-amber-600">۳.۵ <span className="text-xs font-normal text-slate-400">ساعت خالی</span></div>
-          <span className="text-[10px] font-kal-3 text-amber-800 bg-amber-50 px-2 py-0.5 rounded font-bold">آماده پذیرش و رزرو سریع</span>
-        </div>
-
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
-            <span>سفارشات آنلاین لوپُن:</span>
-            <img src="/lopon-logo-icon.png" alt="" className="h-3.5 w-auto object-contain" />
-          </div>
-          <div className="font-kal-4 font-black text-xl text-[#F47A20]">۴ <span className="text-xs font-normal text-slate-400">نوبت</span></div>
-          <span className="text-[10px] font-kal-3 text-orange-700 bg-orange-50 px-2 py-0.5 rounded font-bold">غیرقابل ویرایش از سالن</span>
-        </div>
-
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-1">
-          <div className="flex items-center justify-between text-xs font-kal-2 text-slate-500">
-            <span>نوبت‌های حضوری سالن:</span>
-            <span className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><Scissors className="w-3.5 h-3.5" /></span>
-          </div>
-          <div className="font-kal-4 font-black text-xl text-blue-600">۵ <span className="text-xs font-normal text-slate-400">نوبت</span></div>
-          <span className="text-[10px] font-kal-3 text-blue-700 bg-blue-50 px-2 py-0.5 rounded font-bold">دارای امکان ویرایش</span>
-        </div>
-      </div>
-
-      {/* 5. Two Columns: Today's Appointments Timeline & Quick Shortcuts */}
+      {/* 4. Two Columns: Today's Scheduled Appointments & Daily Missions (بدون اسکرول، کاملاً هم‌تراز در پایین) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-        {/* Right (8 cols): Interactive Timeline Schedule (Days strip + Hourly axis + Service Event Cards) */}
-        <div className="lg:col-span-8 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-5">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-2xl bg-blue-50 text-[#2563EB] flex items-center justify-center shrink-0">
-                  <CalendarDays className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-kal-3 font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                    <span>برنامه مراجعات و نوبت‌های سالن</span>
-                    <span className="text-[11px] font-kal-4 px-2 py-0.5 rounded-full bg-blue-50 text-[#2563EB] font-bold">
-                      {activeDayAppointments.length.toLocaleString('fa-IR')} نوبت
-                    </span>
-                  </h3>
-                  <p className="text-[11px] font-kal-1 text-slate-400 mt-0.5">
-                    {selectedDayObj.fullDate} • ساعات کاری: ۰۹:۰۰ الی ۲۰:۰۰
-                  </p>
-                </div>
+        
+        {/* Right (8 cols): Today's Scheduled Appointments (نوبت‌های امروز با ارتفاع متناسب و بدون اسکرول) */}
+        <div className="lg:col-span-8 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-4">
+          <div className="space-y-4">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div>
+                <h3 className="font-kal-3 font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                  <Clock className="w-4.5 h-4.5 text-[#F47A20]" />
+                  <span>برنامه نوبت‌ها و مراجعین امروز</span>
+                  <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 font-kal-3 font-bold">
+                    ۶ نوبت امروز
+                  </span>
+                </h3>
+                <p className="text-[11px] font-kal-1 text-slate-400 mt-0.5">
+                  شنبه ۱۸ خرداد (امروز) • ساعات کاری سالن: ۰۹:۰۰ الی ۲۰:۰۰
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleSlotBooking('۱۱:۰۰')}
+                  className="h-9 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-kal-3 font-bold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs whitespace-nowrap"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>ثبت نوبت جدید</span>
+                </button>
+                <Link
+                  to="/vendor/bookings"
+                  className="h-9 px-3 text-[#2563EB] hover:bg-blue-50 text-xs font-kal-3 font-bold rounded-xl flex items-center gap-1 transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  <span>تقویم کامل</span>
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 self-end sm:self-auto">
-              <Link
-                to="/vendor/bookings"
-                className="h-9 px-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-kal-3 font-bold rounded-xl flex items-center gap-1.5 transition-colors shadow-2xs whitespace-nowrap"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>ثبت نوبت جدید</span>
-              </Link>
-              <Link
-                to="/vendor/bookings"
-                className="h-9 px-3 text-[#2563EB] hover:bg-blue-50 text-xs font-kal-3 font-bold rounded-xl flex items-center gap-1 transition-colors whitespace-nowrap"
-              >
-                <span>تقویم کامل</span>
-                <ChevronLeft className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Top Days & Date Strip (Categorization like the reference image) */}
-          <div className="bg-slate-50/70 p-1.5 sm:p-2 rounded-2xl border border-slate-100">
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
-              {SCHEDULE_DAYS.map((day) => {
-                const isSelected = selectedScheduleDayId === day.id;
-                const count = day.id === '1405-03-18'
-                  ? todayAppointments.length
-                  : (OTHER_DAYS_APPOINTMENTS[day.id]?.length || 0);
-
-                return (
-                  <button
-                    key={day.id}
-                    type="button"
-                    onClick={() => setSelectedScheduleDayId(day.id)}
-                    className={`py-2 px-1 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer select-none text-center ${
-                      isSelected
-                        ? 'bg-[#2563EB] text-white shadow-md shadow-blue-500/25 scale-[1.03]'
-                        : 'bg-white hover:bg-slate-100/90 text-slate-700 border border-slate-200/60 shadow-2xs'
-                    }`}
-                  >
-                    <span
-                      className={`text-sm sm:text-lg font-kal-4 font-black leading-tight ${
-                        isSelected ? 'text-white' : 'text-slate-800'
-                      }`}
-                    >
-                      {day.dayNum}
-                    </span>
-                    <span
-                      className={`text-[10px] sm:text-xs font-kal-2 mt-0.5 ${
-                        isSelected ? 'text-blue-100 font-medium' : 'text-slate-500'
-                      }`}
-                    >
-                      {day.dayName}
-                    </span>
-                    {count > 0 && (
-                      <span
-                        className={`mt-1 text-[9px] px-1.5 py-0.2 rounded-full font-kal-4 font-bold ${
-                          isSelected
-                            ? 'bg-white/25 text-white'
-                            : 'bg-blue-50 text-blue-600'
-                        }`}
+            {/* List of today's key upcoming visits (Online & Offline) + 1 Empty Slot with 2 CTAs */}
+            <div className="space-y-3 pt-0.5">
+              
+              {/* Item 1: 09:00 - Online Booking (مریم منصوری) */}
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 border-r-4 border-r-[#F47A20] shadow-2xs hover:shadow-xs transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-kal-3 font-bold bg-orange-50 text-[#F47A20] border border-orange-200/60 inline-flex items-center gap-1">
+                        <img src="/lopon-logo-icon.png" alt="" className="h-2.5 w-auto object-contain" />
+                        <span>آنلاین لوپُن (غیرقابل ویرایش)</span>
+                      </span>
+                      <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-kal-2">
+                        رنگ و مو
+                      </span>
+                    </div>
+                    <h4 className="font-kal-3 font-bold text-xs sm:text-sm text-slate-900">
+                      رنگ و لایت بالیاژ اروپایی
+                    </h4>
+                    <div className="flex items-center gap-3 text-[11px] font-kal-2 text-slate-500">
+                      <button
+                        type="button"
+                        onClick={() => openCustomerDetail({
+                          name: 'مریم منصوری',
+                          phone: '09134569874',
+                          tier: 'bronze',
+                          totalSpend: 3500000,
+                          staffNotes: 'اولین مراجعه جهت رنگ و لایت بالیاژ، تست حساسیت انجام شد.',
+                          latestFeedback: 'رنگ مو دقیقاً همون چیزی شد که می‌خواستم، خیلی راضی هستم.',
+                          rating: 5,
+                        })}
+                        className="font-kal-3 font-bold text-slate-800 hover:text-[#F47A20] flex items-center gap-1 cursor-pointer transition-colors"
                       >
-                        {count.toLocaleString('fa-IR')}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Summary / Filter Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-kal-2 pt-1 pb-1 px-1">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1.5 text-slate-600">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#F47A20]"></span>
-                <span>سفارشات آنلاین لوپُن: <strong>{activeDayAppointments.filter((a) => a.type === 'online').length.toLocaleString('fa-IR')}</strong></span>
-              </span>
-              <span className="flex items-center gap-1.5 text-slate-600">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#06B6D4]"></span>
-                <span>نوبت‌های حضوری سالن: <strong>{activeDayAppointments.filter((a) => a.type === 'offline').length.toLocaleString('fa-IR')}</strong></span>
-              </span>
-            </div>
-
-            <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-kal-3 bg-emerald-50 px-2.5 py-1 rounded-lg">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
-              <span>سالن در این روز باز است</span>
-            </div>
-          </div>
-
-          {/* Timeline Operating Hours & Appointments */}
-          <div className="relative space-y-3.5 pr-1 pl-1">
-            {TIMELINE_HOURS.map((slot) => {
-              const hourAppointments = getAppointmentsForHour(slot.hour);
-              const isCurrentTimeHour = selectedScheduleDayId === '1405-03-18' && slot.hour === 11;
-
-              return (
-                <div key={slot.hour} className="relative">
-                  {/* Current Time Indicator line at 11:30 */}
-                  {isCurrentTimeHour && (
-                    <div className="relative my-2.5 flex items-center gap-2 z-10">
-                      <div className="w-14 sm:w-16 shrink-0 flex items-center justify-end pl-2">
-                        <span className="text-[10px] font-kal-4 font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-200/60">
-                          ۱۱:۳۰
-                        </span>
-                      </div>
-                      <div className="relative flex-1 flex items-center">
-                        <div className="w-3 h-3 rounded-full bg-[#2563EB] ring-4 ring-blue-100 shrink-0"></div>
-                        <div className="h-[2px] bg-[#2563EB] flex-1"></div>
-                        <span className="text-[10px] font-kal-3 font-bold bg-[#2563EB] text-white px-2 py-0.5 rounded-full shadow-2xs mr-2 shrink-0">
-                          اکنون
-                        </span>
-                      </div>
+                        <User className="w-3 h-3 text-slate-400" />
+                        <span>مریم منصوری</span>
+                      </button>
+                      <span>• پرسنل: نازنین ابراهیمی</span>
                     </div>
-                  )}
+                  </div>
 
-                  {/* Hour Row */}
-                  <div className="flex items-start gap-2.5 sm:gap-3">
-                    {/* Time Label Column (Right side in RTL) */}
-                    <div className="w-14 sm:w-16 shrink-0 pt-2 text-left pl-2 select-none">
-                      <span className="font-kal-4 font-bold text-xs sm:text-sm text-slate-500 block">
-                        {slot.label}
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between gap-1.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                    <span className="text-[11px] font-kal-4 font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded">
+                      ۰۹:۰۰ تا ۱۰:۳۰
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-kal-4 font-bold bg-orange-100 text-[#F47A20] px-2 py-0.5 rounded">
+                        کد: ۳۵۷۱۵۹
                       </span>
-                    </div>
-
-                    {/* Timeline Content (Left side in RTL) */}
-                    <div className="flex-1 relative pb-2 border-r-2 border-slate-100 pr-3 sm:pr-4">
-                      {hourAppointments.length > 0 ? (
-                        <div className="space-y-2.5">
-                          {hourAppointments.map((app) => {
-                            const isOnline = app.type === 'online';
-                            const accentColorClass = isOnline
-                              ? 'border-r-[#F47A20]'
-                              : app.categoryName?.includes('ناخن')
-                              ? 'border-r-[#06B6D4]'
-                              : app.categoryName?.includes('پوست')
-                              ? 'border-r-[#8B5CF6]'
-                              : 'border-r-[#2563EB]';
-
-                            return (
-                              <div
-                                key={app.id}
-                                className={`group rounded-2xl bg-white p-3.5 sm:p-4 border border-slate-200/90 hover:border-slate-300 shadow-xs hover:shadow-md transition-all border-r-[5px] ${accentColorClass}`}
-                              >
-                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                                  {/* Right side info */}
-                                  <div className="space-y-1.5 flex-1">
-                                    <div className="flex flex-wrap items-center gap-1.5">
-                                      {/* Origin Badge */}
-                                      {isOnline ? (
-                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-orange-50 text-[#F47A20] text-[10px] font-kal-3 font-bold border border-orange-200/70">
-                                          <Globe className="w-3 h-3 text-[#F47A20]" />
-                                          <span>سفارش آنلاین سایت (لوپُن)</span>
-                                        </span>
-                                      ) : (
-                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-cyan-50 text-cyan-700 text-[10px] font-kal-3 font-bold border border-cyan-200/70">
-                                          <Store className="w-3 h-3 text-cyan-600" />
-                                          <span>نوبت سالن (حضوری/تلفنی)</span>
-                                        </span>
-                                      )}
-
-                                      {/* Category */}
-                                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 font-kal-2">
-                                        {app.categoryName}
-                                      </span>
-
-                                      {/* Status Badge */}
-                                      {app.status === 'completed' || app.status === 'used' ? (
-                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-kal-3 font-bold">
-                                          تکمیل شده
-                                        </span>
-                                      ) : app.status === 'in_progress' ? (
-                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-kal-3 font-bold animate-pulse">
-                                          در حال انجام
-                                        </span>
-                                      ) : (
-                                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-kal-3 font-bold">
-                                          در انتظار مراجعه
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    {/* Service Title */}
-                                    <h4 className="font-kal-3 font-bold text-slate-900 text-xs sm:text-sm">
-                                      {app.serviceTitle}
-                                    </h4>
-
-                                    {/* Metadata: Customer, Phone, Staff */}
-                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-kal-2 text-slate-500 pt-0.5">
-                                      <span className="flex items-center gap-1">
-                                        <User className="w-3 h-3 text-slate-400" />
-                                        <span>مشتری: <strong className="font-kal-3 text-slate-800">{app.customerName}</strong></span>
-                                      </span>
-                                      <span className="flex items-center gap-1">
-                                        <Phone className="w-3 h-3 text-slate-400" />
-                                        <span>تلفن: <strong className="font-kal-4 text-slate-600 dir-ltr inline-block">{app.customerPhone}</strong></span>
-                                      </span>
-                                      <span className="flex items-center gap-1">
-                                        <Scissors className="w-3 h-3 text-slate-400" />
-                                        <span>پرسنل: <strong className="font-kal-3 text-slate-800">{app.staffName}</strong></span>
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  {/* Left side: Time & Action/Price */}
-                                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                                    <div className="inline-flex items-center gap-1 text-[11px] font-kal-4 text-slate-700 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">
-                                      <Clock className="w-3 h-3 text-slate-400" />
-                                      <span>{app.timeString}</span>
-                                    </div>
-
-                                    {isOnline ? (
-                                      <div className="flex items-center gap-1.5">
-                                        <span className="font-kal-4 font-bold text-[11px] bg-orange-100/70 text-[#F47A20] px-2 py-0.5 rounded-md">
-                                          کد: {app.code}
-                                        </span>
-                                        {app.status === 'pending' ? (
-                                          <button
-                                            type="button"
-                                            onClick={() => {
-                                              const res = redeemCoupon(app.code);
-                                              setQuickResult(res);
-                                            }}
-                                            className="px-2.5 py-1 bg-[#F47A20] hover:bg-[#d66311] text-white text-[11px] font-kal-3 font-bold rounded-lg transition-colors cursor-pointer shadow-2xs whitespace-nowrap"
-                                          >
-                                            ثبت استفاده
-                                          </button>
-                                        ) : (
-                                          <span className="text-[10px] font-kal-3 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
-                                            تسویه شده
-                                          </span>
-                                        )}
-                                      </div>
-                                    ) : (
-                                      <div className="text-left font-kal-2">
-                                        <span className="font-kal-4 font-bold text-slate-900 text-xs sm:text-sm">
-                                          {app.amount ? app.amount.toLocaleString('fa-IR') : '۰'} تومان
-                                        </span>
-                                        <span className="block text-[10px] text-slate-400">
-                                          {app.status === 'completed' ? 'تسویه کامل' : 'در انتظار پرداخت'}
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ) : (
-                        /* Empty Hour Slot */
-                        <div className="group/empty flex items-center justify-between py-2 px-3 rounded-xl hover:bg-slate-50 border border-dashed border-slate-200 hover:border-blue-200 transition-all text-xs font-kal-2">
-                          <span className="flex items-center gap-2 text-slate-400 group-hover/empty:text-slate-600">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover/empty:bg-blue-500"></span>
-                            <span>ساعت آزاد سالن - آماده پذیرش و رزرو نوبت</span>
-                          </span>
-                          <Link
-                            to="/vendor/bookings"
-                            className="opacity-0 group-hover/empty:opacity-100 text-[11px] font-kal-3 text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-opacity"
-                          >
-                            <Plus className="w-3 h-3" />
-                            <span>رزرو این ساعت</span>
-                          </Link>
-                        </div>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const res = redeemCoupon('357159');
+                          setQuickResult(res);
+                        }}
+                        className="px-2.5 py-1 bg-[#F47A20] hover:bg-[#d66311] text-white text-[11px] font-kal-3 font-bold rounded-lg cursor-pointer transition-colors shadow-2xs whitespace-nowrap"
+                      >
+                        ثبت استفاده
+                      </button>
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+
+              {/* Item 2: 10:00 - Offline Booking (زهرا کاظمی) */}
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 border-r-4 border-r-cyan-500 shadow-2xs hover:shadow-xs transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-kal-3 font-bold bg-cyan-50 text-cyan-700 border border-cyan-200/60 inline-flex items-center gap-1">
+                        <Scissors className="w-2.5 h-2.5 text-cyan-600" />
+                        <span>حضوری سالن</span>
+                      </span>
+                      <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-kal-2">
+                        ناخن
+                      </span>
+                    </div>
+                    <h4 className="font-kal-3 font-bold text-xs sm:text-sm text-slate-900">
+                      کاشت ناخن با ژل و پلی‌ژل
+                    </h4>
+                    <div className="flex items-center gap-3 text-[11px] font-kal-2 text-slate-500">
+                      <button
+                        type="button"
+                        onClick={() => openCustomerDetail({
+                          name: 'زهرا کاظمی',
+                          phone: '09131408899',
+                          tier: 'silver',
+                          totalSpend: 2400000,
+                          staffNotes: 'فرم ناخن بادامی متوسط؛ لاک ژل شاین‌دار.',
+                          latestFeedback: 'کاشت ناخن ژل ماندگاری فوق‌العاده‌ای داشت.',
+                          rating: 5,
+                        })}
+                        className="font-kal-3 font-bold text-slate-800 hover:text-[#F47A20] flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <User className="w-3 h-3 text-slate-400" />
+                        <span>زهرا کاظمی</span>
+                      </button>
+                      <span>• پرسنل: مهسا مرادی</span>
+                    </div>
+                  </div>
+
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between gap-1.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                    <span className="text-[11px] font-kal-4 font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded">
+                      ۱۰:۰۰ تا ۱۱:۳۰
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-kal-4 font-bold text-slate-900">
+                        ۷۰۰,۰۰۰ تومان
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => openEditBooking({
+                          id: 'off-1',
+                          customerName: 'زهرا کاظمی',
+                          customerPhone: '09131408899',
+                          time: '۱۰:۰۰',
+                          serviceTitle: 'کاشت ناخن با ژل و پلی‌ژل',
+                          staffName: 'مهسا مرادی',
+                          amount: 700000,
+                        })}
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-kal-3 font-bold rounded-lg cursor-pointer transition-colors flex items-center gap-1"
+                      >
+                        <Edit3 className="w-2.5 h-2.5" />
+                        <span>ویرایش نوبت</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 3: 13:00 - Offline Booking (علی علی آبادی) */}
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 border-r-4 border-r-cyan-500 shadow-2xs hover:shadow-xs transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-kal-3 font-bold bg-cyan-50 text-cyan-700 border border-cyan-200/60 inline-flex items-center gap-1">
+                        <Scissors className="w-2.5 h-2.5 text-cyan-600" />
+                        <span>حضوری سالن</span>
+                      </span>
+                      <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-kal-2">
+                        مو
+                      </span>
+                    </div>
+                    <h4 className="font-kal-3 font-bold text-xs sm:text-sm text-slate-900">
+                      براشینگ و حالت‌دهی حرفه‌ای مو
+                    </h4>
+                    <div className="flex items-center gap-3 text-[11px] font-kal-2 text-slate-500">
+                      <button
+                        type="button"
+                        onClick={() => openCustomerDetail({
+                          name: 'علی علی آبادی',
+                          phone: '09381778920',
+                          tier: 'gold',
+                          totalSpend: 4200000,
+                          staffNotes: 'مشتری ثابت هفتگی، اولویت نوبت‌های عصرگاهی.',
+                          latestFeedback: 'براشینگ بسیار مرتب و با ماندگاری بالا، کادر محترم.',
+                          rating: 5,
+                        })}
+                        className="font-kal-3 font-bold text-slate-800 hover:text-[#F47A20] flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <User className="w-3 h-3 text-slate-400" />
+                        <span>علی علی آبادی</span>
+                      </button>
+                      <span>• پرسنل: نازنین ابراهیمی</span>
+                    </div>
+                  </div>
+
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between gap-1.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                    <span className="text-[11px] font-kal-4 font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded">
+                      ۱۳:۰۰ تا ۱۴:۰۰
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-kal-4 font-bold text-slate-900">
+                        ۴۵۰,۰۰۰ تومان
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => openEditBooking({
+                          id: 'off-2',
+                          customerName: 'علی علی آبادی',
+                          customerPhone: '09381778920',
+                          time: '۱۳:۰۰',
+                          serviceTitle: 'براشینگ و حالت‌دهی حرفه‌ای مو',
+                          staffName: 'نازنین ابراهیمی',
+                          amount: 450000,
+                        })}
+                        className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-kal-3 font-bold rounded-lg cursor-pointer transition-colors flex items-center gap-1"
+                      >
+                        <Edit3 className="w-2.5 h-2.5" />
+                        <span>ویرایش نوبت</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 4: 15:00 - Online Booking (مبینا کاربخش) */}
+              <div className="p-3.5 rounded-2xl bg-white border border-slate-200 border-r-4 border-r-[#F47A20] shadow-2xs hover:shadow-xs transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-kal-3 font-bold bg-orange-50 text-[#F47A20] border border-orange-200/60 inline-flex items-center gap-1">
+                        <img src="/lopon-logo-icon.png" alt="" className="h-2.5 w-auto object-contain" />
+                        <span>آنلاین لوپُن (غیرقابل ویرایش)</span>
+                      </span>
+                      <span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-kal-2">
+                        پوست
+                      </span>
+                    </div>
+                    <h4 className="font-kal-3 font-bold text-xs sm:text-sm text-slate-900">
+                      فیشیال تخصصی پوست و هیدرودرمی
+                    </h4>
+                    <div className="flex items-center gap-3 text-[11px] font-kal-2 text-slate-500">
+                      <button
+                        type="button"
+                        onClick={() => openCustomerDetail({
+                          name: 'مبینا کاربخش',
+                          phone: '09138824590',
+                          tier: 'vip',
+                          totalSpend: 6850000,
+                          staffNotes: 'حساسیت پوستی خفیف، همیشه محصولات بدون عطر و ارگانیک استفاده شود.',
+                          latestFeedback: 'کیفیت خدمات فیشیال و برخورد پرسنل فوق‌العاده بود.',
+                          rating: 5,
+                        })}
+                        className="font-kal-3 font-bold text-slate-800 hover:text-[#F47A20] flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <User className="w-3 h-3 text-slate-400" />
+                        <span>مبینا کاربخش</span>
+                      </button>
+                      <span>• پرسنل: یلدا رحیمی</span>
+                    </div>
+                  </div>
+
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between gap-1.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                    <span className="text-[11px] font-kal-4 font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded">
+                      ۱۵:۰۰ تا ۱۶:۳۰
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-kal-4 font-bold bg-orange-100 text-[#F47A20] px-2 py-0.5 rounded">
+                        کد: ۵۸۲۹۱۴
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const res = redeemCoupon('582914');
+                          setQuickResult(res);
+                        }}
+                        className="px-2.5 py-1 bg-[#F47A20] hover:bg-[#d66311] text-white text-[11px] font-kal-3 font-bold rounded-lg cursor-pointer transition-colors shadow-2xs whitespace-nowrap"
+                      >
+                        ثبت استفاده
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 5: 18:00 - Empty Slot with TWO CTA buttons (رزرو این ساعت + افزایش فروش) */}
+              <div className="p-3 rounded-2xl bg-amber-50/20 hover:bg-amber-50/40 border border-dashed border-amber-200 transition-all flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5 text-xs font-kal-2">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-kal-3 font-bold bg-amber-100 text-amber-800">
+                    ۱۸:۰۰
+                  </span>
+                  <span className="text-slate-600 font-kal-3 font-medium">
+                    ساعت آزاد سالن - آماده پذیرش و رزرو نوبت تلفنی یا حضوری
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleSlotBooking('۱۸:۰۰')}
+                    className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-kal-3 font-bold border border-emerald-200 transition-colors cursor-pointer flex items-center gap-1 whitespace-nowrap shadow-2xs"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>رزرو این ساعت</span>
+                  </button>
+                  <Link
+                    to="/vendor/catalog"
+                    className="px-3 py-1.5 bg-gradient-to-r from-orange-500 to-[#F47A20] hover:from-orange-600 hover:to-[#d66311] text-white rounded-xl text-xs font-kal-3 font-bold transition-all shadow-2xs flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                  >
+                    <TrendingUp className="w-3 h-3" />
+                    <span>افزایش فروش</span>
+                  </Link>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Card Footer: Summary strip (هم‌تراز‌کننده ارتفاع) */}
+          <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] font-kal-2 text-slate-500">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>وضعیت شیفت امروز: <strong>۴ نوبت فعال</strong> • <strong>۱ ساعت خالی</strong></span>
+            </div>
+            <Link
+              to="/vendor/bookings"
+              className="text-[#2563EB] hover:underline font-kal-3 font-bold flex items-center gap-1"
+            >
+              <span>مشاهده و ویرایش جدول کامل نوبت‌ها</span>
+              <ChevronLeft className="w-3 h-3" />
+            </Link>
           </div>
         </div>
 
-        {/* Left (4 cols): Quick Management Shortcuts & Revenue Split */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* ماموریت‌های امروز */}
-          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        {/* Left (4 cols): Daily Missions & Revenue Split (کاملاً هم‌تراز با ستون راست) */}
+        <div className="lg:col-span-4 flex flex-col justify-between space-y-4">
+          
+          {/* Card 1: ماموریت‌های امروز (کاملاً مینیمال طبق دستور کاربر) */}
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-xs space-y-3.5">
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
               <h3 className="font-kal-3 font-bold text-slate-800 text-sm flex items-center gap-2">
-                <CheckCircle2 className="w-4.5 h-4.5 text-[#F47A20]" />
+                <CheckCircle2 className="w-4 h-4 text-[#F47A20]" />
                 <span>ماموریت‌های امروز</span>
               </h3>
             </div>
 
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
                 <span className="font-kal-3 text-xs font-bold text-slate-800">بروزرسانی قیمت‌ها</span>
                 <Link
                   to="/vendor/services"
-                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
+                  className="h-8 px-3.5 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
                 >
                   انجام ماموریت
                 </Link>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
                 <span className="font-kal-3 text-xs font-bold text-slate-800">آپدیت کردن عکس‌ها</span>
                 <Link
                   to="/vendor/profile"
-                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
+                  className="h-8 px-3.5 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
                 >
                   انجام ماموریت
                 </Link>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
                 <span className="font-kal-3 text-xs font-bold text-slate-800">پاسخ به نظرات</span>
                 <Link
                   to="/vendor/crm"
-                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
+                  className="h-8 px-3.5 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
                 >
                   انجام ماموریت
                 </Link>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
+              <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 transition-colors">
                 <span className="font-kal-3 text-xs font-bold text-slate-800">ارسال پیامک انبوه</span>
                 <Link
                   to="/vendor/crm"
-                  className="h-8 px-4 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
+                  className="h-8 px-3.5 bg-slate-900 hover:bg-slate-800 text-white font-kal-3 text-xs font-bold rounded-xl flex items-center justify-center transition-colors shadow-2xs whitespace-nowrap"
                 >
                   انجام ماموریت
                 </Link>
@@ -1141,54 +1156,65 @@ export default function VendorDashboard() {
             </div>
           </div>
 
-          {/* Revenue By Service Line Widget */}
-          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-xs space-y-3">
-            <h3 className="font-kal-3 font-bold text-slate-900 text-sm pb-2 border-b border-slate-100">
-              تفکیک درآمد لاین‌های خدمات
-            </h3>
+          {/* Card 2: تفکیک درآمد لاین‌های خدمات (با ۴ لاین و رضایت مشتریان) */}
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-xs space-y-3 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 className="font-kal-3 font-bold text-slate-900 text-sm pb-2 border-b border-slate-100">
+                تفکیک درآمد لاین‌های خدمات
+              </h3>
 
-            <div className="space-y-2.5 text-xs font-kal-2">
-              <div>
-                <div className="flex justify-between text-slate-600 mb-1">
-                  <span>لاین مو، رنگ و احیا</span>
-                  <span className="font-kal-3 font-bold">۵۲٪</span>
+              <div className="space-y-2.5 text-xs font-kal-2 pt-1.5">
+                <div>
+                  <div className="flex justify-between text-slate-600 mb-1">
+                    <span>لاین مو، رنگ و احیا</span>
+                    <span className="font-kal-3 font-bold text-slate-800">۵۲٪ (۸,۲۰۰,۰۰۰ ت)</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-[#F47A20] rounded-full" style={{ width: '52%' }} />
+                  </div>
                 </div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#F47A20] rounded-full" style={{ width: '52%' }} />
-                </div>
-              </div>
 
-              <div>
-                <div className="flex justify-between text-slate-600 mb-1">
-                  <span>لاین ناخن و پدیکور</span>
-                  <span className="font-kal-3 font-bold">۲۶٪</span>
+                <div>
+                  <div className="flex justify-between text-slate-600 mb-1">
+                    <span>لاین ناخن و پدیکور</span>
+                    <span className="font-kal-3 font-bold text-slate-800">۲۶٪ (۴,۱۰۰,۰۰۰ ت)</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-cyan-500 rounded-full" style={{ width: '26%' }} />
+                  </div>
                 </div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-purple-500 rounded-full" style={{ width: '26%' }} />
-                </div>
-              </div>
 
-              <div>
-                <div className="flex justify-between text-slate-600 mb-1">
-                  <span>لاین پوست و فیشیال</span>
-                  <span className="font-kal-3 font-bold">۱۴٪</span>
+                <div>
+                  <div className="flex justify-between text-slate-600 mb-1">
+                    <span>لاین پوست و فیشیال</span>
+                    <span className="font-kal-3 font-bold text-slate-800">۱۴٪ (۲,۲۰۰,۰۰۰ ت)</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-purple-500 rounded-full" style={{ width: '14%' }} />
+                  </div>
                 </div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: '14%' }} />
-                </div>
-              </div>
 
-              <div>
-                <div className="flex justify-between text-slate-600 mb-1">
-                  <span>مژه، ابرو و میکاپ</span>
-                  <span className="font-kal-3 font-bold">۸٪</span>
-                </div>
-                <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
+                <div>
+                  <div className="flex justify-between text-slate-600 mb-1">
+                    <span>میکاپ، مژه و ابرو</span>
+                    <span className="font-kal-3 font-bold text-slate-800">۸٪ (۱,۳۰۰,۰۰۰ ت)</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
+                  </div>
                 </div>
               </div>
             </div>
+
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-kal-2 text-slate-500">
+              <span>میانگین رضایت مشتریان:</span>
+              <span className="font-kal-3 font-bold text-amber-500 flex items-center gap-1">
+                <span>۴.۹ از ۵</span>
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              </span>
+            </div>
           </div>
+
         </div>
       </div>
 
