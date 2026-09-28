@@ -490,7 +490,7 @@ export default function VendorDashboard() {
         <div className="absolute -left-10 -bottom-10 w-56 h-56 bg-[#F47A20]/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute right-0 top-0 w-48 h-48 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch items-center">
           <div className="lg:col-span-7 space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-orange-300 text-xs font-kal-3">
               <Sparkles className="w-3.5 h-3.5" />
@@ -701,10 +701,10 @@ export default function VendorDashboard() {
           <div>
             <h3 className="font-kal-3 font-bold text-slate-900 text-base flex items-center gap-2">
               <QrCode className="w-5 h-5 text-[#F47A20]" />
-              <span>استعلام و ابطال سریع کوپن در پیشخوان</span>
+              <span>ابطال کوپن لوپُن</span>
             </h3>
             <p className="font-kal-1 text-xs text-slate-400 mt-1">
-              کد ۶ رقمی مشتری را وارد نمایید تا پذیرش در سیستم ثبت و تسویه لحاظ شود.
+              کد ۶ رقمی کوپن مشتری را جهت ثبت پذیرش وارد نمایید:
             </p>
           </div>
 
@@ -792,7 +792,7 @@ export default function VendorDashboard() {
       </div>
 
       {/* 5. Two Columns: Today's Appointments Timeline & Quick Shortcuts */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Right (8 cols): Interactive Timeline Schedule (Days strip + Hourly axis + Service Event Cards) */}
         <div className="lg:col-span-8 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-5">
           {/* Header */}
@@ -905,7 +905,7 @@ export default function VendorDashboard() {
           </div>
 
           {/* Timeline Operating Hours & Appointments */}
-          <div className="relative max-h-[620px] overflow-y-auto pr-1 pl-1 space-y-4">
+          <div className="relative space-y-3.5 pr-1 pl-1">
             {TIMELINE_HOURS.map((slot) => {
               const hourAppointments = getAppointmentsForHour(slot.hour);
               const isCurrentTimeHour = selectedScheduleDayId === '1405-03-18' && slot.hour === 11;

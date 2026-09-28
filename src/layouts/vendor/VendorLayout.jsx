@@ -83,9 +83,9 @@ export default function VendorLayout() {
     {
       id: 'bookings',
       path: '/vendor/bookings',
-      label: 'سفارشات آفلاین سالن',
+      label: 'نوبت‌های آنلاین و آفلاین',
       icon: CalendarDays,
-      desc: 'نوبت‌های تلفنی، تقویم و گزارش صندوق',
+      desc: 'جدول زمان‌بندی نوبت‌های آنلاین و حضوری',
     },
   ];
 
